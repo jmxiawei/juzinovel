@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 自定义属性 -->
+    <attr name="top_root_color" format="reference|color" />
+    <attr name="root_view_bg" format="reference|color" />
+    <attr name="btn_bg" format="reference|color" />
+    <attr name="text_color" format="reference|color" />
+    <attr name="text_second_color" format="reference|color" />
+
+    <item name="swipe_layout" type="id"/>
+    <item name="recycler" type="id"/>
+
+</resources>

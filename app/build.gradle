@@ -1,0 +1,51 @@
+apply plugin: 'com.android.application'
+
+android {
+
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+    defaultConfig {
+        applicationId "top.iscore.freereader"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    //implementation project(':hwtxtreaderlib')
+    //implementation project(':readercore')
+    compile files('libs/chardet.jar')
+    compile files('libs/jsoup-1.11.3.jar')
+    compile rootProject.ext.easypermissions
+    compile rootProject.ext.supportDesign
+    compile rootProject.ext.supportAppcompat
+    compile rootProject.ext.supportrecyclerview
+    compile rootProject.ext.butterknife
+    compile rootProject.ext.stetho
+    compile rootProject.ext.glide
+    compile rootProject.ext.utilcode
+    compile rootProject.ext.okhttp
+    compile rootProject.ext.sugar
+    compile rootProject.ext.retrofit
+    compile rootProject.ext.converterGson
+    compile rootProject.ext.stethoOkhttp3
+    compile rootProject.ext.stetho
+    compile rootProject.ext.bolts
+    implementation 'jp.wasabeef:glide-transformations:2.0.0'
+    annotationProcessor butterknifeAnnotationProcessor
+    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-14'
+    compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-14'//没有使用特殊Header，可以不加这行
+    compile 'com.android.support:appcompat-v7:25.3.1'//版本 23以上（必须）
+    compile rootProject.ext.mosby3Lce
+    compile rootProject.ext.mosby3queuing
+}
