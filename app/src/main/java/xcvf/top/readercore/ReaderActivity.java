@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.hannesdorfmann.mosby3.mvp.MvpActivity;
+import com.tencent.mmkv.MMKV;
 
 import java.util.ArrayList;
 
@@ -147,7 +148,6 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
     public void onLoadChapterList(ArrayList<Chapter> chapters) {
         book.chapters = chapters;
         showContent();
-
     }
 
     @Override

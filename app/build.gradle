@@ -48,4 +48,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'//版本 23以上（必须）
     compile rootProject.ext.mosby3Lce
     compile rootProject.ext.mosby3queuing
+    implementation 'com.tencent:mmkv:1.0.10'
 }
