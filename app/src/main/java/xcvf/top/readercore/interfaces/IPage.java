@@ -10,6 +10,8 @@ import java.util.List;
  */
 public interface IPage {
 
+    int LOADING_PAGE = -1;
+
     int getIndex();
     int getTotalPage();
      void setTotalPage(int totalPage);

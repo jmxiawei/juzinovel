@@ -60,9 +60,6 @@ public class BaseHttpHandler {
         retrofit = new Retrofit
                 .Builder()
                 .baseUrl(App.baseUrl)
-                .client(HttpClientManager
-                        .getInstance()
-                        .getOkHttpClient())
                 .addConverterFactory(this.converter)
                 .build();
         T t = retrofit.create(clazz);

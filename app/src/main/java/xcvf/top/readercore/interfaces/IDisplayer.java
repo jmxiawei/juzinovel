@@ -11,6 +11,13 @@ import xcvf.top.readercore.views.ReaderView;
  */
 public interface IDisplayer {
 
-    void showChapter(ReaderView readerView,boolean fromLast,Chapter chapter);
+    /**
+     *
+     * @param readerView
+     * @param fromLast
+     * @param page 直接跳到第几页
+     * @param chapter
+     */
+    void showChapter(boolean reset,ReaderView readerView,boolean fromLast,int page,Chapter chapter);
 
 }

@@ -27,4 +27,17 @@ public interface BookService {
             ,@Field("extern_bookid") String exterBookId
             ,@Field("startid") int startid);
 
+    /**
+     * 加载书籍章节
+     * @param service
+     * @param exterBookId
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("reader/public/v1/")
+    Call<BaseModel<ArrayList<Chapter>>> getNextChapter(@Field("service") String service
+            ,@Field("extern_bookid") String exterBookId
+            ,@Field("startid") int startid);
+
+
 }

@@ -1,6 +1,5 @@
 package xcvf.top.readercore.bean;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.TypedValue;
@@ -8,10 +7,6 @@ import android.widget.TextView;
 
 import com.blankj.utilcode.util.SPUtils;
 import com.scwang.smartrefresh.layout.util.DensityUtil;
-import com.scwang.smartrefresh.layout.util.DesignUtil;
-
-import top.iscore.freereader.App;
-import top.iscore.freereader.R;
 
 /**
  * 字体设置
@@ -88,7 +83,7 @@ public class TextConfig {
         Paint textPaint = new Paint();
         textPaint.setTextSize(textSize);
         textPaint.setFakeBoldText(Bold);
-        textPaint.setTextAlign(Paint.Align.LEFT);
+        textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setColor(textColor);
         textPaint.setAntiAlias(true);
         return textPaint;

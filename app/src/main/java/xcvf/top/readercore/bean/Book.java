@@ -18,6 +18,7 @@ public class Book  extends SugarRecord implements Parcelable {
 
     @Ignore
     public List<Chapter> chapters = new ArrayList<>();
+
     public int bookid=5;
     public String cover  = "http://www.biquge.com.tw/files/article/image/16/16288/16288s.jpg";
     public String name = "斗罗大陆III龙王传说";

@@ -3,10 +3,8 @@ package top.iscore.freereader.mvp.presenters;
 import android.support.annotation.NonNull;
 
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
-import com.tencent.mmkv.MMKV;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,7 +23,7 @@ import xcvf.top.readercore.bean.Chapter;
 public class BookReadPresenter extends MvpBasePresenter<BookReadView> {
 
 
-    public void loadChapters(Book book) {
+    public void loadChapters(Book book,int startId) {
 
         ifViewAttached(new ViewAction<BookReadView>() {
             @Override
@@ -33,10 +31,7 @@ public class BookReadPresenter extends MvpBasePresenter<BookReadView> {
                 view.showLoading(false);
             }
         });
-
-
-
-        Call<BaseModel<ArrayList<Chapter>>> baseModelCall = BaseHttpHandler.create().getProxy(BookService.class).getChapterList("Book.GetChapters", book.extern_bookid, MMKV.defaultMMKV().decodeInt(book.extern_bookid,0));
+        Call<BaseModel<ArrayList<Chapter>>> baseModelCall = BaseHttpHandler.create().getProxy(BookService.class).getChapterList("Book.GetChapters", book.extern_bookid,startId);
         baseModelCall.enqueue(new Callback<BaseModel<ArrayList<Chapter>>>() {
             @Override
             public void onResponse(Call<BaseModel<ArrayList<Chapter>>> call, final Response<BaseModel<ArrayList<Chapter>>> response) {

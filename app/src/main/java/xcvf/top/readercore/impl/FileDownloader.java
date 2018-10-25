@@ -16,7 +16,7 @@ import okhttp3.Response;
 import xcvf.top.readercore.interfaces.DownloadListener;
 import xcvf.top.readercore.utils.Constant;
 
-/**
+/** 文件下载
  * Created by xiaw on 2018/9/28.
  */
 

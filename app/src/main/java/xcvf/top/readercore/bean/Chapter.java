@@ -2,9 +2,12 @@ package xcvf.top.readercore.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 
 import com.orm.SugarRecord;
+import com.orm.dsl.Column;
 import com.orm.dsl.Ignore;
+import com.orm.dsl.Unique;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,14 +20,34 @@ import xcvf.top.readercore.interfaces.IPage;
  */
 public class Chapter extends SugarRecord implements Parcelable {
 
+
+    @Column(name = "chapter_name")
     public String chapter_name;
+
+    @Column(name = "extern_bookid")
     public String extern_bookid;
+
+    @Column(name = "self_page")
     public String self_page;
+
+    @Column(name = "is_fetch")
     public int is_fetch;
+
+    @Column(name = "engine_domain")
     public String engine_domain;
+
+    @Column(name = "extra_info")
     public String extra_info;
+
+    @Column(name = "fetch_code")
     public String fetch_code;
+
+    @Column(name = "content")
     public String content;
+
+    @Unique
+    @Column(name = "chapterid")
+    public int chapterid;
 
     @Override
     public boolean equals(Object o) {
@@ -123,6 +146,49 @@ public class Chapter extends SugarRecord implements Parcelable {
         }
     }
 
+    /**
+     * 获取下一个章节
+     * @param chapterid
+     * @return
+     */
+    public static Chapter getNextChapter(String chapterid) {
+        List<Chapter> chapters = Chapter.find(Chapter.class, " chapterid >  ? ", new String[]{String.valueOf(chapterid)}, null, " chapterid ASC ", " 1 ");
+        if (chapters != null && chapters.size() > 0) {
+            return chapters.get(0);
+        }
+        return null;
+    }
+
+
+    /**
+     * 根绝id获取章节
+     * @param chapterid
+     * @return
+     */
+    public static Chapter getChapter(String chapterid) {
+        if(TextUtils.isEmpty(chapterid)){
+            return  null;
+        }
+        List<Chapter> chapters = Chapter.find(Chapter.class, " chapterid =  ? ", chapterid);
+        if (chapters != null && chapters.size() > 0) {
+            return chapters.get(0);
+        }
+        return null;
+    }
+
+    /**
+     * 获取上一个章节
+     * @param chapterid
+     * @return
+     */
+    public  static Chapter getPreChapter(String chapterid) {
+        List<Chapter> chapters = Chapter.find(Chapter.class, " chapterid <  ? ", new String[]{String.valueOf(chapterid)}, null, " chapterid DESC ", " 1 ");
+        if (chapters != null && chapters.size() > 0) {
+            return chapters.get(0);
+        }
+        return null;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -138,7 +204,6 @@ public class Chapter extends SugarRecord implements Parcelable {
         dest.writeString(this.extra_info);
         dest.writeString(this.fetch_code);
         dest.writeString(this.content);
-        dest.writeList(this.pages);
     }
 
     public Chapter() {
@@ -153,8 +218,7 @@ public class Chapter extends SugarRecord implements Parcelable {
         this.extra_info = in.readString();
         this.fetch_code = in.readString();
         this.content = in.readString();
-        this.pages = new ArrayList<IPage>();
-        in.readList(this.pages, IPage.class.getClassLoader());
+
     }
 
     public static final Creator<Chapter> CREATOR = new Creator<Chapter>() {

@@ -19,6 +19,7 @@ public class TextBreakUtil {
             char ch = chars[i];
             String measureStr = String.valueOf(ch);
             float charWidth = paint.measureText(measureStr);
+
             //超过了整行的宽度，表示一行满了
             TxtChar txtChar = new TxtChar(ch);
             if (ch == '\n') {

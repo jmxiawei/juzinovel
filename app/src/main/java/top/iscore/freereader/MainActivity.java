@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     String[] permissions = new String[]{
-            Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE
+            Manifest.permission.INTERNET, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -56,7 +56,8 @@ public class MainActivity extends AppCompatActivity {
         // startActivity(new Intent(this,ReaderActivity.class));
         toolbar.inflateMenu(R.menu.main_more);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                    || checkSelfPermission(Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     requestPermissions(permissions, 1);
                 }
@@ -73,36 +74,4 @@ public class MainActivity extends AppCompatActivity {
         TabUtils.setIndicator(this, tablayout, 64, 64, 0, 0);
     }
 
-
-    private void move() {
-
-        String[] filenames = new String[]{
-                "13803.html", "13804.html", "13805.html"
-        };
-
-        for (int i = 0; i < filenames.length; i++) {
-
-
-            AssetManager assetManager = getAssets();
-            try {
-                InputStream inputStream = assetManager.open(filenames[i]);
-                File file = new File(Environment.getExternalStorageDirectory() + Constant.BOOK_ROOT_FOLDER);
-                if (!file.exists()) {
-                    file.mkdirs();
-                }
-                FileOutputStream fileOutputStream = new FileOutputStream(new File(file, filenames[i]));
-                byte[] buffer = new byte[1024];
-                int len;
-                while ((len = inputStream.read(buffer)) != -1) {
-                    fileOutputStream.write(buffer, 0, len);
-                }
-                fileOutputStream.close();
-                inputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-
-            }
-        }
-    }
 }

@@ -40,11 +40,6 @@ public class AddParamsInterceptor implements Interceptor {
          *
          */
         HttpUrl.Builder builder = url.newBuilder();
-//        HashMap<String, String> params = App.getApp().getToken();
-//        for (Map.Entry<String, String> p :
-//                params.entrySet()) {
-//            builder.addQueryParameter(p.getKey(), p.getValue());
-//        }
 
 
         FormBody formBody = (FormBody) oldRequest.body();

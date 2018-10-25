@@ -3,7 +3,6 @@ package xcvf.top.readercore.views;
 import android.content.Context;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewConfigurationCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
@@ -13,10 +12,14 @@ import android.view.ViewConfiguration;
 
 import com.blankj.utilcode.util.LogUtils;
 
+import xcvf.top.readercore.bean.Chapter;
 import xcvf.top.readercore.bean.TextConfig;
+import xcvf.top.readercore.impl.ChapterPagerSnapHelper;
+import xcvf.top.readercore.impl.SimplePageChangeListener;
 import xcvf.top.readercore.interfaces.Area;
 import xcvf.top.readercore.interfaces.IAreaClickListener;
 import xcvf.top.readercore.interfaces.IPageScrollListener;
+import xcvf.top.readercore.interfaces.OnPageChangedListener;
 
 /**
  * 翻页显示内容
@@ -26,9 +29,10 @@ public class BookContentView extends RecyclerView {
 
     static final int V_CLICK = 6;
 
-    PagerSnapHelper mPagerSnapHelper;
+    ChapterPagerSnapHelper mPagerSnapHelper;
     IPageScrollListener mPageScrollListener;
     IAreaClickListener mAreaClickListener;
+
     boolean isReachLastPage = false;
     boolean isReachStartPage = false;
 
@@ -57,6 +61,27 @@ public class BookContentView extends RecyclerView {
         isReachStartPage = false;
     }
 
+    public int getCurrentPage() {
+        return currentPage;
+    }
+
+    public BookContentView setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
+        return this;
+    }
+
+
+    /*
+     * 翻页
+     */
+    private OnPageChangedListener onPageChangeListener = new SimplePageChangeListener() {
+        @Override
+        public void onPageSelected(int position) {
+            LogUtils.e("position = " + position);
+        }
+    };
+
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         switch (ev.getAction()) {
@@ -72,18 +97,12 @@ public class BookContentView extends RecyclerView {
                 if (Math.abs(cdownX - downX) > touchSlop) {
                     if (cdownX > downX) {
                         //右滑动
-                        if (isReachStartPage) {
-                            if (mPageScrollListener != null) {
-                                mPageScrollListener.onScroll(currentPage, totalPage, IPageScrollListener.PRE_CHAPTER);
-                            }
-                            LogUtils.e("右滑动---上一章");
+                        if (mPageScrollListener != null) {
+                            mPageScrollListener.onScroll(currentPage, totalPage, IPageScrollListener.PRE_CHAPTER);
                         }
                     } else {
-                        if (isReachLastPage) {
-                            if (mPageScrollListener != null) {
-                                mPageScrollListener.onScroll(currentPage, totalPage, IPageScrollListener.NEXT_CHAPTER);
-                            }
-                            LogUtils.e("左滑动---下一章");
+                        if (mPageScrollListener != null) {
+                            mPageScrollListener.onScroll(currentPage, totalPage, IPageScrollListener.NEXT_CHAPTER);
                         }
                     }
                 } else {
@@ -101,8 +120,8 @@ public class BookContentView extends RecyclerView {
             default:
                 break;
         }
-        LogUtils.e("isReachStartPage="+isReachStartPage+",isReachLastPage="+isReachLastPage
-                +",currentPage="+currentPage+",totalPage="+totalPage);
+        LogUtils.e("isReachStartPage=" + isReachStartPage + ",isReachLastPage=" + isReachLastPage
+                + ",currentPage=" + currentPage + ",totalPage=" + totalPage);
         return super.dispatchTouchEvent(ev);
     }
 
@@ -165,8 +184,10 @@ public class BookContentView extends RecyclerView {
 
     void init() {
         touchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop() * 4;
-        mPagerSnapHelper = new PagerSnapHelper();
+        mPagerSnapHelper = new ChapterPagerSnapHelper();
+        mPagerSnapHelper.setOnPageChangedListener(onPageChangeListener);
         mPagerSnapHelper.attachToRecyclerView(this);
+
     }
 
 
