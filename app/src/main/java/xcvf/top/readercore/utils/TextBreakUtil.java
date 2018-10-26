@@ -22,6 +22,7 @@ public class TextBreakUtil {
 
             //超过了整行的宽度，表示一行满了
             TxtChar txtChar = new TxtChar(ch);
+            txtChar.setWidth(charWidth);
             if (ch == '\n') {
                 //换行
                 line.addChar(txtChar);

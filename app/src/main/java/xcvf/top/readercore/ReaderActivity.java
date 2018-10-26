@@ -100,9 +100,6 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
 
         presenter.attachView(this);
         book = getIntent().getParcelableExtra("book");
-        book = new Book();
-        book.name = "";
-        book.extern_bookid = "3_3987";
         if (book != null) {
             book.save();
         }
@@ -123,8 +120,8 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
     }
 
     private void checkChapters(final boolean retry) {
-        mBookMark = BookMark.getMark(book, null);
-        String chapterid = null;
+        mBookMark = BookMark.getMark(book, mUser.getUid());
+        String chapterid = "369908";
         if (mBookMark == null) {
             //没有书签，从第一个章节开始
             Chapter chapter = Chapter.getNextChapter("0");
@@ -143,7 +140,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
                         loadData(false);
                     }
                 } else {
-                    mChapterDisplayedImpl.showChapter(false, readerView, false, IPage.LOADING_PAGE, chapter);
+                    mChapterDisplayedImpl.showChapter(false, readerView, false, mBookMark == null ? IPage.LOADING_PAGE : mBookMark.getPage(), chapter);
                 }
             }
         });
@@ -203,13 +200,13 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
         //保存书签
         if (chapter != null) {
             if (mBookMark == null) {
-                mBookMark = new BookMark(null, book.extern_bookid);
+                mBookMark = new BookMark(mUser.getUid(), book.extern_bookid);
             }
             mBookMark.setExtern_bookid(book.extern_bookid);
             mBookMark.setChapterid(String.valueOf(chapter.chapterid));
             mBookMark.setTime_stamp(System.currentTimeMillis());
             Page page = readerView.getCurrentPage();
-            mBookMark.setPage(String.valueOf(page.getIndex()));
+            mBookMark.setPage(page.getIndex());
             mBookMark.save();
         }
 

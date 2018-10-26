@@ -1,6 +1,7 @@
 package top.iscore.freereader.adapter.holders;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -31,6 +32,10 @@ public class BookHolder extends CommonViewHolder<Book> {
     TextView tvChapter;
     @BindView(R.id.ll_new)
     LinearLayout llNew;
+    @BindView(R.id.ll_empty)
+    LinearLayout llEmpty;
+    @BindView(R.id.ll_content)
+    LinearLayout llContent;
 
     public BookHolder(Context context, ViewGroup root) {
         super(context, root, R.layout.item_holder_bookself);
@@ -39,11 +44,20 @@ public class BookHolder extends CommonViewHolder<Book> {
 
     @Override
     public void bindData(Book book, int position) {
-        RoundedCornersTransformation roundedCornersTransformation
-                = new RoundedCornersTransformation(itemView.getContext(), 24, 0);
-        Glide.with(itemView.getContext()).load(book.cover).placeholder(R.mipmap.ic_placehold_book).bitmapTransform(roundedCornersTransformation).into(imgCover);
-        tvName.setText(book.name);
-        tvChapter.setText(book.latest_chapter_name);
-        llNew.setVisibility(View.INVISIBLE);
+
+        if (book.bookid == -1) {
+            llEmpty.setVisibility(View.VISIBLE);
+            llContent.setVisibility(View.GONE);
+        } else {
+            llContent.setVisibility(View.VISIBLE);
+            llEmpty.setVisibility(View.GONE);
+            RoundedCornersTransformation roundedCornersTransformation
+                    = new RoundedCornersTransformation(itemView.getContext(), 10, 0);
+            Glide.with(itemView.getContext()).load(book.cover).placeholder(R.mipmap.ic_placehold_book).bitmapTransform(roundedCornersTransformation).into(imgCover);
+            tvName.setText(Html.fromHtml(book.name));
+            tvChapter.setText(book.latest_chapter_name);
+            llNew.setVisibility(View.INVISIBLE);
+        }
+
     }
 }

@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import com.orm.SugarRecord;
 import com.orm.dsl.Column;
 import com.orm.dsl.Ignore;
+import com.orm.dsl.Table;
 import com.orm.dsl.Unique;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import xcvf.top.readercore.interfaces.IPage;
  * 章节
  * Created by xiaw on 2018/6/30.
  */
+@Table(name = "chapters")
 public class Chapter extends SugarRecord implements Parcelable {
 
 
@@ -42,8 +44,6 @@ public class Chapter extends SugarRecord implements Parcelable {
     @Column(name = "fetch_code")
     public String fetch_code;
 
-    @Column(name = "content")
-    public String content;
 
     @Unique
     @Column(name = "chapterid")
@@ -51,8 +51,12 @@ public class Chapter extends SugarRecord implements Parcelable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Chapter chapter = (Chapter) o;
 
@@ -127,13 +131,6 @@ public class Chapter extends SugarRecord implements Parcelable {
         this.fetch_code = fetch_code;
     }
 
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
 
     public List<IPage> getPages() {
         return pages;
@@ -148,6 +145,7 @@ public class Chapter extends SugarRecord implements Parcelable {
 
     /**
      * 获取下一个章节
+     *
      * @param chapterid
      * @return
      */
@@ -162,12 +160,13 @@ public class Chapter extends SugarRecord implements Parcelable {
 
     /**
      * 根绝id获取章节
+     *
      * @param chapterid
      * @return
      */
     public static Chapter getChapter(String chapterid) {
-        if(TextUtils.isEmpty(chapterid)){
-            return  null;
+        if (TextUtils.isEmpty(chapterid)) {
+            return null;
         }
         List<Chapter> chapters = Chapter.find(Chapter.class, " chapterid =  ? ", chapterid);
         if (chapters != null && chapters.size() > 0) {
@@ -178,10 +177,11 @@ public class Chapter extends SugarRecord implements Parcelable {
 
     /**
      * 获取上一个章节
+     *
      * @param chapterid
      * @return
      */
-    public  static Chapter getPreChapter(String chapterid) {
+    public static Chapter getPreChapter(String chapterid) {
         List<Chapter> chapters = Chapter.find(Chapter.class, " chapterid <  ? ", new String[]{String.valueOf(chapterid)}, null, " chapterid DESC ", " 1 ");
         if (chapters != null && chapters.size() > 0) {
             return chapters.get(0);
@@ -203,7 +203,6 @@ public class Chapter extends SugarRecord implements Parcelable {
         dest.writeString(this.engine_domain);
         dest.writeString(this.extra_info);
         dest.writeString(this.fetch_code);
-        dest.writeString(this.content);
     }
 
     public Chapter() {
@@ -217,7 +216,7 @@ public class Chapter extends SugarRecord implements Parcelable {
         this.engine_domain = in.readString();
         this.extra_info = in.readString();
         this.fetch_code = in.readString();
-        this.content = in.readString();
+
 
     }
 

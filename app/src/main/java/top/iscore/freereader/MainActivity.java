@@ -24,6 +24,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import top.iscore.freereader.adapter.TabFragmentAdapter;
 import top.iscore.freereader.fragment.BookshelfFragment;
+import xcvf.top.readercore.bean.User;
 import xcvf.top.readercore.utils.Constant;
 
 
@@ -52,7 +53,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
+        User user = new User();
+        user.setUid("4");
+        user.setAccount("admin");
+        user.save();
         // startActivity(new Intent(this,ReaderActivity.class));
         toolbar.inflateMenu(R.menu.main_more);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

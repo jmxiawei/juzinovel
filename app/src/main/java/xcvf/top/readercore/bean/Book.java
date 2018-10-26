@@ -19,18 +19,21 @@ public class Book  extends SugarRecord implements Parcelable {
     @Ignore
     public List<Chapter> chapters = new ArrayList<>();
 
-    public int bookid=5;
-    public String cover  = "http://www.biquge.com.tw/files/article/image/16/16288/16288s.jpg";
-    public String name = "斗罗大陆III龙王传说";
-    public String author = "唐家三少";
-    public String cate_name = "玄幻小说";
-    public String desc ="    伴随着魂导科技的进步，斗罗大陆上的人类征服了海洋，又发现了两片大陆。魂兽也随着人类魂师的猎杀无度走向灭亡，沉睡无数年的魂兽之王在星斗大森林最后的净土苏醒，它要带领仅存的族人，向人类复仇！     唐舞麟立志要成为一名强大的魂师，可当武魂觉醒时，苏醒的，却是……     旷世之才，龙王之争，我们的龙王传说，将由此开始";
-    public String latest_chapter_name="一千八百五十一章 海神斗罗";
+    public int bookid;
+    public String cover  ;
+    public String name ;
+    public String author ;
+    public String cate_name;
+    public String desc ;
+    public String latest_chapter_name;
     public String latest_chapter_url;
     public String keywords;
     @Unique
-    public String extern_bookid="16_16288";
+    public String extern_bookid;
 
+    public Book(int bookid) {
+        this.bookid = bookid;
+    }
 
     @Override
     public int describeContents() {

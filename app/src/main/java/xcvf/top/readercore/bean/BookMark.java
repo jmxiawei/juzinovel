@@ -32,7 +32,7 @@ public class BookMark extends SugarRecord implements Parcelable {
     @Column(name = "chapterid")
     String chapterid;
     @Column(name = "page")
-    String page;
+    int page;
 
     public long getTime_stamp() {
         return time_stamp;
@@ -69,10 +69,7 @@ public class BookMark extends SugarRecord implements Parcelable {
         if (bookMarks != null && bookMarks.size() > 0) {
             return bookMarks.get(0);
         }
-
-        BookMark bookMark = new BookMark(null, book.extern_bookid);
-        bookMark.chapterid = "367499";
-        return bookMark;
+        return null;
     }
 
     public String getChapterid() {
@@ -84,11 +81,11 @@ public class BookMark extends SugarRecord implements Parcelable {
         return this;
     }
 
-    public String getPage() {
+    public int getPage() {
         return page;
     }
 
-    public BookMark setPage(String page) {
+    public BookMark setPage(int page) {
         this.page = page;
         return this;
     }
@@ -109,7 +106,7 @@ public class BookMark extends SugarRecord implements Parcelable {
         dest.writeString(this.userid);
         dest.writeString(this.extern_bookid);
         dest.writeString(this.chapterid);
-        dest.writeString(this.page);
+        dest.writeInt(this.page);
     }
 
     protected BookMark(Parcel in) {
@@ -118,7 +115,7 @@ public class BookMark extends SugarRecord implements Parcelable {
         this.userid = in.readString();
         this.extern_bookid = in.readString();
         this.chapterid = in.readString();
-        this.page = in.readString();
+        this.page = in.readInt();
     }
 
     public static final Creator<BookMark> CREATOR = new Creator<BookMark>() {

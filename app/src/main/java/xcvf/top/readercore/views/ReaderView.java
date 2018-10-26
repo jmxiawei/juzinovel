@@ -97,16 +97,7 @@ public class ReaderView extends FrameLayout {
      * @param page       直接跳转到哪一页
      */
     public void setChapter(boolean reset, Chapter mChapter, final boolean toLastPage, int page) {
-        mBookContentAdapter.setChapter(reset, mChapter, page);
-        if (page == IPage.LOADING_PAGE) {
-            if (toLastPage) {
-                mBookContentView.scrollToPosition(mBookContentAdapter.getItemCount() - 1);
-            }
-        } else {
-            //可能从历史记录跳转
-            mBookContentView.scrollToPosition(page);
-        }
-
+        mBookContentAdapter.setChapter(mBookContentView,reset, mChapter, page);
     }
 
 }

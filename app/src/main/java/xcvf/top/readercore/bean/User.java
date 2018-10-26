@@ -4,24 +4,44 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.orm.SugarRecord;
+import com.orm.dsl.Column;
+import com.orm.dsl.Table;
+import com.orm.dsl.Unique;
+
+import java.util.List;
 
 /**
  * 用户
  * Created by xiaw on 2018/10/25.
  */
+@Table(name = "users")
+public class User extends SugarRecord implements Parcelable {
 
-public class User  extends SugarRecord implements Parcelable {
-
+    @Column(name = "nickname")
     String nickname;
+
+    @Unique
+    @Column(name = "uid")
     String uid;
+    @Column(name = "avatar")
     String avatar;
+    @Column(name = "account")
     String account;
+    @Column(name = "gender")
     String gender;
+    @Column(name = "token")
     String token;
+    @Column(name = "update_time")
+    String update_time;
 
+    public String getUpdate_time() {
+        return update_time;
+    }
 
-
-
+    public User setUpdate_time(String update_time) {
+        this.update_time = update_time;
+        return this;
+    }
 
     public String getNickname() {
         return nickname;
@@ -77,6 +97,17 @@ public class User  extends SugarRecord implements Parcelable {
         return this;
     }
 
+    public static User currentUser() {
+        List<User> users = User.find(User.class, null, null, null, " update_time DESC", "1");
+        if (users != null && users.size() > 0) {
+            return users.get(0);
+        }
+        return new User();
+    }
+
+    public User() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -90,9 +121,7 @@ public class User  extends SugarRecord implements Parcelable {
         dest.writeString(this.account);
         dest.writeString(this.gender);
         dest.writeString(this.token);
-    }
-
-    public User() {
+        dest.writeString(this.update_time);
     }
 
     protected User(Parcel in) {
@@ -102,9 +131,10 @@ public class User  extends SugarRecord implements Parcelable {
         this.account = in.readString();
         this.gender = in.readString();
         this.token = in.readString();
+        this.update_time = in.readString();
     }
 
-    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+    public static final Creator<User> CREATOR = new Creator<User>() {
         @Override
         public User createFromParcel(Parcel source) {
             return new User(source);

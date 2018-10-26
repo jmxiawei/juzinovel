@@ -10,11 +10,20 @@ public class TxtChar implements IChar {
 
     char data;
     int type;
+    float width;
+
+    public float getWidth() {
+        return width;
+    }
 
     public TxtChar(char data) {
         this.data = data;
     }
 
+    public TxtChar setWidth(float width) {
+        this.width = width;
+        return this;
+    }
 
     @Override
     public int getType() {

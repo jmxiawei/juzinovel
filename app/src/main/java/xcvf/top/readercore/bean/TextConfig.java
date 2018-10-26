@@ -2,11 +2,14 @@ package xcvf.top.readercore.bean;
 
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.text.TextPaint;
 import android.util.TypedValue;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.SPUtils;
 import com.scwang.smartrefresh.layout.util.DensityUtil;
+
+import top.iscore.freereader.R;
 
 /**
  * 字体设置
@@ -22,17 +25,20 @@ public class TextConfig {
     private static final String C_WIDTH = "C_WIDTH";
     private static final String C_HEIGHT = "C_HEIGHT";
     private static final String C_SHOW_SPECIAL_CHAR = "SHOW_SPECIAL_CHAR";
+    private static final String C_PADDING_TOP = "C_PADDING_TOP";
 
 
     public static final int MAX_TEXT_SIZE = 150;
     public static final int MIN_TEXT_SIZE = 50;
     public int textSize = MIN_TEXT_SIZE;
-    public int textColor = Color.BLACK;
-    public int backgroundColor = Color.WHITE;
+    public int textColor = R.color.text_black;
+    public int backgroundColor = R.color.reader_styleclor1;
     public Boolean Bold = false;
     public int pageWidth;
     public int pageHeight;
     public int lineSpace = 8;
+
+    public int paddingTop;
 
     private TextConfig() {
     }
@@ -43,7 +49,7 @@ public class TextConfig {
 
     public void setPageWidth(int pageWidth) {
         this.pageWidth = pageWidth;
-        this.pageWidth = this.pageWidth - DensityUtil.dp2px(32);
+        this.pageWidth = this.pageWidth - DensityUtil.dp2px(20);
         SPUtils.getInstance(SAVE_NAME).put(C_WIDTH, this.pageWidth);
     }
 
@@ -64,29 +70,34 @@ public class TextConfig {
     public static TextConfig getConfig() {
         TextConfig textConfig = new TextConfig();
         textConfig.textSize = SPUtils.getInstance(SAVE_NAME).getInt(C_TEXT_SIZE, textConfig.textSize);
-        textConfig.lineSpace = textConfig.textSize / 6;
         textConfig.textColor = SPUtils.getInstance(SAVE_NAME).getInt(C_TEXT_COLOR, textConfig.textColor);
         textConfig.backgroundColor = SPUtils.getInstance(SAVE_NAME).getInt(C_BACKGROUND_COLOR, textConfig.backgroundColor);
         textConfig.Bold = SPUtils.getInstance(SAVE_NAME).getBoolean(C_BOLD, textConfig.Bold);
         textConfig.pageWidth = SPUtils.getInstance(SAVE_NAME).getInt(C_WIDTH, 0);
         textConfig.pageHeight = SPUtils.getInstance(SAVE_NAME).getInt(C_HEIGHT, 0);
-
+        textConfig.paddingTop = SPUtils.getInstance(SAVE_NAME).getInt(C_PADDING_TOP, 0);
         return textConfig;
     }
 
 
     public int maxLine() {
-        return (pageHeight - DensityUtil.dp2px(72)) / (textSize + lineSpace);
+        int padding = DensityUtil.dp2px(56);
+        int line = (pageHeight - padding) / (textSize + lineSpace);
+        paddingTop = (pageHeight - padding - (line * (textSize + lineSpace))) / 2;
+        SPUtils.getInstance(SAVE_NAME).put(C_PADDING_TOP, paddingTop);
+        return line;
     }
 
     public Paint getSamplePaint() {
-        Paint textPaint = new Paint();
+        TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         textPaint.setTextSize(textSize);
         textPaint.setFakeBoldText(Bold);
-        textPaint.setTextAlign(Paint.Align.CENTER);
-        textPaint.setColor(textColor);
         textPaint.setAntiAlias(true);
         return textPaint;
+    }
+
+    public int getLineSpace() {
+        return lineSpace;
     }
 
     public int getTextSize() {
@@ -100,7 +111,6 @@ public class TextConfig {
         } else if (textSize > MAX_TEXT_SIZE) {
             textSize = MAX_TEXT_SIZE;
         }
-        lineSpace = this.textSize / 6;
         this.textSize = textSize;
         SPUtils.getInstance(SAVE_NAME).put(C_TEXT_SIZE, textSize);
     }
@@ -111,7 +121,7 @@ public class TextConfig {
 
     public void setTextColor(int textColor) {
         this.textColor = textColor;
-        SPUtils.getInstance(SAVE_NAME).put(C_TEXT_COLOR, textSize);
+        SPUtils.getInstance(SAVE_NAME).put(C_TEXT_COLOR, this.textColor);
     }
 
     public int getBackgroundColor() {
@@ -120,7 +130,7 @@ public class TextConfig {
 
     public void setBackgroundColor(int backgroundColor) {
         this.backgroundColor = backgroundColor;
-        SPUtils.getInstance(SAVE_NAME).put(C_BACKGROUND_COLOR, textSize);
+        SPUtils.getInstance(SAVE_NAME).put(C_BACKGROUND_COLOR, this.backgroundColor);
     }
 
     public Boolean getBold() {
@@ -132,6 +142,6 @@ public class TextConfig {
     }
 
     public void applyColor(TextView tv) {
-        tv.setTextColor(TextConfig.getConfig().getTextColor());
+        tv.setTextColor(tv.getResources().getColor(textColor));
     }
 }

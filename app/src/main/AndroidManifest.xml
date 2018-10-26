@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -34,7 +35,7 @@
             android:value="reader.db" />
         <meta-data
             android:name="VERSION"
-            android:value="5" />
+            android:value="6" />
         <meta-data
             android:name="QUERY_LOG"
             android:value="true" />

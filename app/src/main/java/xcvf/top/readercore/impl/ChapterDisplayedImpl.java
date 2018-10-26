@@ -25,8 +25,7 @@ public class ChapterDisplayedImpl implements IDisplayer {
     }
 
     @Override
-    public void showChapter(final boolean reset, final ReaderView readerView, final boolean toLastPage, int page, final Chapter chapter) {
-        LogUtils.e("show chapter "+chapter.chapter_name);
+    public void showChapter(final boolean reset, final ReaderView readerView, final boolean toLastPage, final int page, final Chapter chapter) {
         //重新加载
         //下载文件
         FileDownloader.download(App.oss_domain + chapter.self_page, Constant.getCachePath(readerView.getContext(), chapter.self_page), new DownloadListener() {
@@ -36,7 +35,7 @@ public class ChapterDisplayedImpl implements IDisplayer {
                     //下载成功
                     TextConfig config = TextConfig.getConfig();
                     chapter.setPages(HtmlPageProvider.newInstance().providerPages(path, config.pageWidth, config.maxLine(), config.getSamplePaint()));
-                    readerView.setChapter(reset,chapter, toLastPage, IPage.LOADING_PAGE);
+                    readerView.setChapter(reset,chapter, toLastPage, page);
                 }
             }
         });
