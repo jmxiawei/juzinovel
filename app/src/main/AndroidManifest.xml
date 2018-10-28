@@ -8,7 +8,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
-
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -22,10 +21,10 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="xcvf.top.readercore.ReaderActivity"
             android:screenOrientation="portrait" />
@@ -42,6 +41,12 @@
         <meta-data
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="xcvf.top.readercore" />
+
+        <activity
+            android:name="xcvf.top.readercore.FullscreenActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_fullscreen"
+            android:theme="@style/FullscreenTheme"></activity>
     </application>
 
 </manifest>

@@ -15,7 +15,7 @@
         <ImageView
             android:id="@+id/iv_back"
             android:layout_width="48dp"
-            android:padding="12dp"
+            android:padding="16dp"
             android:layout_height="48dp"
             android:scaleType="centerInside"
             android:src="@mipmap/icon_back" />
@@ -43,6 +43,7 @@
 
 
         <LinearLayout
+            android:id="@+id/ll_mode"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -62,11 +63,12 @@
                 android:gravity="center"
                 android:text="日间"
                 android:textColor="@color/text_gray_light"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_font"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -86,11 +88,12 @@
                 android:gravity="center"
                 android:text="字体"
                 android:textColor="@color/text_gray_light"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_cache"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -110,11 +113,12 @@
                 android:gravity="center"
                 android:text="缓存"
                 android:textColor="@color/text_gray_light"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_chapter_list"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -132,10 +136,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-
                 android:text="目录"
                 android:textColor="@color/text_gray_light"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
         </LinearLayout>
 

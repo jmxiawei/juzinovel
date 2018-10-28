@@ -2,8 +2,14 @@ package xcvf.top.readercore.impl;
 
 import com.blankj.utilcode.util.LogUtils;
 
+import java.util.List;
+import java.util.concurrent.Callable;
+
+import bolts.Continuation;
+import bolts.Task;
 import top.iscore.freereader.App;
 import xcvf.top.readercore.bean.Chapter;
+import xcvf.top.readercore.bean.Page;
 import xcvf.top.readercore.bean.TextConfig;
 import xcvf.top.readercore.interfaces.DownloadListener;
 import xcvf.top.readercore.interfaces.IDisplayer;
@@ -30,12 +36,25 @@ public class ChapterDisplayedImpl implements IDisplayer {
         //下载文件
         FileDownloader.download(App.oss_domain + chapter.self_page, Constant.getCachePath(readerView.getContext(), chapter.self_page), new DownloadListener() {
             @Override
-            public void onDownload(int status, String path) {
+            public void onDownload(int status,final String path) {
                 if (status == 0) {
                     //下载成功
-                    TextConfig config = TextConfig.getConfig();
-                    chapter.setPages(HtmlPageProvider.newInstance().providerPages(path, config.pageWidth, config.maxLine(), config.getSamplePaint()));
-                    readerView.setChapter(reset,chapter, toLastPage, page);
+                    final TextConfig config = TextConfig.getConfig();
+                    Task.callInBackground(new Callable<List<IPage>>() {
+                        @Override
+                        public List<IPage> call() throws Exception {
+                            return  HtmlPageProvider.newInstance().providerPages(path, config.pageWidth, config.maxLine(), config.getSamplePaint());
+
+                        }
+                    }).continueWith(new Continuation<List<IPage>, Object>() {
+                        @Override
+                        public Object then(Task<List<IPage>> task) throws Exception {
+                            chapter.setPages(task.getResult());
+                            readerView.setChapter(reset,chapter, toLastPage, page);
+                            return null;
+                        }
+                    },Task.UI_THREAD_EXECUTOR);
+
                 }
             }
         });

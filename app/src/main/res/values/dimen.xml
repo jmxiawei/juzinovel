@@ -5,7 +5,7 @@
     <dimen name="toolbar_height">56dp</dimen>
     <dimen name="horizon_margin">16dp</dimen>
     <dimen name="vertical_margin">8dp</dimen>
-    <dimen name="size_bottom_icon">20dp</dimen>
+    <dimen name="size_bottom_icon">16dp</dimen>
 
 
     <dimen name="read_page_padding">10dp</dimen>

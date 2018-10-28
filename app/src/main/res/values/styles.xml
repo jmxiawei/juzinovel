@@ -10,6 +10,8 @@
             res/values-vXX/styles.xml, while customizations related to
             backward-compatibility can go here.
         -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <!-- Application theme. -->
@@ -19,6 +21,9 @@
 
     <!-- 日间主题 -->
     <style name="DayTheme" parent="AppTheme">
+        <item name="colorAccent">@color/bg_top_light_color</item>
+        <item name="colorPrimary">@color/bg_top_light_color</item>
+        <item name="colorPrimaryDark">@color/bg_top_light_color</item>
         <item name="root_view_bg">@color/color_white</item>
         <item name="top_root_color">@color/bg_top_light_color</item>
         <item name="text_color">@color/text_black</item>
@@ -28,12 +33,27 @@
 
     <!-- 夜间主题 -->
     <style name="NightTheme" parent="AppTheme">
+        <item name="colorAccent">@color/bg_top_light_color</item>
+        <item name="colorPrimary">@color/bg_top_light_color</item>
+        <item name="colorPrimaryDark">@color/bg_top_light_color</item>
         <item name="root_view_bg">@color/bg_light_color</item>
         <item name="top_root_color">@color/bg_top_light_color</item>
         <item name="text_color">@color/text_black</item>
         <item name="text_second_color">@color/text_gray_light</item>
         <item name="book_list_bg">@color/bg_dark_color</item>
 
+    </style>
+
+    <style name="FullscreenTheme" parent="DayTheme">
+        <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowBackground">@null</item>
+        <item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>
+        <item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
+    </style>
+
+    <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
+        <item name="android:background">@color/black_overlay</item>
     </style>
 
 </resources>

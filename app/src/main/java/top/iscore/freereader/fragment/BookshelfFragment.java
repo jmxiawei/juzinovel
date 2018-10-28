@@ -114,6 +114,7 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
             mBookShelfAdapter.appendDataList(data);
         }
         refreshLayout.finishRefresh();
+        refreshLayout.finishLoadMore();
     }
 
     @Override

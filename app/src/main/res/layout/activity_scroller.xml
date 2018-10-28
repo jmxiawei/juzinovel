@@ -10,7 +10,11 @@
         android:layout_height="match_parent" />
 
 
-    <include layout="@layout/layout_read_setting" />
+    <xcvf.top.readercore.views.ReaderSettingView
+        android:id="@+id/setting_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 
 
 </FrameLayout>

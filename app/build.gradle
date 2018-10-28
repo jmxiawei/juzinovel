@@ -24,6 +24,7 @@ android {
 dependencies {
     //implementation project(':hwtxtreaderlib')
     //implementation project(':readercore')
+    compile rootProject.ext.supportV4
     compile files('libs/chardet.jar')
     compile files('libs/jsoup-1.11.3.jar')
     compile rootProject.ext.easypermissions

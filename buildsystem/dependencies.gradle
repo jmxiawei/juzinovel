@@ -56,8 +56,8 @@ ext {
     buildToolsVersion = "26.0.2"
     minSdkVersion = 16
     targetSdkVersion = 26
-    support = "26.1.0"
-    appcompatSupport = "26.1.0"
+    support = "26.0.0-alpha1"
+    appcompatSupport = "26.0.0-alpha1"
 //  versionCode = 195
 //  versionName = '3.6.1'
     versionCode = getVersionCode()

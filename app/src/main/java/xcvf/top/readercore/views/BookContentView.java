@@ -44,7 +44,7 @@ public class BookContentView extends RecyclerView {
     int touchSlop;
 
     long downTimestamp = 0L;
-
+    int position = 0;
     public void setAreaClickListener(IAreaClickListener mAreaClickListener) {
         this.mAreaClickListener = mAreaClickListener;
     }
@@ -62,7 +62,7 @@ public class BookContentView extends RecyclerView {
     }
 
     public int getCurrentPage() {
-        return currentPage;
+        return position;
     }
 
     public BookContentView setCurrentPage(int currentPage) {

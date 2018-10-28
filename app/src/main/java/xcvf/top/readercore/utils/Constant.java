@@ -13,7 +13,9 @@ public class Constant {
 
     public static final String BOOK_ROOT_FOLDER = "/freeBook/";
 
-
+    public static final String DAY_NIGHT_MODE = "DAY_NIGHT_MODE";
+    public static final int DAY_MODE =0;
+    public static final  int NIGHT_MODE = 1;
 
 
 

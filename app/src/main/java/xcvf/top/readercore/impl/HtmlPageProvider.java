@@ -75,6 +75,11 @@ public class HtmlPageProvider implements IPageProvider {
                 content = content.substring(line.getChars().size());
             }
 
+            if(page!=null){
+                pageList.add(page);
+                page.setIndex(pageList.size());
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

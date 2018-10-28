@@ -45,6 +45,8 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
     public void setChapter(BookContentView bookContentView, boolean reset, Chapter mChapter, int startPage) {
         if (reset) {
             mCacheChapterList.clear();
+            pageList.clear();
+            notifyDataSetChanged();
         }
         if (!mCacheChapterList.contains(mChapter)) {
             int size = mCacheChapterList.size();
@@ -89,11 +91,16 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
                 //添加到前面
             }
 
-
-            if (startPage != IPage.LOADING_PAGE && startPage > 0) {
-                //历史记录
-                bookContentView.scrollToPosition(startPage - 1);
+            if(reset){
+                bookContentView.scrollToPosition(0);
+            }else {
+                if (startPage != IPage.LOADING_PAGE && startPage > 0) {
+                    //历史记录
+                    bookContentView.scrollToPosition(startPage - 1);
+                }
             }
+
+
         }
     }
 
@@ -116,7 +123,7 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
 
     private void appendList(List<IPage> pageList) {
         this.pageList.addAll(pageList);
-        notifyItemRangeInserted(this.pageList.size() - pageList.size(), this.pageList.size());
+        notifyItemRangeInserted(this.pageList.size(), this.pageList.size());
     }
 
     private void setPageList(List<IPage> pageList) {

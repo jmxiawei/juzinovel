@@ -19,5 +19,7 @@
     <color name="reader_styleclor4">#393330</color>
     <color name="reader_styleclor5">#00141f</color>
 
+    <color name="black_overlay">#66000000</color>
+    <color name="bg_setting_font">#66000000</color>
 
 </resources>

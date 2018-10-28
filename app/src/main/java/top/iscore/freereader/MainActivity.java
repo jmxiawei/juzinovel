@@ -14,6 +14,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 
+import com.blankj.utilcode.util.ScreenUtils;
+import com.blankj.utilcode.util.Utils;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -24,6 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import top.iscore.freereader.adapter.TabFragmentAdapter;
 import top.iscore.freereader.fragment.BookshelfFragment;
+import top.iscore.freereader.mode.Colorful;
 import xcvf.top.readercore.bean.User;
 import xcvf.top.readercore.utils.Constant;
 
@@ -76,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         viewpager.setAdapter(adapter);
         tablayout.setupWithViewPager(viewpager);
         TabUtils.setIndicator(this, tablayout, 64, 64, 0, 0);
+
     }
 
 }
