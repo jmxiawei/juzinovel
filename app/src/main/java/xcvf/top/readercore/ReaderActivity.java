@@ -15,6 +15,7 @@ import android.view.View;
 
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ScreenUtils;
+import com.blankj.utilcode.util.SpanUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.hannesdorfmann.mosby3.mvp.MvpActivity;
 
@@ -39,6 +40,7 @@ import xcvf.top.readercore.interfaces.IChapterListener;
 import xcvf.top.readercore.interfaces.IChapterProvider;
 import xcvf.top.readercore.interfaces.IPage;
 import xcvf.top.readercore.interfaces.IPageScrollListener;
+import xcvf.top.readercore.utils.Constant;
 import xcvf.top.readercore.views.ReaderSettingView;
 import xcvf.top.readercore.views.ReaderView;
 
@@ -61,7 +63,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
     @BindView(R.id.setting_view)
     ReaderSettingView settingView;
 
-
+    ChapterFragment chapterFragment;
     Handler mHandler = new Handler(Looper.getMainLooper());
     /**
      * 阅读页面
@@ -113,11 +115,19 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
             if(action == SettingAction.ACTION_BACK){
                 finish();
             }else if(action == SettingAction.ACTION_CHAPTER){
-                ChapterFragment chapterFragment = new ChapterFragment();
+
+                chapterFragment = new ChapterFragment();
                 chapterFragment.setBook(book);
                 chapterFragment.setChapter(readerView.getCurrentChapter());
                 chapterFragment.setSwitchChapterListener(switchChapterListener);
                 chapterFragment.show(getSupportFragmentManager(),"ChapterFragment");
+            }else if(action == SettingAction.ACTION_MODE){
+                int current = SPUtils.getInstance().getInt(Constant.DAY_NIGHT_MODE,Constant.DAY_MODE);
+                if(current == Constant.DAY_MODE){
+                    setTheme(R.style.NightTheme);
+                }else {
+                    setTheme(R.style.DayTheme);
+                }
             }
         }
     };

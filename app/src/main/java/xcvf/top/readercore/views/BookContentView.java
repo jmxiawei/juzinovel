@@ -44,7 +44,7 @@ public class BookContentView extends RecyclerView {
     int touchSlop;
 
     long downTimestamp = 0L;
-    int position = 0;
+    int mPosition = 0;
     public void setAreaClickListener(IAreaClickListener mAreaClickListener) {
         this.mAreaClickListener = mAreaClickListener;
     }
@@ -62,7 +62,7 @@ public class BookContentView extends RecyclerView {
     }
 
     public int getCurrentPage() {
-        return position;
+        return mPosition;
     }
 
     public BookContentView setCurrentPage(int currentPage) {
@@ -78,6 +78,7 @@ public class BookContentView extends RecyclerView {
         @Override
         public void onPageSelected(int position) {
             LogUtils.e("position = " + position);
+            mPosition = position;
         }
     };
 

@@ -41,7 +41,7 @@ public class ChapterFragment extends DialogFragment {
 
     Book mbook;
     Chapter chapter;
-
+    static final int page_size = 200;
     int page = 1;
     boolean hasMore = true;
     boolean isloading = false;
@@ -58,8 +58,6 @@ public class ChapterFragment extends DialogFragment {
     public void setSwitchChapterListener(ChapterFragment.switchChapterListener switchChapterListener) {
         this.switchChapterListener = switchChapterListener;
     }
-
-
 
     @Nullable
     @Override
@@ -80,17 +78,18 @@ public class ChapterFragment extends DialogFragment {
         Task.callInBackground(new Callable<List<Chapter>>() {
             @Override
             public List<Chapter> call() throws Exception {
-                int start = (page-1)*100;
-                return  Chapter.find(Chapter.class," extern_bookid = ? ",new String[]{mbook.extern_bookid},null," chapterid ASC ",start+",100 ");
+                int start = (page-1)*page_size;
+                return  Chapter.find(Chapter.class," extern_bookid = ? ",new String[]{mbook.extern_bookid},null," chapterid ASC ",start+", "+page_size+" ");
             }
         }).continueWith(new Continuation<List<Chapter>, Object>() {
             @Override
             public Object then(Task<List<Chapter>> task) throws Exception {
 
                 List<Chapter> chapters = task.getResult();
-                if(chapters.size()<100){
+                if(chapters.size()<page_size){
                     hasMore = false;
                 }
+                mChapterListAdapter.setCurrentChapter(chapter);
                 if(page ==1){
                     mChapterListAdapter.setDataList(chapters);
                 }else {
@@ -115,10 +114,10 @@ public class ChapterFragment extends DialogFragment {
         mChapterListAdapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener<Chapter>() {
             @Override
             public void onRecyclerViewItemClick(CommonViewHolder holder, int position, Chapter item) {
-                        if(switchChapterListener!=null){
-                            switchChapterListener.onChapter(item);
-                        }
-                        dismiss();
+                if(switchChapterListener!=null){
+                    switchChapterListener.onChapter(item);
+                }
+                dismiss();
             }
         });
         mChapterListAdapter.setReachBottomListener(new OnReachBottomListener() {

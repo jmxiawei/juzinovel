@@ -167,6 +167,9 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
 
 
     public Chapter getCurrentChapter(int page) {
+        if(page >= pageList.size()){
+            return  null;
+        }
         IPage page1 = pageList.get(page);
         for (int i = 0; i < mCacheChapterList.size(); i++) {
             List<IPage> pageList = mCacheChapterList.get(i).getPages();
