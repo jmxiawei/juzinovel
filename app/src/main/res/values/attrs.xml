@@ -2,12 +2,11 @@
 <resources>
 
     <!-- 自定义属性 -->
-    <attr name="top_root_color" format="reference|color" />
-    <attr name="root_view_bg" format="reference|color" />
-    <attr name="btn_bg" format="reference|color" />
+
+
     <attr name="text_color" format="reference|color" />
     <attr name="text_second_color" format="reference|color" />
-    <attr name="book_list_bg" format="reference|color" />
+    <attr name="bg_dark" format="reference|color" />
     <item name="swipe_layout" type="id" />
     <item name="recycler" type="id" />
 

@@ -3,12 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <top.iscore.freereader.mode.views.ColorFulLinearLayout
         android:id="@+id/ll_setting_top"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_alignParentTop="true"
-        android:background="#000000"
+        android:background="?attr/bg_dark"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -29,15 +29,15 @@
             android:textSize="16sp" />
 
 
-    </LinearLayout>
+    </top.iscore.freereader.mode.views.ColorFulLinearLayout>
 
 
-    <LinearLayout
+    <top.iscore.freereader.mode.views.ColorFulLinearLayout
         android:id="@+id/ll_setting_bottom"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_alignParentBottom="true"
-        android:background="#000000"
+        android:background="?attr/bg_dark"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -142,7 +142,7 @@
 
         </LinearLayout>
 
-    </LinearLayout>
+    </top.iscore.freereader.mode.views.ColorFulLinearLayout>
 
 
 </RelativeLayout>

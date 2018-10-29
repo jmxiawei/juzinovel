@@ -20,7 +20,6 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import top.iscore.freereader.R;
 import top.iscore.freereader.adapter.ChapterListAdapter;
-
 import top.iscore.freereader.fragment.adapters.CommonViewHolder;
 import top.iscore.freereader.fragment.adapters.OnReachBottomListener;
 import top.iscore.freereader.fragment.adapters.OnRecyclerViewItemClickListener;
@@ -41,10 +40,12 @@ public class ChapterFragment extends DialogFragment {
 
     Book mbook;
     Chapter chapter;
-    static final int page_size = 200;
+    static final int page_size = 100;
     int page = 1;
     boolean hasMore = true;
-    boolean isloading = false;
+    boolean isLoading = false;
+    @BindView(R.id.tv_book)
+    TextView tvBook;
 
     public void setBook(Book mbook) {
         this.mbook = mbook;
@@ -71,50 +72,51 @@ public class ChapterFragment extends DialogFragment {
 
     private void showChapter() {
 
-        isloading = true;
-        if(!hasMore){
+        isLoading = true;
+        if (!hasMore) {
             return;
         }
         Task.callInBackground(new Callable<List<Chapter>>() {
             @Override
             public List<Chapter> call() throws Exception {
-                int start = (page-1)*page_size;
-                return  Chapter.find(Chapter.class," extern_bookid = ? ",new String[]{mbook.extern_bookid},null," chapterid ASC ",start+", "+page_size+" ");
+                int start = (page - 1) * page_size;
+                return Chapter.find(Chapter.class, " extern_bookid = ? ", new String[]{mbook.extern_bookid}, null, " chapterid ASC ", start + ", " + page_size + " ");
             }
         }).continueWith(new Continuation<List<Chapter>, Object>() {
             @Override
             public Object then(Task<List<Chapter>> task) throws Exception {
 
                 List<Chapter> chapters = task.getResult();
-                if(chapters.size()<page_size){
+                if (chapters.size() < page_size) {
                     hasMore = false;
                 }
                 mChapterListAdapter.setCurrentChapter(chapter);
-                if(page ==1){
+                if (page == 1) {
                     mChapterListAdapter.setDataList(chapters);
-                }else {
+                } else {
                     mChapterListAdapter.appendDataList(chapters);
                 }
-                page ++;
-                isloading =false;
+                page++;
+                isLoading = false;
                 return null;
             }
-        },Task.UI_THREAD_EXECUTOR);
+        }, Task.UI_THREAD_EXECUTOR);
 
     }
-    public interface switchChapterListener{
+
+    public interface switchChapterListener {
         void onChapter(Chapter chapter);
     }
 
     private void initViews() {
-
-        recycler.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
+        tvBook.setText(mbook.name);
+        recycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         mChapterListAdapter = new ChapterListAdapter();
         recycler.setAdapter(mChapterListAdapter);
         mChapterListAdapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener<Chapter>() {
             @Override
             public void onRecyclerViewItemClick(CommonViewHolder holder, int position, Chapter item) {
-                if(switchChapterListener!=null){
+                if (switchChapterListener != null) {
                     switchChapterListener.onChapter(item);
                 }
                 dismiss();
@@ -123,7 +125,7 @@ public class ChapterFragment extends DialogFragment {
         mChapterListAdapter.setReachBottomListener(new OnReachBottomListener() {
             @Override
             public void onReachBottom() {
-                if(!isloading&& hasMore){
+                if (!isLoading && hasMore) {
                     showChapter();
                 }
 
@@ -132,14 +134,11 @@ public class ChapterFragment extends DialogFragment {
     }
 
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
     }
-
-
 
 
 }

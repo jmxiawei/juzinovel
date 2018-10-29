@@ -2,6 +2,7 @@ package xcvf.top.readercore;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,8 +16,6 @@ import android.view.View;
 
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ScreenUtils;
-import com.blankj.utilcode.util.SpanUtils;
-import com.blankj.utilcode.util.ToastUtils;
 import com.hannesdorfmann.mosby3.mvp.MvpActivity;
 
 import java.util.ArrayList;
@@ -29,18 +28,24 @@ import top.iscore.freereader.mvp.view.BookReadView;
 import xcvf.top.readercore.bean.Book;
 import xcvf.top.readercore.bean.BookMark;
 import xcvf.top.readercore.bean.Chapter;
+import xcvf.top.readercore.bean.Mode;
 import xcvf.top.readercore.bean.Page;
 import xcvf.top.readercore.bean.SettingAction;
+import xcvf.top.readercore.bean.TextConfig;
 import xcvf.top.readercore.bean.User;
 import xcvf.top.readercore.impl.ChapterDisplayedImpl;
 import xcvf.top.readercore.impl.ChapterProviderImpl;
+import xcvf.top.readercore.impl.FullScreenHandler;
 import xcvf.top.readercore.interfaces.Area;
 import xcvf.top.readercore.interfaces.IAreaClickListener;
 import xcvf.top.readercore.interfaces.IChapterListener;
 import xcvf.top.readercore.interfaces.IChapterProvider;
 import xcvf.top.readercore.interfaces.IPage;
 import xcvf.top.readercore.interfaces.IPageScrollListener;
-import xcvf.top.readercore.utils.Constant;
+import xcvf.top.readercore.interfaces.OnTextConfigChangedListener;
+import xcvf.top.readercore.styles.ModeConfig;
+import xcvf.top.readercore.styles.ModeHandler;
+import xcvf.top.readercore.styles.ModeProvider;
 import xcvf.top.readercore.views.ReaderSettingView;
 import xcvf.top.readercore.views.ReaderView;
 
@@ -52,7 +57,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
 
 
     Book book;
-    public  static final int DELAY_HIDE = 2000;
+
     @BindView(R.id.readerView)
     ReaderView readerView;
 
@@ -64,7 +69,9 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
     ReaderSettingView settingView;
 
     ChapterFragment chapterFragment;
-    Handler mHandler = new Handler(Looper.getMainLooper());
+
+    FullScreenHandler fullScreenHandler;
+
     /**
      * 阅读页面
      *
@@ -80,21 +87,17 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scroller);
+        setContentView(R.layout.activity_reader);
         ButterKnife.bind(this);
-
         presenter.attachView(this);
         book = getIntent().getParcelableExtra("book");
         if (book != null) {
             book.save();
         }
-
         mUser = User.first(User.class);
         settingView.setBook(book);
         settingView.setSettingListener(mSettingListener);
-        ScreenUtils.setFullScreen(this);
         initReadView();
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.INTERNET}, 1);
@@ -102,8 +105,9 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
             }
         }
         checkChapters(true);
+        fullScreenHandler = new FullScreenHandler(this, readerView, settingView);
         //loadData(false);
-        hide();
+        fullScreenHandler.hide();
     }
 
     /**
@@ -112,25 +116,47 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
     private ReaderSettingView.ISettingListener mSettingListener = new ReaderSettingView.ISettingListener() {
         @Override
         public void onSettingChanged(SettingAction action) {
-            if(action == SettingAction.ACTION_BACK){
+            if (action == SettingAction.ACTION_BACK) {
                 finish();
-            }else if(action == SettingAction.ACTION_CHAPTER){
-
+            } else if (action == SettingAction.ACTION_CHAPTER) {
                 chapterFragment = new ChapterFragment();
                 chapterFragment.setBook(book);
                 chapterFragment.setChapter(readerView.getCurrentChapter());
                 chapterFragment.setSwitchChapterListener(switchChapterListener);
-                chapterFragment.show(getSupportFragmentManager(),"ChapterFragment");
-            }else if(action == SettingAction.ACTION_MODE){
-                int current = SPUtils.getInstance().getInt(Constant.DAY_NIGHT_MODE,Constant.DAY_MODE);
-                if(current == Constant.DAY_MODE){
-                    setTheme(R.style.NightTheme);
-                }else {
-                    setTheme(R.style.DayTheme);
+                chapterFragment.show(getSupportFragmentManager(), "ChapterFragment");
+            } else if (action == SettingAction.ACTION_MODE) {
+                Mode current = ModeProvider.getCurrentMode();
+                //切换日间模式和夜间模式
+                Mode dest;
+                if (current == Mode.NightMode) {
+                    dest = Mode.DayMode;
+                } else {
+                    dest = Mode.NightMode;
                 }
+                settingView.changeMode(dest);
+                ModeHandler modeHandler = new ModeHandler(ReaderActivity.this);
+                modeHandler.apply(dest);
+                ModeConfig config = ModeProvider.get(dest);
+                TextConfig.getConfig().setBackgroundColor(config.getBgResId());
+                TextConfig.getConfig().setTextColor(config.getTextColorResId());
+                onTextConfigChangedListener.onChanged(null);
+                ModeProvider.save(config.getId(), dest);
+                fullScreenHandler.check();
             }
         }
     };
+
+
+    /**
+     * 字体设置改了
+     */
+    private OnTextConfigChangedListener onTextConfigChangedListener = new OnTextConfigChangedListener() {
+        @Override
+        public void onChanged(TextConfig config) {
+            readerView.onTextConfigChanged();
+        }
+    };
+
 
     /**
      * 切换章节
@@ -138,7 +164,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
     private ChapterFragment.switchChapterListener switchChapterListener = new ChapterFragment.switchChapterListener() {
         @Override
         public void onChapter(Chapter chapter) {
-            mChapterDisplayedImpl.showChapter(true,readerView,false,Page.LOADING_PAGE,chapter);
+            mChapterDisplayedImpl.showChapter(true, readerView, false, Page.LOADING_PAGE, chapter);
         }
     };
 
@@ -188,54 +214,9 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
 
     }
 
-
-    private Runnable hideSettingTask = new Runnable() {
-        @Override
-        public void run() {
-            settingView.setVisibility(View.GONE);
-        }
-    };
-
-    private Runnable showSettingTask = new Runnable() {
-        @Override
-        public void run() {
-            settingView.setVisibility(View.VISIBLE);
-            // 显示出来之后，延时2秒隐藏
-            hide();
-        }
-    };
-
-
-        private final Runnable mHidePart2Runnable = new Runnable() {
-        @SuppressLint("InlinedApi")
-        @Override
-        public void run() {
-            // Delayed removal of status and navigation bar
-
-            // Note that some of these constants are new as of API 16 (Jelly Bean)
-            // and API 19 (KitKat). It is safe to use them, as they are inlined
-            // at compile-time and do nothing on earlier devices.
-//            mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
-//                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-//                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-//                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-        }
-    };
-
-
-    private void hide() {
-        mHandler.removeCallbacks(hideSettingTask);
-        mHandler.postDelayed(hideSettingTask,DELAY_HIDE);
-    }
-
     @Override
     public void clickArea(Area area) {
-        if(settingView.getVisibility() != View.VISIBLE){
-            mHandler.removeCallbacks(showSettingTask);
-            mHandler.postDelayed(showSettingTask,0);
-        }
+        fullScreenHandler.check();
     }
 
     @Override

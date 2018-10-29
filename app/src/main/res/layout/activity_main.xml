@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tablayout="http://schemas.android.com/apk/res-auto"
@@ -14,16 +15,16 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
-        android:background="?attr/top_root_color" />
+        android:background="?attr/colorAccent" />
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tablayout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
-        android:background="?attr/top_root_color"
+        android:background="?attr/colorAccent"
         app:tabMode="fixed"
         app:tabIndicatorHeight="4dp"
-        app:tabIndicatorColor="?attr/root_view_bg"
+        app:tabIndicatorColor="?attr/colorPrimary"
         />
 
 

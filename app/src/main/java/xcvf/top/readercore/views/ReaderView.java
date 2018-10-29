@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 import java.util.List;
 
 import top.iscore.freereader.R;
+import top.iscore.freereader.mode.views.ColorFulFrameLayout;
 import xcvf.top.readercore.bean.Book;
 import xcvf.top.readercore.bean.Chapter;
 import xcvf.top.readercore.bean.Page;
@@ -17,12 +18,13 @@ import xcvf.top.readercore.holders.BookContentAdapter;
 import xcvf.top.readercore.interfaces.IAreaClickListener;
 import xcvf.top.readercore.interfaces.IPage;
 import xcvf.top.readercore.interfaces.IPageScrollListener;
+import xcvf.top.readercore.interfaces.OnTextConfigChangedListener;
 
 /**
  * 阅读的view
  * Created by xiaw on 2018/6/27.
  */
-public class ReaderView extends FrameLayout {
+public class ReaderView extends ColorFulFrameLayout {
 
     private static final int CACHE_CHAPTER = 5;
 
@@ -35,6 +37,10 @@ public class ReaderView extends FrameLayout {
 
     LinearLayoutManager mLayoutManager;
 
+
+    public void onTextConfigChanged(){
+        mBookContentAdapter.notifyDataSetChanged();
+    }
 
     public void setPageScrollListener(IPageScrollListener pageScrollListener) {
         this.pageScrollListener = pageScrollListener;

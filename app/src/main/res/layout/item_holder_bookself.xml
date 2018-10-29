@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<top.iscore.freereader.mode.views.ColorFulLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:background="?attr/book_list_bg"
+    android:background="?attr/colorPrimary"
     android:orientation="vertical">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -104,4 +104,4 @@
 
 
     </LinearLayout>
-</LinearLayout>
+</top.iscore.freereader.mode.views.ColorFulLinearLayout>

@@ -22,26 +22,23 @@
     <!-- 日间主题 -->
     <style name="DayTheme" parent="AppTheme">
         <item name="colorAccent">@color/bg_top_light_color</item>
-        <item name="colorPrimary">@color/bg_top_light_color</item>
+        <item name="colorPrimary">@color/color_white</item>
         <item name="colorPrimaryDark">@color/bg_top_light_color</item>
-        <item name="root_view_bg">@color/color_white</item>
-        <item name="top_root_color">@color/bg_top_light_color</item>
         <item name="text_color">@color/text_black</item>
         <item name="text_second_color">@color/text_gray_light</item>
-        <item name="book_list_bg">@color/color_white</item>
+        <item name="bg_dark">@color/color_white</item>
+
+
     </style>
 
     <!-- 夜间主题 -->
     <style name="NightTheme" parent="AppTheme">
-        <item name="colorAccent">@color/bg_top_light_color</item>
-        <item name="colorPrimary">@color/bg_top_light_color</item>
-        <item name="colorPrimaryDark">@color/bg_top_light_color</item>
-        <item name="root_view_bg">@color/bg_light_color</item>
-        <item name="top_root_color">@color/bg_top_light_color</item>
-        <item name="text_color">@color/text_black</item>
-        <item name="text_second_color">@color/text_gray_light</item>
-        <item name="book_list_bg">@color/bg_dark_color</item>
-
+        <item name="colorAccent">#FF454545</item>
+        <item name="colorPrimary">#818181</item>
+        <item name="colorPrimaryDark">#FF454545</item>
+        <item name="text_color">@color/color_white</item>
+        <item name="text_second_color">@color/color_light_white</item>
+        <item name="bg_dark">@color/color_black</item>
     </style>
 
     <style name="FullscreenTheme" parent="DayTheme">

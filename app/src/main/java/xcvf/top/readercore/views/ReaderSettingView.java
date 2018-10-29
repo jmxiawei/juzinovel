@@ -18,6 +18,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import top.iscore.freereader.R;
 import xcvf.top.readercore.bean.Book;
+import xcvf.top.readercore.bean.Mode;
 import xcvf.top.readercore.bean.SettingAction;
 import xcvf.top.readercore.utils.Constant;
 
@@ -84,7 +85,7 @@ public class ReaderSettingView extends FrameLayout {
     public ReaderSettingView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         LayoutInflater.from(context).inflate(R.layout.layout_read_setting, this, true);
-        ButterKnife.bind(this,this);
+        ButterKnife.bind(this, this);
         initView();
     }
 
@@ -103,54 +104,54 @@ public class ReaderSettingView extends FrameLayout {
 
     /**
      * 要切换成哪个模式
+     *
      * @param mode
      */
-    public void changeMode(int mode){
-        if(mode == Constant.DAY_MODE){
+    public void changeMode(Mode mode) {
+        if (mode == Mode.DayMode) {
             ivMode.setImageResource(R.mipmap.ic_mode_day);
             tvMode.setText("日间");
-        }else {
+        } else {
             ivMode.setImageResource(R.mipmap.ic_mode_night);
             tvMode.setText("夜间");
         }
-        SPUtils.getInstance().put(Constant.DAY_NIGHT_MODE,mode);
     }
 
     @OnClick({R.id.iv_back, R.id.ll_mode, R.id.ll_font, R.id.ll_cache, R.id.ll_chapter_list})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
-                if(settingListener!=null){
+                if (settingListener != null) {
                     settingListener.onSettingChanged(SettingAction.ACTION_BACK);
                 }
                 break;
             case R.id.ll_mode:
-                if(settingListener!=null){
+                if (settingListener != null) {
                     settingListener.onSettingChanged(SettingAction.ACTION_MODE);
                 }
                 break;
             case R.id.ll_font:
-                if(settingListener!=null){
+                if (settingListener != null) {
                     settingListener.onSettingChanged(SettingAction.ACTION_FONT);
                 }
                 break;
             case R.id.ll_cache:
-                if(settingListener!=null){
+                if (settingListener != null) {
                     settingListener.onSettingChanged(SettingAction.ACTION_CACHE);
                 }
                 break;
             case R.id.ll_chapter_list:
-                if(settingListener!=null){
+                if (settingListener != null) {
                     settingListener.onSettingChanged(SettingAction.ACTION_CHAPTER);
                 }
                 break;
-                default:
-                    break;
+            default:
+                break;
         }
     }
 
 
-    public interface  ISettingListener{
+    public interface ISettingListener {
         void onSettingChanged(SettingAction action);
     }
 }

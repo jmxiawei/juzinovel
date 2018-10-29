@@ -1,35 +1,22 @@
 package top.iscore.freereader;
 
 import android.Manifest;
-import android.app.DownloadManager;
 import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-
-import com.blankj.utilcode.util.ScreenUtils;
-import com.blankj.utilcode.util.Utils;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import top.iscore.freereader.adapter.TabFragmentAdapter;
 import top.iscore.freereader.fragment.BookshelfFragment;
-import top.iscore.freereader.mode.Colorful;
 import xcvf.top.readercore.bean.User;
-import xcvf.top.readercore.utils.Constant;
 
 
 /**
