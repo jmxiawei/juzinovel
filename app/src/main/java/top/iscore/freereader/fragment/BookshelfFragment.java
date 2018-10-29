@@ -33,6 +33,8 @@ import top.iscore.freereader.mvp.view.BookShelfView;
 import xcvf.top.readercore.ReaderActivity;
 import xcvf.top.readercore.bean.Book;
 import xcvf.top.readercore.bean.User;
+import xcvf.top.readercore.styles.ModeHandler;
+import xcvf.top.readercore.styles.ModeProvider;
 
 /**
  * 书架
@@ -50,6 +52,7 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
     int page = 1;
     BookShelfAdapter mBookShelfAdapter;
     User mUser;
+    ModeHandler mModeHandler;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -58,8 +61,14 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
         mUser = User.currentUser();
         presenter.attachView(this);
         initViews(view);
-
+        mModeHandler =new  ModeHandler(getActivity(),(ViewGroup)view);
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mModeHandler.apply(ModeProvider.getCurrentMode());
     }
 
     private void initViews(View view) {

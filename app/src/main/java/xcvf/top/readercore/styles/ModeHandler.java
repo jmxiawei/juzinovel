@@ -1,6 +1,8 @@
 package xcvf.top.readercore.styles;
 
 import android.app.Activity;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -27,15 +29,15 @@ public class ModeHandler {
 
 
     Activity mActivity;
-
-    public ModeHandler(Activity mActivity) {
+    ViewGroup contentView;
+    public ModeHandler(Activity mActivity,ViewGroup contentView) {
         this.mActivity = mActivity;
+        this.contentView = contentView;
     }
 
     public void apply(Mode mode) {
         Colorful.Builder builder = new Colorful.Builder(mActivity);
-        ViewGroup view = (ViewGroup) mActivity.findViewById(R.id.activity_content);
-        childViews(builder, view);
+        childViews(builder, this.contentView);
         builder.create().setTheme(mode == Mode.DayMode ? R.style.DayTheme : R.style.NightTheme);
     }
 
@@ -51,11 +53,14 @@ public class ModeHandler {
                 builder.setter(new ViewBackgroundColorSetter(childView, R.attr.colorPrimary));
             } else if (childView instanceof IRecyclerView) {
                 builder.setter(new ViewGroupSetter((ViewGroup) childView, R.attr.text_color));
+                builder.setter(new ViewGroupSetter((ViewGroup) childView,R.attr.colorPrimary));
             } else if (childView instanceof IBackgroundColorView) {
                 builder.setter(new ViewBackgroundColorSetter(childView, R.attr.colorAccent));
-            } else if(childView instanceof IDarkBackgroundColorView){
+            } else if (childView instanceof IDarkBackgroundColorView) {
                 builder.setter(new ViewBackgroundColorSetter(childView, R.attr.bg_dark));
-            }else {
+            } else if (childView instanceof TabLayout) {
+                builder.setter(new ViewBackgroundColorSetter(childView, R.attr.colorAccent));
+            } else {
                 if (childView instanceof ViewGroup) {
                     childViews(builder, (ViewGroup) childView);
                 }

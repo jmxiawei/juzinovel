@@ -98,6 +98,7 @@ public class ChapterFragment extends DialogFragment {
                 }
                 page++;
                 isLoading = false;
+                showChapter();
                 return null;
             }
         }, Task.UI_THREAD_EXECUTOR);

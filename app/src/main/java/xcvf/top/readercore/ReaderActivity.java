@@ -13,6 +13,7 @@ import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ScreenUtils;
@@ -110,6 +111,13 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
         fullScreenHandler.hide();
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fullScreenHandler.check();
+    }
+
     /**
      * 设置按钮
      */
@@ -134,7 +142,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
                     dest = Mode.NightMode;
                 }
                 settingView.changeMode(dest);
-                ModeHandler modeHandler = new ModeHandler(ReaderActivity.this);
+                ModeHandler modeHandler = new ModeHandler(ReaderActivity.this,(ViewGroup) findViewById(R.id.activity_content));
                 modeHandler.apply(dest);
                 ModeConfig config = ModeProvider.get(dest);
                 TextConfig.getConfig().setBackgroundColor(config.getBgResId());

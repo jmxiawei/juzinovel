@@ -11,7 +11,7 @@
     tools:context="top.iscore.freereader.MainActivity">
 
 
-    <android.support.v7.widget.Toolbar
+    <top.iscore.freereader.mode.views.ColorFulToolBar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"

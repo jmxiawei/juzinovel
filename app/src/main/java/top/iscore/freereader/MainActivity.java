@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
@@ -16,7 +17,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import top.iscore.freereader.adapter.TabFragmentAdapter;
 import top.iscore.freereader.fragment.BookshelfFragment;
+import xcvf.top.readercore.bean.Mode;
 import xcvf.top.readercore.bean.User;
+import xcvf.top.readercore.impl.FullScreenHandler;
+import xcvf.top.readercore.styles.ModeHandler;
+import xcvf.top.readercore.styles.ModeProvider;
 
 
 /**
@@ -38,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<Fragment> fragmentList = new ArrayList<>();
     ArrayList<String> titles = new ArrayList<>();
-
+    ModeHandler modeHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,9 +58,7 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
                     || checkSelfPermission(Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     requestPermissions(permissions, 1);
-                }
             }
         }
         toolbar.setTitle(getString(R.string.app_name));
@@ -67,7 +70,16 @@ public class MainActivity extends AppCompatActivity {
         viewpager.setAdapter(adapter);
         tablayout.setupWithViewPager(viewpager);
         TabUtils.setIndicator(this, tablayout, 64, 64, 0, 0);
-
+        modeHandler = new ModeHandler(this,(ViewGroup) findViewById(R.id.activity_content));
+        Mode mode = ModeProvider.getCurrentMode();
+        modeHandler.apply(mode);
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Mode mode = ModeProvider.getCurrentMode();
+        modeHandler.apply(mode);
+    }
 }
