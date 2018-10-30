@@ -53,6 +53,7 @@ public class ModeProvider {
 
     /**
      * 拼接保存id的key
+     *
      * @param mode
      * @return
      */
@@ -63,6 +64,7 @@ public class ModeProvider {
 
     /**
      * 保存设置的模式
+     *
      * @param id
      * @param mode
      */
@@ -73,11 +75,17 @@ public class ModeProvider {
 
     /**
      * 获取当前的模式
+     *
      * @return
      */
     public static Mode getCurrentMode() {
         return Mode.from(SPUtils.getInstance().getInt(KET_MODE, 0));
     }
+
+    public static int getCurrentModeTheme() {
+        return getCurrentMode() == Mode.NightMode ? R.style.NightTheme : R.style.DayTheme;
+    }
+
 
     public static ModeConfig get(Mode mode) {
         int id = SPUtils.getInstance().getInt(getKetId(mode), 0);

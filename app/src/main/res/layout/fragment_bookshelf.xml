@@ -1,34 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<top.iscore.freereader.mode.views.ColorFulFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/fragment_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorPrimary">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/contentView"
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        app:srlAccentColor="@android:color/white"
+        app:srlEnablePreviewInEditMode="true"
+        app:srlPrimaryColor="#444444">
 
-        <com.scwang.smartrefresh.layout.SmartRefreshLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/refreshLayout"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:srlAccentColor="@android:color/white"
-            app:srlEnablePreviewInEditMode="true"
-            app:srlPrimaryColor="#444444">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+            android:layout_height="match_parent" />
 
 
-        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
-
-    </LinearLayout>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
 
-</top.iscore.freereader.mode.views.ColorFulFrameLayout>
+</FrameLayout>

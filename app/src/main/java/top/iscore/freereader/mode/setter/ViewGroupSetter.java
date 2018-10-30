@@ -99,7 +99,7 @@ public class ViewGroupSetter extends ViewSetter {
 	 */
 	private View findViewById(View rootView, int viewId) {
 		View targetView = rootView.findViewById(viewId);
-		Log.d("", "### viewgroup find view : " + targetView);
+		//Log.d("", "### viewgroup find view : " + targetView);
 		return targetView;
 	}
 
@@ -116,23 +116,11 @@ public class ViewGroupSetter extends ViewSetter {
 		for (int i = 0; i < childCount; i++) {
 			View childView = viewGroup.getChildAt(i);
 			// 深度遍历
-			if (childView instanceof ViewGroup) {
-				changeChildenAttrs((ViewGroup) childView, newTheme, themeId);
-			}
-
 			// 遍历子元素与要修改的属性,如果相同那么则修改子View的属性
 			for (ViewSetter setter : mItemViewSetters) {
 				// 每次都要从ViewGroup中查找数据
-				setter.mView = findViewById(viewGroup, setter.mViewId);
-
-				Log.e("", "### childView : " + childView + ", id = "
-						+ childView.getId());
-				Log.e("", "### setter view : " + setter.mView + ", id = "
-						+ setter.getViewId());
-				if (childView.getId() == setter.getViewId()) {
-					setter.setValue(newTheme, themeId);
-					Log.e("", "@@@ 修改新的属性: " + childView);
-				}
+				setter.mView = findViewById(childView, setter.mViewId);
+				setter.setValue(newTheme, themeId);
 			}
 		}
 	}

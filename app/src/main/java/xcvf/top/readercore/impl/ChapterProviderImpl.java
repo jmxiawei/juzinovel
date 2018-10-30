@@ -5,6 +5,10 @@ import java.util.concurrent.Callable;
 
 import bolts.Continuation;
 import bolts.Task;
+import retrofit2.Response;
+import top.iscore.freereader.http.BaseHttpHandler;
+import top.iscore.freereader.http.BaseModel;
+import top.iscore.freereader.http.BookService;
 import xcvf.top.readercore.bean.Chapter;
 import xcvf.top.readercore.interfaces.IChapterListener;
 import xcvf.top.readercore.interfaces.IChapterProvider;
@@ -28,15 +32,21 @@ public class ChapterProviderImpl implements IChapterProvider {
                 if (type == IChapterProvider.TYPE_NEXT) {
                     Chapter next = Chapter.getNextChapter(chapterid);
                     if (next == null) {
-                        //接口请求
-                        // BaseHttpHandler.create().getProxy(BookService.class).
+                        //接口请求  0本章节,1上一章节，2下一章节
+                        next = getChapterFromNet(chapterid, 2);
                     }
                     return next;
                 } else if (type == IChapterProvider.TYPE_PRE) {
                     Chapter pre = Chapter.getPreChapter(chapterid);
+                    if (pre == null) {
+                        pre = getChapterFromNet(chapterid, 1);
+                    }
                     return pre;
                 } else if (type == IChapterProvider.TYPE_DETAIL) {
                     Chapter chp = Chapter.getChapter(chapterid);
+                    if (chp == null) {
+                        chp = getChapterFromNet(chapterid, 0);
+                    }
                     return chp;
                 }
                 return null;
@@ -46,11 +56,30 @@ public class ChapterProviderImpl implements IChapterProvider {
             public Chapter then(Task<Chapter> task) throws Exception {
                 Chapter chapter1 = task.getResult();
                 if (chapterListener != null) {
-                    chapterListener.onChapter(chapter, chapter1);
+                    chapterListener.onChapter(IChapterListener.CODE_OK, chapter, chapter1);
                 }
                 return null;
             }
         }, Task.UI_THREAD_EXECUTOR);
+    }
+
+    /**
+     * 网络获取章节
+     * @param chapterid
+     * @param type
+     * @return
+     * @throws Exception
+     */
+    private Chapter getChapterFromNet(String chapterid, int type) throws Exception {
+        try {
+            Response<BaseModel<Chapter>> chapter = BaseHttpHandler.create().getProxy(BookService.class).getOneChapter("Chapter.getSingleChapter", chapterid, type).execute();
+            if (chapter != null && chapter.isSuccessful()) {
+                return chapter.body().getData();
+            }
+        } catch (Exception e) {
+            throw new Exception(String.valueOf(IChapterListener.CODE_NO_NET));
+        }
+        return null;
     }
 
     @Override
@@ -65,7 +94,7 @@ public class ChapterProviderImpl implements IChapterProvider {
             @Override
             public Object then(Task<Object> task) throws Exception {
                 if (chapterListener != null) {
-                    chapterListener.onChapter(null, null);
+                    chapterListener.onChapter(IChapterListener.CODE_OK, null, null);
                 }
                 return null;
             }

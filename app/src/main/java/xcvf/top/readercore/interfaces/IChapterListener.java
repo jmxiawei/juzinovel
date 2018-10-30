@@ -7,10 +7,15 @@ import xcvf.top.readercore.bean.Chapter;
  * Created by xiaw on 2018/10/25.
  */
 public interface IChapterListener {
+
+    int CODE_OK = 0;
+    int CODE_ERROR = 1;
+    int CODE_NO_NET = 2;
+
+
     /**
-     *
      * @param srcChapter
      * @param destChapter
      */
-    void onChapter(Chapter srcChapter,Chapter destChapter);
+    void onChapter(int code, Chapter srcChapter, Chapter destChapter);
 }

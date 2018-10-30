@@ -8,15 +8,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.hannesdorfmann.mosby3.mvp.MvpFragment;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -25,15 +24,15 @@ import butterknife.Unbinder;
 import top.iscore.freereader.R;
 import top.iscore.freereader.adapter.BookShelfAdapter;
 import top.iscore.freereader.adapter.WhiteItemDivider;
-import top.iscore.freereader.adapter.holders.BookHolder;
 import top.iscore.freereader.fragment.adapters.CommonViewHolder;
 import top.iscore.freereader.fragment.adapters.OnRecyclerViewItemClickListener;
+import top.iscore.freereader.mode.Colorful;
+import top.iscore.freereader.mode.setter.ViewGroupSetter;
 import top.iscore.freereader.mvp.presenters.BookShelfPresenter;
 import top.iscore.freereader.mvp.view.BookShelfView;
 import xcvf.top.readercore.ReaderActivity;
 import xcvf.top.readercore.bean.Book;
 import xcvf.top.readercore.bean.User;
-import xcvf.top.readercore.styles.ModeHandler;
 import xcvf.top.readercore.styles.ModeProvider;
 
 /**
@@ -46,13 +45,11 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
     RecyclerView recycler;
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout refreshLayout;
-    @BindView(R.id.contentView)
-    LinearLayout contentView;
     Unbinder unbinder;
     int page = 1;
     BookShelfAdapter mBookShelfAdapter;
     User mUser;
-    ModeHandler mModeHandler;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -61,14 +58,35 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
         mUser = User.currentUser();
         presenter.attachView(this);
         initViews(view);
-        mModeHandler =new  ModeHandler(getActivity(),(ViewGroup)view);
+
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mModeHandler.apply(ModeProvider.getCurrentMode());
+        updateMode();
+    }
+
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if(!hidden){
+            LogUtils.e("--------------------onHiddenChanged--------------");
+        }
+    }
+
+    private void updateMode() {
+        LogUtils.e("--------------------updateMode--------------"+R.id.tv_name+"-----"+R.id.tv_chapter_name);
+        new Colorful.Builder(this)
+                .backgroundColor(R.id.fragment_content, R.attr.colorPrimary)
+                .setter(new ViewGroupSetter(recycler, R.attr.colorPrimary)
+                        .childViewBgColor(R.id.book_content, R.attr.colorPrimary)
+                        .childViewTextColor(R.id.tv_name, R.attr.text_color)
+                        .childViewTextColor(R.id.tv_chapter, R.attr.text_second_color))
+                .create()
+                .setTheme(ModeProvider.getCurrentModeTheme());
     }
 
     private void initViews(View view) {

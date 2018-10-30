@@ -31,14 +31,15 @@ public interface BookService {
     /**
      * 加载书籍章节
      * @param service
-     * @param exterBookId
+     * @param chapterid
+     * @param type 0本章节,1上一章节，2下一章节
      * @return
      */
     @FormUrlEncoded
     @POST("reader/public/v1/")
-    Call<BaseModel<ArrayList<Chapter>>> getOneChapter(@Field("service") String service
-            ,@Field("extern_bookid") String exterBookId
-            ,@Field("startid") int startid);
+    Call<BaseModel<Chapter>> getOneChapter(@Field("service") String service
+            ,@Field("chapterid") String chapterid
+            ,@Field("type") int type);
 
 
     /**

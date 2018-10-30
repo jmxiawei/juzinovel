@@ -5,9 +5,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 
-import top.iscore.freereader.mode.views.ColorFulTextView;
 import xcvf.top.readercore.bean.Line;
 import xcvf.top.readercore.bean.Page;
 import xcvf.top.readercore.bean.TextConfig;
@@ -17,7 +17,7 @@ import xcvf.top.readercore.bean.TxtChar;
  * 显示一页数据
  * Created by xiaw on 2018/10/26.
  */
-public class PageTextView extends ColorFulTextView {
+public class PageTextView extends AppCompatTextView {
 
     Page page;
     int mWidth;

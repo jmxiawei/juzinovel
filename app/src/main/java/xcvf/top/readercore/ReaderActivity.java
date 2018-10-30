@@ -1,22 +1,16 @@
 package xcvf.top.readercore;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.blankj.utilcode.util.SPUtils;
-import com.blankj.utilcode.util.ScreenUtils;
 import com.hannesdorfmann.mosby3.mvp.MvpActivity;
 
 import java.util.ArrayList;
@@ -45,7 +39,6 @@ import xcvf.top.readercore.interfaces.IPage;
 import xcvf.top.readercore.interfaces.IPageScrollListener;
 import xcvf.top.readercore.interfaces.OnTextConfigChangedListener;
 import xcvf.top.readercore.styles.ModeConfig;
-import xcvf.top.readercore.styles.ModeHandler;
 import xcvf.top.readercore.styles.ModeProvider;
 import xcvf.top.readercore.views.ReaderSettingView;
 import xcvf.top.readercore.views.ReaderView;
@@ -142,8 +135,6 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
                     dest = Mode.NightMode;
                 }
                 settingView.changeMode(dest);
-                ModeHandler modeHandler = new ModeHandler(ReaderActivity.this,(ViewGroup) findViewById(R.id.activity_content));
-                modeHandler.apply(dest);
                 ModeConfig config = ModeProvider.get(dest);
                 TextConfig.getConfig().setBackgroundColor(config.getBgResId());
                 TextConfig.getConfig().setTextColor(config.getTextColorResId());

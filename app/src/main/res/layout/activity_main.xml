@@ -8,10 +8,11 @@
     xmlns:tablayout="http://schemas.android.com/apk/res-auto"
     android:gravity="center"
     android:orientation="vertical"
+    android:background="?attr/colorPrimary"
     tools:context="top.iscore.freereader.MainActivity">
 
 
-    <top.iscore.freereader.mode.views.ColorFulToolBar
+    <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
