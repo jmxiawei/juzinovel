@@ -4,7 +4,7 @@
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
-    <style name="AppBaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppBaseTheme" parent="Theme.AppCompat.DayNight">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
@@ -13,6 +13,8 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
+
 
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
@@ -27,8 +29,6 @@
         <item name="text_color">@color/text_black</item>
         <item name="text_second_color">@color/text_gray_light</item>
         <item name="bg_dark">@color/light_black</item>
-
-
     </style>
 
     <!-- 夜间主题 -->

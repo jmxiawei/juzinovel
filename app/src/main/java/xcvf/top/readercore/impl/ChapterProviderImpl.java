@@ -25,25 +25,25 @@ public class ChapterProviderImpl implements IChapterProvider {
     }
 
     @Override
-    public void getChapter(final int type, final String chapterid, final Chapter chapter, final IChapterListener chapterListener) {
+    public void getChapter(final int type,final String bookid,final String chapterid, final Chapter chapter, final IChapterListener chapterListener) {
         Task.callInBackground(new Callable<Chapter>() {
             @Override
             public Chapter call() throws Exception {
                 if (type == IChapterProvider.TYPE_NEXT) {
-                    Chapter next = Chapter.getNextChapter(chapterid);
+                    Chapter next = Chapter.getNextChapter(bookid,chapterid);
                     if (next == null) {
                         //接口请求  0本章节,1上一章节，2下一章节
                         next = getChapterFromNet(chapterid, 2);
                     }
                     return next;
                 } else if (type == IChapterProvider.TYPE_PRE) {
-                    Chapter pre = Chapter.getPreChapter(chapterid);
+                    Chapter pre = Chapter.getPreChapter(bookid,chapterid);
                     if (pre == null) {
                         pre = getChapterFromNet(chapterid, 1);
                     }
                     return pre;
                 } else if (type == IChapterProvider.TYPE_DETAIL) {
-                    Chapter chp = Chapter.getChapter(chapterid);
+                    Chapter chp = Chapter.getChapter(bookid,chapterid);
                     if (chp == null) {
                         chp = getChapterFromNet(chapterid, 0);
                     }

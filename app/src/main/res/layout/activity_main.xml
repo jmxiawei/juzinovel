@@ -12,11 +12,36 @@
     tools:context="top.iscore.freereader.MainActivity">
 
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <LinearLayout
+        android:id="@+id/ll_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height"
-        android:background="?attr/colorAccent" />
+        android:layout_height="56dp"
+        android:background="?attr/colorAccent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/horizon_margin"
+            android:layout_height="match_parent"
+            android:textSize="20sp"
+            android:text="@string/app_name"
+            android:textColor="@color/color_white"/>
+
+        <ImageView
+            android:id="@+id/img_more"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/ic_more"/>
+
+    </LinearLayout>
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tablayout"
@@ -25,6 +50,8 @@
         android:background="?attr/colorAccent"
         app:tabMode="fixed"
         app:tabIndicatorHeight="4dp"
+        app:tabTextColor="@color/color_light_white"
+        app:tabSelectedTextColor="@color/color_white"
         app:tabIndicatorColor="?attr/colorPrimary"
         />
 

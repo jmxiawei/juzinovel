@@ -8,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.view.ViewGroup;
 
 import com.blankj.utilcode.util.SPUtils;
 import com.hannesdorfmann.mosby3.mvp.MvpActivity;
@@ -101,14 +100,14 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
         checkChapters(true);
         fullScreenHandler = new FullScreenHandler(this, readerView, settingView);
         //loadData(false);
-        fullScreenHandler.hide();
+        //fullScreenHandler.hide();
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        fullScreenHandler.check();
+        fullScreenHandler.hide();
     }
 
     /**
@@ -172,16 +171,16 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
         String chapterid = "0";
         if (mBookMark == null) {
             //没有书签，从第一个章节开始
-            Chapter chapter = Chapter.getNextChapter("0");
+            Chapter chapter = Chapter.getNextChapter(book.extern_bookid,"0");
             if (chapter != null) {
                 chapterid = String.valueOf(chapter.chapterid);
             }
         } else {
             chapterid = mBookMark.getChapterid();
         }
-        ChapterProviderImpl.newInstance().getChapter(IChapterProvider.TYPE_DETAIL, chapterid, null, new IChapterListener() {
+        ChapterProviderImpl.newInstance().getChapter(IChapterProvider.TYPE_DETAIL,book.extern_bookid, chapterid, null, new IChapterListener() {
             @Override
-            public void onChapter(Chapter srcChapter, Chapter chapter) {
+            public void onChapter(int code,Chapter srcChapter, Chapter chapter) {
                 if (chapter == null) {
                     //本地没有章节内容,加载服务端的
                     if (retry) {
@@ -224,9 +223,9 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
         if (nextOrPre == IPageScrollListener.PRE_CHAPTER) {
             //上一章节
             Chapter chapter = readerView.getCurrentChapter();
-            ChapterProviderImpl.newInstance().getChapter(ChapterProviderImpl.TYPE_PRE, String.valueOf(chapter.chapterid), chapter, new IChapterListener() {
+            ChapterProviderImpl.newInstance().getChapter(ChapterProviderImpl.TYPE_PRE,book.extern_bookid, String.valueOf(chapter.chapterid), chapter, new IChapterListener() {
                 @Override
-                public void onChapter(Chapter srcChapter, Chapter chapter) {
+                public void onChapter(int code,Chapter srcChapter, Chapter chapter) {
                     mChapterDisplayedImpl.showChapter(false, readerView, true, IPage.LOADING_PAGE, chapter);
                 }
             });
@@ -234,9 +233,9 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
         } else if (nextOrPre == IPageScrollListener.NEXT_CHAPTER) {
             //下一章节
             Chapter chapter = readerView.getCurrentChapter();
-            ChapterProviderImpl.newInstance().getChapter(ChapterProviderImpl.TYPE_NEXT, String.valueOf(chapter.chapterid), chapter, new IChapterListener() {
+            ChapterProviderImpl.newInstance().getChapter(ChapterProviderImpl.TYPE_NEXT,book.extern_bookid, String.valueOf(chapter.chapterid), chapter, new IChapterListener() {
                 @Override
-                public void onChapter(Chapter srcChapter, Chapter chapter) {
+                public void onChapter(int code,Chapter srcChapter, Chapter chapter) {
                     mChapterDisplayedImpl.showChapter(false, readerView, false, IPage.LOADING_PAGE, chapter);
                 }
             });
@@ -263,7 +262,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
         book.chapters = chapters;
         ChapterProviderImpl.newInstance().saveChapter(chapters, new IChapterListener() {
             @Override
-            public void onChapter(Chapter srcChapter, Chapter destChapter) {
+            public void onChapter(int code,Chapter srcChapter, Chapter destChapter) {
                 checkChapters(false);
             }
         });

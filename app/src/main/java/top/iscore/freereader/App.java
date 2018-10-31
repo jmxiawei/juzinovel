@@ -14,6 +14,8 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 
+import xcvf.top.readercore.bean.TextConfig;
+
 /**
  * Created by xiaw on 2018/6/11.
  */
@@ -48,7 +50,11 @@ public class App extends SugarApp {
         super.onCreate();
         Utils.init(this);
         Stetho.initializeWithDefaults(this);
-        //CrashUtils.init();
+        int  p = (int) getResources().getDimension(R.dimen.read_page_padding);
+        TextConfig.horinzontalSpaceDB = (p*2);
+        TextConfig.verticalSpaceDB = (int) (TextConfig.horinzontalSpaceDB
+                + getResources().getDimension(R.dimen.read_page_progress)
+                +getResources().getDimension(R.dimen.read_page_title));
     }
 
 

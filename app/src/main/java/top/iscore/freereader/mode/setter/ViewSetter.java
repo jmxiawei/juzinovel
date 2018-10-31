@@ -59,7 +59,6 @@ public abstract class ViewSetter {
 	/**
 	 * 
 	 * @param newTheme
-	 * @param resId
 	 * @return
 	 */
 	protected int getColor(Theme newTheme) {
@@ -67,4 +66,17 @@ public abstract class ViewSetter {
 		newTheme.resolveAttribute(mAttrResId, typedValue, true);
 		return typedValue.data;
 	}
+
+	/**
+	 *
+	 * @param newTheme
+	 * @param mAttrResId
+	 * @return
+	 */
+	protected int getColor(Theme newTheme,int mAttrResId) {
+		TypedValue typedValue = new TypedValue();
+		newTheme.resolveAttribute(mAttrResId, typedValue, true);
+		return typedValue.data;
+	}
+
 }

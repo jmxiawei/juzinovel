@@ -18,5 +18,4 @@
         android:fitsSystemWindows="true"
         android:visibility="gone" />
 
-
 </FrameLayout>

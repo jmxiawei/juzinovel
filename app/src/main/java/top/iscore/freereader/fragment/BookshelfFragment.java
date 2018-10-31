@@ -84,7 +84,8 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
                 .setter(new ViewGroupSetter(recycler, R.attr.colorPrimary)
                         .childViewBgColor(R.id.book_content, R.attr.colorPrimary)
                         .childViewTextColor(R.id.tv_name, R.attr.text_color)
-                        .childViewTextColor(R.id.tv_chapter, R.attr.text_second_color))
+                        .childViewTextColor(R.id.tv_chapter, R.attr.text_second_color)
+                        .childViewTextColor(R.id.tv_add,R.attr.text_color))
                 .create()
                 .setTheme(ModeProvider.getCurrentModeTheme());
     }

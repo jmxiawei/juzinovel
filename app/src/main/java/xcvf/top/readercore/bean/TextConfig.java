@@ -39,7 +39,8 @@ public class TextConfig {
     public int lineSpace = 8;
 
     public int paddingTop;
-
+    public static int verticalSpaceDB = 0;
+    public static int horinzontalSpaceDB = 0;
     private TextConfig() {
     }
 
@@ -49,7 +50,7 @@ public class TextConfig {
 
     public void setPageWidth(int pageWidth) {
         this.pageWidth = pageWidth;
-        this.pageWidth = this.pageWidth - DensityUtil.dp2px(20);
+        this.pageWidth = this.pageWidth - DensityUtil.dp2px(horinzontalSpaceDB);
         SPUtils.getInstance(SAVE_NAME).put(C_WIDTH, this.pageWidth);
     }
 
@@ -57,9 +58,9 @@ public class TextConfig {
         return pageHeight;
     }
 
-    public void setPageHeight(int pageHeght) {
-        this.pageHeight = pageHeght;
-        SPUtils.getInstance(SAVE_NAME).put(C_HEIGHT, pageHeght);
+    public void setPageHeight(int pageHeight) {
+        this.pageHeight = pageHeight;
+        SPUtils.getInstance(SAVE_NAME).put(C_HEIGHT, pageHeight);
     }
 
     public void apply(TextView textView) {
@@ -81,7 +82,7 @@ public class TextConfig {
 
 
     public int maxLine() {
-        int padding = DensityUtil.dp2px(56);
+        int padding = DensityUtil.dp2px(verticalSpaceDB);
         int line = (pageHeight - padding) / (textSize + lineSpace);
         paddingTop = (pageHeight - padding - (line * (textSize + lineSpace))) / 2;
         SPUtils.getInstance(SAVE_NAME).put(C_PADDING_TOP, paddingTop);

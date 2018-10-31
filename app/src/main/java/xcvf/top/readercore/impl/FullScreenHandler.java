@@ -13,8 +13,8 @@ import android.view.View;
 public class FullScreenHandler {
 
 
-    public static final int DELAY_HIDE = 2000;
-    public static final int ANIM_DELAY_HIDE = 200;
+    public static final int DELAY_HIDE = 1500;
+    public static final int ANIM_DELAY_HIDE = 100;
 
     AppCompatActivity mActivity;
     View contentView;

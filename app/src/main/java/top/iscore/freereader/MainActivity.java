@@ -8,7 +8,9 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -16,8 +18,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import top.iscore.freereader.adapter.TabFragmentAdapter;
 import top.iscore.freereader.fragment.BookshelfFragment;
+import top.iscore.freereader.fragment.FinderFragment;
 import top.iscore.freereader.mode.Colorful;
+import top.iscore.freereader.mode.setter.TabIndicatorSetter;
 import top.iscore.freereader.mode.setter.ViewBackgroundColorSetter;
+import xcvf.top.readercore.bean.TextConfig;
 import xcvf.top.readercore.bean.User;
 import xcvf.top.readercore.styles.ModeProvider;
 
@@ -31,8 +36,6 @@ public class MainActivity extends AppCompatActivity {
     String[] permissions = new String[]{
             Manifest.permission.INTERNET, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
     @BindView(R.id.tablayout)
     TabLayout tablayout;
     @BindView(R.id.viewpager)
@@ -41,6 +44,14 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<Fragment> fragmentList = new ArrayList<>();
     ArrayList<String> titles = new ArrayList<>();
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
+    @BindView(R.id.img_more)
+    ImageView imgMore;
+    @BindView(R.id.ll_toolbar)
+    LinearLayout llToolbar;
+    @BindView(R.id.activity_content)
+    LinearLayout activityContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,16 +63,17 @@ public class MainActivity extends AppCompatActivity {
         user.setAccount("admin");
         user.save();
         // startActivity(new Intent(this,ReaderActivity.class));
-        toolbar.inflateMenu(R.menu.main_more);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
                     || checkSelfPermission(Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(permissions, 1);
             }
         }
-        toolbar.setTitle(getString(R.string.app_name));
+
+
+
         fragmentList.add(new BookshelfFragment());
-        fragmentList.add(new Fragment());
+        fragmentList.add(new FinderFragment());
         titles.add("书架");
         titles.add("发现");
         TabFragmentAdapter adapter = new TabFragmentAdapter(fragmentList, titles, getSupportFragmentManager());
@@ -80,9 +92,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateMode() {
         new Colorful.Builder(this)
-                .setter(new ViewBackgroundColorSetter(toolbar, R.attr.colorAccent))
+                .setter(new ViewBackgroundColorSetter(llToolbar, R.attr.colorAccent))
                 .setter(new ViewBackgroundColorSetter(tablayout, R.attr.colorAccent))
-                .setter(new ViewBackgroundColorSetter(R.id.activity_content,R.attr.colorPrimary))
+                .setter(new TabIndicatorSetter(tablayout, R.attr.colorPrimary))
+                .setter(new ViewBackgroundColorSetter(R.id.activity_content, R.attr.colorPrimary))
                 .create().setTheme(ModeProvider.getCurrentModeTheme());
     }
 }

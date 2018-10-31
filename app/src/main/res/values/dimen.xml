@@ -8,7 +8,7 @@
     <dimen name="size_bottom_icon">16dp</dimen>
 
 
-    <dimen name="read_page_padding">10dp</dimen>
+    <dimen name="read_page_padding">16dp</dimen>
     <dimen name="read_page_title">20dp</dimen>
     <dimen name="read_page_progress">20dp</dimen>
 

@@ -149,8 +149,8 @@ public class Chapter extends SugarRecord implements Parcelable {
      * @param chapterid
      * @return
      */
-    public static Chapter getNextChapter(String chapterid) {
-        List<Chapter> chapters = Chapter.find(Chapter.class, " chapterid >  ? ", new String[]{String.valueOf(chapterid)}, null, " chapterid ASC ", " 1 ");
+    public static Chapter getNextChapter(String bookid,String chapterid) {
+        List<Chapter> chapters = Chapter.find(Chapter.class, " chapterid >  ?  and extern_bookid = ? ", new String[]{String.valueOf(chapterid),bookid}, null, " chapterid ASC ", " 1 ");
         if (chapters != null && chapters.size() > 0) {
             return chapters.get(0);
         }
@@ -164,11 +164,11 @@ public class Chapter extends SugarRecord implements Parcelable {
      * @param chapterid
      * @return
      */
-    public static Chapter getChapter(String chapterid) {
+    public static Chapter getChapter(String bookid,String chapterid) {
         if (TextUtils.isEmpty(chapterid)) {
             return null;
         }
-        List<Chapter> chapters = Chapter.find(Chapter.class, " chapterid =  ? ", chapterid);
+        List<Chapter> chapters = Chapter.find(Chapter.class, " chapterid =  ? and extern_bookid = ?", chapterid,bookid);
         if (chapters != null && chapters.size() > 0) {
             return chapters.get(0);
         }
@@ -181,8 +181,8 @@ public class Chapter extends SugarRecord implements Parcelable {
      * @param chapterid
      * @return
      */
-    public static Chapter getPreChapter(String chapterid) {
-        List<Chapter> chapters = Chapter.find(Chapter.class, " chapterid <  ? ", new String[]{String.valueOf(chapterid)}, null, " chapterid DESC ", " 1 ");
+    public static Chapter getPreChapter(String bookid,String chapterid) {
+        List<Chapter> chapters = Chapter.find(Chapter.class, " chapterid <  ? and extern_booid = ? ", new String[]{String.valueOf(chapterid),bookid}, null, " chapterid DESC ", " 1 ");
         if (chapters != null && chapters.size() > 0) {
             return chapters.get(0);
         }
