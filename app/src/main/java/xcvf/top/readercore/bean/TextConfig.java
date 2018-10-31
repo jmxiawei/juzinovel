@@ -36,7 +36,7 @@ public class TextConfig {
     public Boolean Bold = false;
     public int pageWidth;
     public int pageHeight;
-    public int lineSpace = 8;
+    public int lineSpace = 12;
 
     public int paddingTop;
     public static int verticalSpaceDB = 0;
@@ -50,7 +50,7 @@ public class TextConfig {
 
     public void setPageWidth(int pageWidth) {
         this.pageWidth = pageWidth;
-        this.pageWidth = this.pageWidth - DensityUtil.dp2px(horinzontalSpaceDB);
+        this.pageWidth = this.pageWidth - horinzontalSpaceDB;
         SPUtils.getInstance(SAVE_NAME).put(C_WIDTH, this.pageWidth);
     }
 
@@ -82,7 +82,7 @@ public class TextConfig {
 
 
     public int maxLine() {
-        int padding = DensityUtil.dp2px(verticalSpaceDB);
+        int padding = verticalSpaceDB;
         int line = (pageHeight - padding) / (textSize + lineSpace);
         paddingTop = (pageHeight - padding - (line * (textSize + lineSpace))) / 2;
         SPUtils.getInstance(SAVE_NAME).put(C_PADDING_TOP, paddingTop);
