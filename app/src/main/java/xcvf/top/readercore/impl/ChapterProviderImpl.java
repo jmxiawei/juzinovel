@@ -100,7 +100,8 @@ public class ChapterProviderImpl implements IChapterProvider {
                 // 第一次 直接使用原始列表
                 // 第二次 先查所有的，再插入
                 LogUtils.e("start read chapter " + System.currentTimeMillis());
-                List<Chapter> chapters = Chapter.find(Chapter.class, null, null, null, " chapterid ASC ", null);
+                List<Chapter> chapters = null;
+                //Chapter.find(Chapter.class, null, null, null, " chapterid ASC ", null);
                 LogUtils.e("finish read chapter " + System.currentTimeMillis());
                 if (chapters == null || chapters.size() == 0) {
                     //没有数据
@@ -109,7 +110,7 @@ public class ChapterProviderImpl implements IChapterProvider {
                     chapters.addAll(chapterList);
                 }
                 LogUtils.e("start save chapter " + System.currentTimeMillis());
-                Chapter.saveInTx(chapterList);
+                //Chapter.saveInTx(chapterList);
                 LogUtils.e("finish save chapter " + System.currentTimeMillis());
                 if (chapterList != null && chapterList.size() > 0) {
                     //保存最大的章节id

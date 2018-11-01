@@ -1,6 +1,8 @@
 package top.iscore.freereader;
 
+import android.app.Application;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 
 import com.blankj.utilcode.util.Utils;
 import com.facebook.stetho.Stetho;
@@ -15,12 +17,14 @@ import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 
 import xcvf.top.readercore.bean.TextConfig;
+import xcvf.top.readercore.daos.DaoMaster;
+import xcvf.top.readercore.daos.DaoSession;
 
 /**
  * Created by xiaw on 2018/6/11.
  */
 
-public class App extends SugarApp {
+public class App extends Application {
 
 
     public static String baseUrl = "http://iscore.top/";
@@ -45,15 +49,29 @@ public class App extends SugarApp {
         });
     }
 
+    public static final String DB_NAME = "app.db";
+
+    private static DaoSession mDaoSession;
+
     @Override
     public void onCreate() {
         super.onCreate();
         Utils.init(this);
         Stetho.initializeWithDefaults(this);
         TextConfig.initSpace(this);
-
+        initGreenDao();
     }
 
+    private void initGreenDao() {
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, DB_NAME);
+        SQLiteDatabase db = helper.getWritableDatabase();
+        DaoMaster daoMaster = new DaoMaster(db);
+        mDaoSession = daoMaster.newSession();
+    }
+
+    public static DaoSession getmDaoSession() {
+        return mDaoSession;
+    }
 
 //    /**
 //     * 设置各个视图与颜色属性的关联

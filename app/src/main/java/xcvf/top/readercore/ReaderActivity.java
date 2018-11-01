@@ -26,7 +26,6 @@ import top.iscore.freereader.mvp.view.BookReadView;
 import xcvf.top.readercore.bean.Book;
 import xcvf.top.readercore.bean.BookMark;
 import xcvf.top.readercore.bean.Chapter;
-import xcvf.top.readercore.bean.GreenDao;
 import xcvf.top.readercore.bean.Mode;
 import xcvf.top.readercore.bean.Page;
 import xcvf.top.readercore.bean.SettingAction;

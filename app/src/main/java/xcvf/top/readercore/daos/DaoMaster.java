@@ -1,4 +1,4 @@
-package xcvf.top.readercore.bean;
+package xcvf.top.readercore.daos;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -21,14 +21,16 @@ public class DaoMaster extends AbstractDaoMaster {
 
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(Database db, boolean ifNotExists) {
-        GreenDao.createTable(db, ifNotExists);
         TestDemoDao.createTable(db, ifNotExists);
+        GreenDao.createTable(db, ifNotExists);
+        ChapterDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(Database db, boolean ifExists) {
-        GreenDao.dropTable(db, ifExists);
         TestDemoDao.dropTable(db, ifExists);
+        GreenDao.dropTable(db, ifExists);
+        ChapterDao.dropTable(db, ifExists);
     }
 
     /**
@@ -47,8 +49,9 @@ public class DaoMaster extends AbstractDaoMaster {
 
     public DaoMaster(Database db) {
         super(db, SCHEMA_VERSION);
-        registerDaoClass(GreenDao.class);
         registerDaoClass(TestDemoDao.class);
+        registerDaoClass(GreenDao.class);
+        registerDaoClass(ChapterDao.class);
     }
 
     public DaoSession newSession() {

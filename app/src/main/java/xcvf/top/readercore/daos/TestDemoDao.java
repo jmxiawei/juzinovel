@@ -1,4 +1,4 @@
-package xcvf.top.readercore.bean;
+package xcvf.top.readercore.daos;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;

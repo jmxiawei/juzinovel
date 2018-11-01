@@ -6,12 +6,14 @@ import android.text.TextUtils;
 
 
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Transient;
 import org.greenrobot.greendao.annotation.Unique;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import xcvf.top.readercore.interfaces.IPage;
+import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * 章节
@@ -70,7 +72,7 @@ public class Chapter  implements Parcelable {
     }
 
 
-    @Ignore
+    @Transient
     List<IPage> pages = new ArrayList<>();
 
     public String getChapter_name() {
@@ -148,10 +150,10 @@ public class Chapter  implements Parcelable {
      * @return
      */
     public static Chapter getNextChapter(String bookid,String chapterid) {
-        List<Chapter> chapters = Chapter.find(Chapter.class, " chapterid >  ?  and extern_bookid = ? ", new String[]{String.valueOf(chapterid),bookid}, null, " chapterid ASC ", " 1 ");
-        if (chapters != null && chapters.size() > 0) {
-            return chapters.get(0);
-        }
+//        List<Chapter> chapters = Chapter.find(Chapter.class, " chapterid >  ?  and extern_bookid = ? ", new String[]{String.valueOf(chapterid),bookid}, null, " chapterid ASC ", " 1 ");
+//        if (chapters != null && chapters.size() > 0) {
+//            return chapters.get(0);
+//        }
         return null;
     }
 
@@ -166,10 +168,10 @@ public class Chapter  implements Parcelable {
         if (TextUtils.isEmpty(chapterid)) {
             return null;
         }
-        List<Chapter> chapters = Chapter.find(Chapter.class, " chapterid =  ? and extern_bookid = ?", chapterid,bookid);
-        if (chapters != null && chapters.size() > 0) {
-            return chapters.get(0);
-        }
+//        List<Chapter> chapters = Chapter.find(Chapter.class, " chapterid =  ? and extern_bookid = ?", chapterid,bookid);
+//        if (chapters != null && chapters.size() > 0) {
+//            return chapters.get(0);
+//        }
         return null;
     }
 
@@ -180,10 +182,10 @@ public class Chapter  implements Parcelable {
      * @return
      */
     public static Chapter getPreChapter(String bookid,String chapterid) {
-        List<Chapter> chapters = Chapter.find(Chapter.class, " chapterid <  ? and extern_booid = ? ", new String[]{String.valueOf(chapterid),bookid}, null, " chapterid DESC ", " 1 ");
-        if (chapters != null && chapters.size() > 0) {
-            return chapters.get(0);
-        }
+//        List<Chapter> chapters = Chapter.find(Chapter.class, " chapterid <  ? and extern_booid = ? ", new String[]{String.valueOf(chapterid),bookid}, null, " chapterid DESC ", " 1 ");
+//        if (chapters != null && chapters.size() > 0) {
+//            return chapters.get(0);
+//        }
         return null;
     }
 
@@ -203,6 +205,14 @@ public class Chapter  implements Parcelable {
         dest.writeString(this.fetch_code);
     }
 
+    public int getChapterid() {
+        return this.chapterid;
+    }
+
+    public void setChapterid(int chapterid) {
+        this.chapterid = chapterid;
+    }
+
     public Chapter() {
     }
 
@@ -216,6 +226,18 @@ public class Chapter  implements Parcelable {
         this.fetch_code = in.readString();
 
 
+    }
+
+    @Generated(hash = 1409677621)
+    public Chapter(String chapter_name, String extern_bookid, String self_page, int is_fetch, String engine_domain, String extra_info, String fetch_code, int chapterid) {
+        this.chapter_name = chapter_name;
+        this.extern_bookid = extern_bookid;
+        this.self_page = self_page;
+        this.is_fetch = is_fetch;
+        this.engine_domain = engine_domain;
+        this.extra_info = extra_info;
+        this.fetch_code = fetch_code;
+        this.chapterid = chapterid;
     }
 
     public static final Creator<Chapter> CREATOR = new Creator<Chapter>() {
