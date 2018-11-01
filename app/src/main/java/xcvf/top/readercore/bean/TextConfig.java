@@ -1,5 +1,6 @@
 package xcvf.top.readercore.bean;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.TextPaint;
@@ -28,20 +29,29 @@ public class TextConfig {
     private static final String C_PADDING_TOP = "C_PADDING_TOP";
 
 
-    public static final int MAX_TEXT_SIZE = 150;
-    public static final int MIN_TEXT_SIZE = 50;
+    public static final int MAX_TEXT_SIZE = 100;
+    public static final int MIN_TEXT_SIZE = 46;
     public int textSize = MIN_TEXT_SIZE;
     public int textColor = R.color.text_black;
     public int backgroundColor = R.color.reader_styleclor1;
     public Boolean Bold = false;
     public int pageWidth;
     public int pageHeight;
-    public int lineSpace = 12;
+    public int lineSpace = 8;
 
     public int paddingTop;
     public static int verticalSpaceDB = 0;
     public static int horinzontalSpaceDB = 0;
+
     private TextConfig() {
+    }
+
+    public static void initSpace(Context context) {
+        int p = (int) context.getResources().getDimension(R.dimen.read_page_padding);
+        TextConfig.horinzontalSpaceDB = (p * 2);
+        TextConfig.verticalSpaceDB = (int) (TextConfig.horinzontalSpaceDB
+                + context.getResources().getDimension(R.dimen.read_page_progress)
+                + context.getResources().getDimension(R.dimen.read_page_title));
     }
 
     public int getPageWidth() {

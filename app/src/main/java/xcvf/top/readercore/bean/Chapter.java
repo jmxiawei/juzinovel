@@ -4,11 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
-import com.orm.SugarRecord;
-import com.orm.dsl.Column;
-import com.orm.dsl.Ignore;
-import com.orm.dsl.Table;
-import com.orm.dsl.Unique;
+
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Unique;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,34 +17,33 @@ import xcvf.top.readercore.interfaces.IPage;
  * 章节
  * Created by xiaw on 2018/6/30.
  */
-@Table(name = "chapters")
-public class Chapter extends SugarRecord implements Parcelable {
+@Entity
+public class Chapter  implements Parcelable {
 
 
-    @Column(name = "chapter_name")
+
     public String chapter_name;
 
-    @Column(name = "extern_bookid")
+
     public String extern_bookid;
 
-    @Column(name = "self_page")
+
     public String self_page;
 
-    @Column(name = "is_fetch")
+
     public int is_fetch;
 
-    @Column(name = "engine_domain")
+
     public String engine_domain;
 
-    @Column(name = "extra_info")
+
     public String extra_info;
 
-    @Column(name = "fetch_code")
+
     public String fetch_code;
 
 
     @Unique
-    @Column(name = "chapterid")
     public int chapterid;
 
     @Override
@@ -71,6 +68,7 @@ public class Chapter extends SugarRecord implements Parcelable {
         result = 31 * result + (self_page != null ? self_page.hashCode() : 0);
         return result;
     }
+
 
     @Ignore
     List<IPage> pages = new ArrayList<>();

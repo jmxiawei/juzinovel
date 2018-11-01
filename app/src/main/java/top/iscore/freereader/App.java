@@ -50,11 +50,8 @@ public class App extends SugarApp {
         super.onCreate();
         Utils.init(this);
         Stetho.initializeWithDefaults(this);
-        int  p = (int) getResources().getDimension(R.dimen.read_page_padding);
-        TextConfig.horinzontalSpaceDB = (p*2);
-        TextConfig.verticalSpaceDB = (int) (TextConfig.horinzontalSpaceDB
-                + getResources().getDimension(R.dimen.read_page_progress)
-                +getResources().getDimension(R.dimen.read_page_title));
+        TextConfig.initSpace(this);
+
     }
 
 

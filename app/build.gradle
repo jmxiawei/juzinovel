@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'org.greenrobot.greendao' // apply plugin
 android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -24,12 +24,19 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
+
+
+    greendao {
+        schemaVersion 1 //数据库版本号
+        daoPackage 'xcvf.top.readercore.bean'// 设置DaoMaster、DaoSession、Dao 包名
+        targetGenDir 'src/main/java'//设置DaoMaster、DaoSession、Dao目录
+    }
+
 }
 
 dependencies {
     //implementation project(':hwtxtreaderlib')
     //implementation project(':readercore')
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     compile rootProject.ext.supportV4
     compile files('libs/chardet.jar')
     compile files('libs/jsoup-1.11.3.jar')
@@ -48,12 +55,11 @@ dependencies {
     compile rootProject.ext.stethoOkhttp3
     compile rootProject.ext.stetho
     compile rootProject.ext.bolts
+    compile rootProject.ext.greendao
     implementation 'jp.wasabeef:glide-transformations:2.0.0'
     annotationProcessor butterknifeAnnotationProcessor
     compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-14'
     compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-14'
-    //没有使用特殊Header，可以不加这行
-    compile 'com.android.support:appcompat-v7:25.3.1'
     //版本 23以上（必须）
     compile rootProject.ext.mosby3Lce
     compile rootProject.ext.mosby3queuing

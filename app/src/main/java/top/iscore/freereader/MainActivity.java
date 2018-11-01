@@ -8,6 +8,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,13 +17,13 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import top.iscore.freereader.adapter.TabFragmentAdapter;
 import top.iscore.freereader.fragment.BookshelfFragment;
 import top.iscore.freereader.fragment.FinderFragment;
 import top.iscore.freereader.mode.Colorful;
 import top.iscore.freereader.mode.setter.TabIndicatorSetter;
 import top.iscore.freereader.mode.setter.ViewBackgroundColorSetter;
-import xcvf.top.readercore.bean.TextConfig;
 import xcvf.top.readercore.bean.User;
 import xcvf.top.readercore.styles.ModeProvider;
 
@@ -52,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout llToolbar;
     @BindView(R.id.activity_content)
     LinearLayout activityContent;
+    @BindView(R.id.img_search)
+    ImageView imgSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +72,6 @@ public class MainActivity extends AppCompatActivity {
                 requestPermissions(permissions, 1);
             }
         }
-
-
 
         fragmentList.add(new BookshelfFragment());
         fragmentList.add(new FinderFragment());
@@ -97,5 +98,17 @@ public class MainActivity extends AppCompatActivity {
                 .setter(new TabIndicatorSetter(tablayout, R.attr.colorPrimary))
                 .setter(new ViewBackgroundColorSetter(R.id.activity_content, R.attr.colorPrimary))
                 .create().setTheme(ModeProvider.getCurrentModeTheme());
+    }
+
+    @OnClick({R.id.img_search, R.id.img_more})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.img_search:
+                break;
+            case R.id.img_more:
+                break;
+            default:
+                break;
+        }
     }
 }

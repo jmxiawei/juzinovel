@@ -40,20 +40,19 @@ public class ChapterFragment extends DialogFragment {
 
     Book mbook;
     Chapter chapter;
-    static final int page_size = 100;
-    int page = 1;
-    boolean hasMore = true;
-    boolean isLoading = false;
     @BindView(R.id.tv_book)
     TextView tvBook;
+
+    List<Chapter> allList;
 
     public void setBook(Book mbook) {
         this.mbook = mbook;
     }
 
 
-    public void setChapter(Chapter chapter) {
+    public void setChapter(List<Chapter> allList, Chapter chapter) {
         this.chapter = chapter;
+        this.allList = allList;
     }
 
     public void setSwitchChapterListener(ChapterFragment.switchChapterListener switchChapterListener) {
@@ -66,44 +65,16 @@ public class ChapterFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_chapter_list, container, false);
         unbinder = ButterKnife.bind(this, view);
         initViews();
-        showChapter();
+        mChapterListAdapter.setCurrentChapter(chapter);
+        mChapterListAdapter.setDataList(this.allList);
+        int index = this.allList.indexOf(chapter);
+        if (index >= 0) {
+            recycler.scrollToPosition(index);
+        }
+
         return view;
     }
 
-    private void showChapter() {
-
-        isLoading = true;
-        if (!hasMore) {
-            return;
-        }
-        Task.callInBackground(new Callable<List<Chapter>>() {
-            @Override
-            public List<Chapter> call() throws Exception {
-                int start = (page - 1) * page_size;
-                return Chapter.find(Chapter.class, " extern_bookid = ? ", new String[]{mbook.extern_bookid}, null, " chapterid ASC ", start + ", " + page_size + " ");
-            }
-        }).continueWith(new Continuation<List<Chapter>, Object>() {
-            @Override
-            public Object then(Task<List<Chapter>> task) throws Exception {
-
-                List<Chapter> chapters = task.getResult();
-                if (chapters.size() < page_size) {
-                    hasMore = false;
-                }
-                mChapterListAdapter.setCurrentChapter(chapter);
-                if (page == 1) {
-                    mChapterListAdapter.setDataList(chapters);
-                } else {
-                    mChapterListAdapter.appendDataList(chapters);
-                }
-                page++;
-                isLoading = false;
-                showChapter();
-                return null;
-            }
-        }, Task.UI_THREAD_EXECUTOR);
-
-    }
 
     public interface switchChapterListener {
         void onChapter(Chapter chapter);
@@ -121,15 +92,6 @@ public class ChapterFragment extends DialogFragment {
                     switchChapterListener.onChapter(item);
                 }
                 dismiss();
-            }
-        });
-        mChapterListAdapter.setReachBottomListener(new OnReachBottomListener() {
-            @Override
-            public void onReachBottom() {
-                if (!isLoading && hasMore) {
-                    showChapter();
-                }
-
             }
         });
     }

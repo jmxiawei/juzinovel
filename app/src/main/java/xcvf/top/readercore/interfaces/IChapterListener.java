@@ -1,5 +1,7 @@
 package xcvf.top.readercore.interfaces;
 
+import java.util.HashMap;
+
 import xcvf.top.readercore.bean.Chapter;
 
 /**
@@ -17,5 +19,5 @@ public interface IChapterListener {
      * @param srcChapter
      * @param destChapter
      */
-    void onChapter(int code, Chapter srcChapter, Chapter destChapter);
+    void onChapter(int code, Chapter srcChapter, Chapter destChapter, HashMap<String,Object> params);
 }

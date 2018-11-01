@@ -58,7 +58,7 @@ public class HtmlPageProvider implements IPageProvider {
             }
 
             String content = textBuff.toString();
-            LogUtils.e(content);
+            //LogUtils.e(content);
             Page page = null;
             while (content.length() > 0) {
                 Line line = (Line) TextBreakUtil.getLine(content, maxWidth, paint);

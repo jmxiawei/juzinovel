@@ -61,6 +61,7 @@ public class BaseHttpHandler {
                 .Builder()
                 .baseUrl(App.baseUrl)
                 .addConverterFactory(this.converter)
+                .client(HttpClientManager.getInstance().getOkHttpClient())
                 .build();
         T t = retrofit.create(clazz);
         return (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class<?>[]{clazz}, new ProxyHandler(t, this));

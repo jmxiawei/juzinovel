@@ -83,7 +83,7 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
             if (index == size) {
                 mCacheChapterList.addLast(mChapter);
                 appendList(mChapter.getPages());
-                LogUtils.e("addLast chapter_name="+mChapter.chapter_name);
+                //LogUtils.e("addLast chapter_name="+mChapter.chapter_name);
             } else {
                 mCacheChapterList.addFirst(mChapter);
                 appendListTop(mChapter.getPages());
