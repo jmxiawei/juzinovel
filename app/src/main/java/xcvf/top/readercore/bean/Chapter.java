@@ -12,6 +12,7 @@ import org.greenrobot.greendao.annotation.Unique;
 import java.util.ArrayList;
 import java.util.List;
 
+import top.iscore.freereader.App;
 import xcvf.top.readercore.interfaces.IPage;
 import org.greenrobot.greendao.annotation.Generated;
 
@@ -154,6 +155,9 @@ public class Chapter  implements Parcelable {
 //        if (chapters != null && chapters.size() > 0) {
 //            return chapters.get(0);
 //        }
+
+        App.getmDaoSession().getChapterDao().queryRaw(" chapterid >  ?  and extern_bookid = ? ", new String[]{String.valueOf(chapterid),bookid});
+        //App.getmDaoSession().getChapterDao().queryBuilder()
         return null;
     }
 
