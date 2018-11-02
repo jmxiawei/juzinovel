@@ -22,6 +22,7 @@ import butterknife.ButterKnife;
 import top.iscore.freereader.R;
 import top.iscore.freereader.fragment.LoadingFragment;
 import top.iscore.freereader.mvp.presenters.BookReadPresenter;
+import top.iscore.freereader.mvp.presenters.BookShelfPresenter;
 import top.iscore.freereader.mvp.view.BookReadView;
 import xcvf.top.readercore.bean.Book;
 import xcvf.top.readercore.bean.BookMark;
@@ -38,6 +39,7 @@ import xcvf.top.readercore.interfaces.Area;
 import xcvf.top.readercore.interfaces.IAreaClickListener;
 import xcvf.top.readercore.interfaces.IChapterListener;
 import xcvf.top.readercore.interfaces.IChapterProvider;
+import xcvf.top.readercore.interfaces.ILoadChapter;
 import xcvf.top.readercore.interfaces.IPage;
 import xcvf.top.readercore.interfaces.IPageScrollListener;
 import xcvf.top.readercore.interfaces.OnTextConfigChangedListener;
@@ -73,11 +75,15 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
 
     List<Chapter> mChapterList;
 
+    BookShelfPresenter mBookShelfPresenter;
+
 
     /**
      * 是否已经加载过章节列表
      */
     boolean loadedChapter = false;
+
+    boolean isShowSuccess = false;
 
     /**
      * 阅读页面
@@ -98,12 +104,14 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
         ButterKnife.bind(this);
         presenter.attachView(this);
         book = getIntent().getParcelableExtra("book");
-        if (book != null) {
-            book.save();
-        }
-        mUser = User.first(User.class);
+        mUser = User.currentUser();
         settingView.setBook(book);
         settingView.setSettingListener(mSettingListener);
+        if (mUser != null) {
+            mBookShelfPresenter = new BookShelfPresenter();
+            mBookShelfPresenter.addBookShelf(mUser.getUid(), book.extern_bookid);
+        }
+
         initReadView();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
@@ -123,6 +131,23 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
         super.onResume();
         fullScreenHandler.hide();
     }
+
+
+    /**
+     * 加载一个章节,失败的章节重新加载
+     */
+    private ILoadChapter mLoadChapter = new ILoadChapter() {
+        @Override
+        public void load(int type, Chapter chapter) {
+
+            ChapterProviderImpl.newInstance().getChapter(type, book.extern_bookid, String.valueOf(chapter.chapterid), chapter, new IChapterListener() {
+                @Override
+                public void onChapter(int code, Chapter srcChapter, Chapter chapter, HashMap<String, Object> params) {
+                    mChapterDisplayedImpl.showChapter(false, readerView, true, IPage.LOADING_PAGE, chapter);
+                }
+            });
+        }
+    };
 
     /**
      * 设置按钮
@@ -171,7 +196,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
 
 
     /**
-     * 切换章节
+     * 切换章节,直接切换到某个章节
      */
     private ChapterFragment.switchChapterListener switchChapterListener = new ChapterFragment.switchChapterListener() {
         @Override
@@ -183,20 +208,20 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
     private void checkChapters(final boolean loadedChapter) {
         mBookMark = BookMark.getMark(book, mUser.getUid());
         String chapterid = "0";
-        if (mBookMark == null) {
-            //没有书签，从第一个章节开始
-            Chapter chapter = Chapter.getNextChapter(book.extern_bookid, "0");
-            if (chapter != null) {
-                chapterid = String.valueOf(chapter.chapterid);
-            }
-        } else {
+        if (mBookMark != null) {
             chapterid = mBookMark.getChapterid();
         }
-        ChapterProviderImpl.newInstance().getChapter(IChapterProvider.TYPE_DETAIL, book.extern_bookid, chapterid, null, new IChapterListener() {
+        int type = IChapterProvider.TYPE_DETAIL;
+        if ("0".equals(chapterid)) {
+            type = IChapterProvider.TYPE_NEXT;
+        }
+        ChapterProviderImpl.newInstance().getChapter(type, book.extern_bookid, chapterid, null, new IChapterListener() {
             @Override
             public void onChapter(int code, Chapter srcChapter, Chapter chapter, HashMap<String, Object> params) {
                 if (chapter != null) {
+                    isShowSuccess = true;
                     mChapterDisplayedImpl.showChapter(false, readerView, false, mBookMark == null ? IPage.LOADING_PAGE : mBookMark.getPage(), chapter);
+                    saveBookMark();
                 }
                 loadData(!loadedChapter);
             }
@@ -220,6 +245,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
         mChapterDisplayedImpl = ChapterDisplayedImpl.newInsrance();
         readerView.setAreaClickListener(this);
         readerView.setPageScrollListener(this);
+        readerView.setLoadChapter(mLoadChapter);
 
     }
 
@@ -256,6 +282,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
 
     }
 
+
     /**
      * 更新书签
      */
@@ -278,15 +305,19 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
     @Override
     public void onLoadChapterList(final ArrayList<Chapter> chapters) {
         book.chapters = chapters;
-        ChapterProviderImpl.newInstance().saveChapter(chapters, new IChapterListener() {
+        ChapterProviderImpl.newInstance().saveChapter(book.extern_bookid, chapters, new IChapterListener() {
             @Override
             public void onChapter(int code, Chapter srcChapter, Chapter destChapter, HashMap<String, Object> params) {
                 if (mLoadingFragment != null) {
                     mLoadingFragment.dismiss();
+                    fullScreenHandler.hide();
                 }
                 mChapterList = (ArrayList<Chapter>) params.get(ChapterProviderImpl.KEY_CHAPTER_LIST);
+                LogUtils.e("[读取章节完成..."+mChapterList.size()+"章]");
+                if (!isShowSuccess) {
+                    checkChapters(loadedChapter);
+                }
 
-                checkChapters(loadedChapter);
             }
         });
 
@@ -311,6 +342,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
     public void setData(Chapter data) {
 
     }
+
 
     @Override
     public void loadData(boolean pullToRefresh) {

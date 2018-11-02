@@ -2,6 +2,7 @@ package xcvf.top.readercore.impl;
 
 import com.blankj.utilcode.util.LogUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -36,25 +37,34 @@ public class ChapterDisplayedImpl implements IDisplayer {
         //下载文件
         FileDownloader.download(App.oss_domain + chapter.self_page, Constant.getCachePath(readerView.getContext(), chapter.self_page), new DownloadListener() {
             @Override
-            public void onDownload(int status,final String path) {
+            public void onDownload(int status, final String path) {
                 if (status == 0) {
                     //下载成功
                     final TextConfig config = TextConfig.getConfig();
                     Task.callInBackground(new Callable<List<IPage>>() {
                         @Override
                         public List<IPage> call() throws Exception {
-                            return  HtmlPageProvider.newInstance().providerPages(path, config.pageWidth, config.maxLine(), config.getSamplePaint());
+                            return HtmlPageProvider.newInstance().providerPages(chapter, path, config.pageWidth, config.maxLine(), config.getSamplePaint());
 
                         }
                     }).continueWith(new Continuation<List<IPage>, Object>() {
                         @Override
                         public Object then(Task<List<IPage>> task) throws Exception {
                             chapter.setPages(task.getResult());
-                            readerView.setChapter(reset,chapter, toLastPage, page);
+                            readerView.setChapter(reset, chapter, toLastPage, page);
                             return null;
                         }
-                    },Task.UI_THREAD_EXECUTOR);
-
+                    }, Task.UI_THREAD_EXECUTOR);
+                } else {
+                    //失败
+                    Page errorPage = new Page();
+                    errorPage.setIndex(Page.ERROR_PAGE);
+                    errorPage.setChapterid(String.valueOf(chapter.chapterid));
+                    List<IPage> pages = new ArrayList<>();
+                    pages.add(errorPage);
+                    chapter.setPages(pages);
+                    chapter.setStatus(Chapter.STATUS_ERROR);
+                    readerView.setChapter(false, chapter, toLastPage, page);
                 }
             }
         });

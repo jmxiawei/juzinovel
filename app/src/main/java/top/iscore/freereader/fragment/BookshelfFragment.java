@@ -33,6 +33,8 @@ import top.iscore.freereader.mvp.view.BookShelfView;
 import xcvf.top.readercore.ReaderActivity;
 import xcvf.top.readercore.bean.Book;
 import xcvf.top.readercore.bean.User;
+import xcvf.top.readercore.daos.BookDao;
+import xcvf.top.readercore.daos.DBManager;
 import xcvf.top.readercore.styles.ModeProvider;
 
 /**
@@ -46,7 +48,6 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout refreshLayout;
     Unbinder unbinder;
-    int page = 1;
     BookShelfAdapter mBookShelfAdapter;
     User mUser;
 
@@ -72,20 +73,20 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if(!hidden){
+        if (!hidden) {
             LogUtils.e("--------------------onHiddenChanged--------------");
         }
     }
 
     private void updateMode() {
-        LogUtils.e("--------------------updateMode--------------"+R.id.tv_name+"-----"+R.id.tv_chapter_name);
+        LogUtils.e("--------------------updateMode--------------" + R.id.tv_name + "-----" + R.id.tv_chapter_name);
         new Colorful.Builder(this)
                 .backgroundColor(R.id.fragment_content, R.attr.colorPrimary)
                 .setter(new ViewGroupSetter(recycler, R.attr.colorPrimary)
                         .childViewBgColor(R.id.book_content, R.attr.colorPrimary)
                         .childViewTextColor(R.id.tv_name, R.attr.text_color)
                         .childViewTextColor(R.id.tv_chapter, R.attr.text_second_color)
-                        .childViewTextColor(R.id.tv_add,R.attr.text_color))
+                        .childViewTextColor(R.id.tv_add, R.attr.text_color))
                 .create()
                 .setTheme(ModeProvider.getCurrentModeTheme());
     }
@@ -126,7 +127,9 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
 
     @Override
     public void showContent() {
-
+        List<Book> books = DBManager.getDaoSession().getBookDao().queryBuilder().where(BookDao.Properties.Userid.eq(mUser.getUid()))
+                .orderDesc(BookDao.Properties.Update_time).list();
+        mBookShelfAdapter.setDataList(books);
     }
 
     @Override
@@ -136,23 +139,20 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
 
     @Override
     public void setData(List<Book> data) {
-        if (page == 1) {
-            mBookShelfAdapter.setDataList(data);
-        } else {
-            mBookShelfAdapter.appendDataList(data);
+        if (data != null) {
+            DBManager.getDaoSession().getBookDao().insertOrReplaceInTx(data);
         }
         refreshLayout.finishRefresh();
         refreshLayout.finishLoadMore();
+        showContent();
     }
 
     @Override
     public void loadData(boolean pullToRefresh) {
         if (pullToRefresh) {
-            page = 1;
             refreshLayout.autoRefresh();
         }
-
-        presenter.loadBookShelf(page, mUser.getUid());
+        presenter.loadBookShelf(mUser.getUid());
     }
 
     @Override

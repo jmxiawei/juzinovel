@@ -14,7 +14,7 @@ public class ModeConfig implements Parcelable {
     int bgResId;
     Mode mode;
     int id;
-
+    int notifyTxtColor;
     public int getId() {
         return id;
     }
@@ -53,15 +53,25 @@ public class ModeConfig implements Parcelable {
         return this;
     }
 
+    public int getNotifyTxtColor() {
+        return notifyTxtColor;
+    }
+
+    public ModeConfig setNotifyTxtColor(int notifyTxtColor) {
+        this.notifyTxtColor = notifyTxtColor;
+        return this;
+    }
+
     public ModeConfig() {
     }
 
-    public static ModeConfig newInstance(int id,Mode mode,int bgResId,int textColorResId){
+    public static ModeConfig newInstance(int id,Mode mode,int bgResId,int textColorResId,int notifyTxtColor){
         ModeConfig config = new ModeConfig();
         config.setId(id);
         config.setMode(mode);
         config.setBgResId(bgResId);
         config.setTextColorResId(textColorResId);
+        config.setNotifyTxtColor(notifyTxtColor);
         return config;
     }
 

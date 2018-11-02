@@ -28,7 +28,7 @@ public class ViewBackgroundColorSetter extends ViewSetter {
 
             mView.setBackgroundColor(getColor(newTheme));
             if (mView.getId() == R.id.fragment_content) {
-                LogUtils.e("-R.id.fragment_content--------");
+               // LogUtils.e("-R.id.fragment_content--------");
             }
         }
     }

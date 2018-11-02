@@ -13,6 +13,7 @@ import xcvf.top.readercore.bean.Chapter;
 import xcvf.top.readercore.bean.Page;
 import xcvf.top.readercore.holders.BookContentAdapter;
 import xcvf.top.readercore.interfaces.IAreaClickListener;
+import xcvf.top.readercore.interfaces.ILoadChapter;
 import xcvf.top.readercore.interfaces.IPageScrollListener;
 
 /**
@@ -25,14 +26,25 @@ public class ReaderView extends FrameLayout {
 
     Book mBook;
     BookContentView mBookContentView;
+    /**
+     * 页显示
+     */
     BookContentAdapter mBookContentAdapter;
-    //BookChapterContentAdapter mBookChapterContentAdapter;
+    /**
+     * 页面滑动，换页
+     */
     IPageScrollListener pageScrollListener;
+    /**
+     * 页面区域点击
+     */
     IAreaClickListener iAreaClickListener;
 
     LinearLayoutManager mLayoutManager;
 
-
+    /**
+     * 加载失败的张杰
+     */
+    ILoadChapter mLoadChapter;
     public void onTextConfigChanged(){
         mBookContentAdapter.notifyDataSetChanged();
     }
@@ -41,7 +53,12 @@ public class ReaderView extends FrameLayout {
         this.pageScrollListener = pageScrollListener;
         mBookContentView.setPageScrollListener(this.pageScrollListener);
         mBookContentAdapter.setPageScrollListener(pageScrollListener);
+    }
 
+    public ReaderView setLoadChapter(ILoadChapter mLoadChapter) {
+        this.mLoadChapter = mLoadChapter;
+        mBookContentAdapter.setmLoadChapter(mLoadChapter);
+        return this;
     }
 
     public void setAreaClickListener(IAreaClickListener iAreaClickListener) {
@@ -64,9 +81,7 @@ public class ReaderView extends FrameLayout {
         mLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
         mBookContentView.setLayoutManager(mLayoutManager);
         mBookContentAdapter = new BookContentAdapter();
-        //mBookChapterContentAdapter = new BookChapterContentAdapter();
         mBookContentView.setAdapter(mBookContentAdapter);
-
     }
 
 

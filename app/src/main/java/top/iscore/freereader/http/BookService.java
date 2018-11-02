@@ -9,7 +9,8 @@ import retrofit2.http.POST;
 import xcvf.top.readercore.bean.Book;
 import xcvf.top.readercore.bean.Chapter;
 
-/**结尾需要带/
+/**
+ * 结尾需要带/
  * Created by xiaw on 2018/9/18.
  */
 
@@ -18,6 +19,7 @@ public interface BookService {
 
     /**
      * 加载书籍章节
+     *
      * @param service
      * @param exterBookId
      * @return
@@ -25,25 +27,27 @@ public interface BookService {
     @FormUrlEncoded
     @POST("reader/public/v1/")
     Call<BaseModel<ArrayList<Chapter>>> getChapterList(@Field("service") String service
-            ,@Field("extern_bookid") String exterBookId
-            ,@Field("startid") int startid);
+            , @Field("extern_bookid") String exterBookId
+            , @Field("startid") int startid);
 
     /**
      * 加载书籍章节
+     *
      * @param service
      * @param chapterid
-     * @param type 0本章节,1上一章节，2下一章节
+     * @param type      0本章节,1上一章节，2下一章节
      * @return
      */
     @FormUrlEncoded
     @POST("reader/public/v1/")
     Call<BaseModel<Chapter>> getOneChapter(@Field("service") String service
-            ,@Field("chapterid") String chapterid
-            ,@Field("type") int type);
+            , @Field("chapterid") String chapterid
+            , @Field("type") int type);
 
 
     /**
      * 加载书架
+     *
      * @param service
      * @param userid
      * @return
@@ -51,8 +55,29 @@ public interface BookService {
     @FormUrlEncoded
     @POST("reader/public/v1/")
     Call<BaseModel<ArrayList<Book>>> getBookShelf(@Field("service") String service
+            , @Field("userid") String userid);
+
+    /**
+     * 新增书架
+     *
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("reader/public/v1/")
+    Call<BaseModel<String>> addBookShelf(@Field("service") String service
             , @Field("userid") String userid
-            , @Field("page") int page);
+            , @Field("extern_bookid") String extern_bookid);
+
+    /**
+     * 删除书架
+     *
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("reader/public/v1/")
+    Call<BaseModel<String>> deleteBookShelf(@Field("service") String service
+            , @Field("shelfid") String shelfid);
+
 
 
 

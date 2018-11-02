@@ -1,12 +1,15 @@
 package top.iscore.freereader;
 
+import android.Manifest;
 import android.app.Application;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 
+import com.blankj.utilcode.util.CrashUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
 import com.facebook.stetho.Stetho;
-import com.orm.SugarApp;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshFooterCreator;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreator;
@@ -17,8 +20,7 @@ import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 
 import xcvf.top.readercore.bean.TextConfig;
-import xcvf.top.readercore.daos.DaoMaster;
-import xcvf.top.readercore.daos.DaoSession;
+import xcvf.top.readercore.daos.DBManager;
 
 /**
  * Created by xiaw on 2018/6/11.
@@ -49,9 +51,6 @@ public class App extends Application {
         });
     }
 
-    public static final String DB_NAME = "app.db";
-
-    private static DaoSession mDaoSession;
 
     @Override
     public void onCreate() {
@@ -59,19 +58,25 @@ public class App extends Application {
         Utils.init(this);
         Stetho.initializeWithDefaults(this);
         TextConfig.initSpace(this);
-        initGreenDao();
+        DBManager.init(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        CrashUtils.init(new CrashUtils.OnCrashListener() {
+            @Override
+            public void onCrash(String crashInfo, Throwable e) {
+                LogUtils.e(crashInfo);
+            }
+        });
     }
 
-    private void initGreenDao() {
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, DB_NAME);
-        SQLiteDatabase db = helper.getWritableDatabase();
-        DaoMaster daoMaster = new DaoMaster(db);
-        mDaoSession = daoMaster.newSession();
-    }
-
-    public static DaoSession getmDaoSession() {
-        return mDaoSession;
-    }
 
 //    /**
 //     * 设置各个视图与颜色属性的关联

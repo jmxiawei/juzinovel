@@ -45,6 +45,7 @@ public class BookContentView extends RecyclerView {
 
     long downTimestamp = 0L;
     int mPosition = 0;
+
     public void setAreaClickListener(IAreaClickListener mAreaClickListener) {
         this.mAreaClickListener = mAreaClickListener;
     }
@@ -62,7 +63,8 @@ public class BookContentView extends RecyclerView {
     }
 
     public int getCurrentPage() {
-        return mPosition;
+        LinearLayoutManager ll = (LinearLayoutManager) getLayoutManager();
+        return ll.findFirstVisibleItemPosition();
     }
 
     public BookContentView setCurrentPage(int currentPage) {
@@ -78,6 +80,8 @@ public class BookContentView extends RecyclerView {
         @Override
         public void onPageSelected(int position) {
             LogUtils.e("position = " + position);
+
+
             mPosition = position;
         }
     };
@@ -106,11 +110,11 @@ public class BookContentView extends RecyclerView {
                             mPageScrollListener.onScroll(currentPage, totalPage, IPageScrollListener.NEXT_CHAPTER);
                         }
                     }
+                    LogUtils.e("move move move");
                 } else {
                     if (Math.abs(downX - cdownX) < V_CLICK && Math.abs(downY - cdownY) < V_CLICK
                             && (SystemClock.elapsedRealtime() - downTimestamp < 100)) {
                         //点击
-                        LogUtils.e("点击事件");
                         if (mAreaClickListener != null) {
                             mAreaClickListener.clickArea(Area.CENTER);
                         }
@@ -121,9 +125,7 @@ public class BookContentView extends RecyclerView {
             default:
                 break;
         }
-        LogUtils.e("isReachStartPage=" + isReachStartPage + ",isReachLastPage=" + isReachLastPage
-                + ",currentPage=" + currentPage + ",totalPage=" + totalPage);
-        return super.dispatchTouchEvent(ev);
+        return  super.dispatchTouchEvent(ev);
     }
 
     @Override

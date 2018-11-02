@@ -3,35 +3,32 @@ package xcvf.top.readercore.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.orm.SugarRecord;
-import com.orm.dsl.Column;
-import com.orm.dsl.Table;
-import com.orm.dsl.Unique;
+
+
+import org.greenrobot.greendao.annotation.Entity;
 
 import java.util.List;
+
+import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Unique;
+
+import xcvf.top.readercore.daos.DBManager;
+import xcvf.top.readercore.daos.UserDao;
 
 /**
  * 用户
  * Created by xiaw on 2018/10/25.
  */
-@Table(name = "users")
-public class User extends SugarRecord implements Parcelable {
+@Entity
+public class User implements Parcelable {
 
-    @Column(name = "nickname")
     String nickname;
-
     @Unique
-    @Column(name = "uid")
     String uid;
-    @Column(name = "avatar")
     String avatar;
-    @Column(name = "account")
     String account;
-    @Column(name = "gender")
     String gender;
-    @Column(name = "token")
     String token;
-    @Column(name = "update_time")
     String update_time;
 
     public String getUpdate_time() {
@@ -98,11 +95,12 @@ public class User extends SugarRecord implements Parcelable {
     }
 
     public static User currentUser() {
-        List<User> users = User.find(User.class, null, null, null, " update_time DESC", "1");
-        if (users != null && users.size() > 0) {
-            return users.get(0);
-        }
-        return new User();
+        return DBManager.getDaoSession().getUserDao().queryBuilder()
+                .orderDesc(UserDao.Properties.Update_time).limit(1).build().unique();
+    }
+
+    public void save() {
+        DBManager.getDaoSession().getUserDao().save(this);
     }
 
     public User() {
@@ -132,6 +130,18 @@ public class User extends SugarRecord implements Parcelable {
         this.gender = in.readString();
         this.token = in.readString();
         this.update_time = in.readString();
+    }
+
+    @Generated(hash = 1186859381)
+    public User(String nickname, String uid, String avatar, String account, String gender, String token,
+                String update_time) {
+        this.nickname = nickname;
+        this.uid = uid;
+        this.avatar = avatar;
+        this.account = account;
+        this.gender = gender;
+        this.token = token;
+        this.update_time = update_time;
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {

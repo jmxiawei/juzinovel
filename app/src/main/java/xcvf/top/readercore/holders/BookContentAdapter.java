@@ -12,6 +12,7 @@ import java.util.List;
 
 import xcvf.top.readercore.bean.Chapter;
 import xcvf.top.readercore.bean.Page;
+import xcvf.top.readercore.interfaces.ILoadChapter;
 import xcvf.top.readercore.interfaces.IPage;
 import xcvf.top.readercore.interfaces.IPageScrollListener;
 import xcvf.top.readercore.views.BookContentView;
@@ -28,6 +29,7 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
 
     LinkedList<Chapter> mCacheChapterList = new LinkedList<>();
     IPageScrollListener pageScrollListener;
+    ILoadChapter mLoadChapter;
 
     public BookContentAdapter setPageScrollListener(IPageScrollListener pageScrollListener) {
         this.pageScrollListener = pageScrollListener;
@@ -35,6 +37,10 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
         return this;
     }
 
+    public BookContentAdapter setmLoadChapter(ILoadChapter mLoadChapter) {
+        this.mLoadChapter = mLoadChapter;
+        return this;
+    }
 
     /**
      * 设置需要显示的章节，放到后面
@@ -87,21 +93,54 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
             } else {
                 mCacheChapterList.addFirst(mChapter);
                 appendListTop(mChapter.getPages());
-                LogUtils.e("addFirst chapter_name="+mChapter.chapter_name);
+                LogUtils.e("addFirst chapter_name=" + mChapter.chapter_name);
                 //添加到前面
             }
 
-            if(reset){
+            if (reset) {
                 bookContentView.scrollToPosition(0);
-            }else {
+            } else {
                 if (startPage != IPage.LOADING_PAGE && startPage > 0) {
                     //历史记录
                     bookContentView.scrollToPosition(startPage - 1);
                 }
             }
-
-
+        } else {
+            //存在。如果是失败的页面
+            int index = mCacheChapterList.indexOf(mChapter);
+            Chapter chapter = mCacheChapterList.get(index);
+            if (chapter.getStatus() == Chapter.STATUS_ERROR
+                    && mChapter.getStatus() == Chapter.STATUS_OK) {
+                mCacheChapterList.set(index, mChapter);
+                int fronPage = getFrontPage(index);
+                List<IPage> pageList = mChapter.getPages();
+                if (pageList.size() > 0) {
+                    replace(fronPage, pageList.get(0));
+                    appendList(fronPage + 1, pageList.subList(1, pageList.size()));
+                }
+            }
         }
+    }
+
+
+    /**
+     * 本章节之前有多少页数据
+     *
+     * @param chapterIndex
+     * @return
+     */
+    private int getFrontPage(int chapterIndex) {
+
+        if (chapterIndex == -1) {
+            return -1;
+        } else if (chapterIndex == 0) {
+            return 0;
+        }
+        int count = 0;
+        for (int i = 0; i < chapterIndex; i++) {
+            count += mCacheChapterList.get(i).getPages().size();
+        }
+        return count;
     }
 
 
@@ -121,9 +160,26 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
         notifyDataSetChanged();
     }
 
+
+    private void replace(int position, IPage page) {
+        this.pageList.set(position, page);
+        notifyItemChanged(position);
+    }
+
+    /**
+     * 加入到列表中间
+     *
+     * @param startIndex
+     * @param pageList
+     */
+    private void appendList(int startIndex, List<IPage> pageList) {
+        this.pageList.addAll(startIndex, pageList);
+        notifyItemRangeInserted(startIndex, pageList.size());
+    }
+
     private void appendList(List<IPage> pageList) {
         this.pageList.addAll(pageList);
-        notifyItemRangeInserted(this.pageList.size(), this.pageList.size());
+        notifyItemRangeInserted(this.pageList.size() - pageList.size(), this.pageList.size());
     }
 
     private void setPageList(List<IPage> pageList) {
@@ -137,7 +193,7 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
 
     @Override
     public PageHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new PageHolder(parent.getContext(), parent);
+        return new PageHolder(parent.getContext(), parent, mLoadChapter);
     }
 
     @Override
@@ -167,8 +223,8 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
 
 
     public Chapter getCurrentChapter(int page) {
-        if(page >= pageList.size()){
-            return  null;
+        if (page >= pageList.size() || page < 0) {
+            return null;
         }
         IPage page1 = pageList.get(page);
         for (int i = 0; i < mCacheChapterList.size(); i++) {

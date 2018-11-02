@@ -5,17 +5,20 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.TimeUtils;
 
 import java.text.SimpleDateFormat;
 
+import butterknife.BindView;
 import top.iscore.freereader.R;
 import xcvf.top.readercore.bean.Chapter;
 import xcvf.top.readercore.bean.Page;
 import xcvf.top.readercore.bean.TextConfig;
+import xcvf.top.readercore.interfaces.IChapterProvider;
+import xcvf.top.readercore.interfaces.ILoadChapter;
 import xcvf.top.readercore.interfaces.IPage;
 import xcvf.top.readercore.interfaces.IPageScrollListener;
 import xcvf.top.readercore.views.PageTextView;
@@ -33,18 +36,27 @@ public class PageHolder extends RecyclerView.ViewHolder {
     TextView tvProgress;
     Chapter chapter;
     View pageBackground;
-    View llProgress;
     IPageScrollListener pageScrollListener;
+    ILoadChapter mILoadChapter;
+    LinearLayout llNotify;
 
-    public PageHolder(Context context, ViewGroup parentView) {
+    LinearLayout llProgress;
+
+    TextView tv_notify_net;
+    TextView tvRetry;
+
+    public PageHolder(Context context, ViewGroup parentView, ILoadChapter mILoadChapter) {
         super(LayoutInflater.from(context).inflate(R.layout.item_page_content, parentView, false));
+        this.mILoadChapter = mILoadChapter;
         tvChapterName = itemView.findViewById(R.id.tv_chapter_name);
         tv = itemView.findViewById(R.id.tv);
         tvTime = itemView.findViewById(R.id.tv_time);
+        tv_notify_net = itemView.findViewById(R.id.tv_notify_net);
         tvProgress = itemView.findViewById(R.id.tv_progress);
         pageBackground = itemView.findViewById(R.id.page_background);
         llProgress = itemView.findViewById(R.id.ll_progress);
-
+        llNotify = itemView.findViewById(R.id.ll_notify);
+        tvRetry = itemView.findViewById(R.id.tv_retry);
     }
 
 
@@ -53,35 +65,38 @@ public class PageHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
-    public void setPage(Chapter chapter, IPage page) {
+    public void setPage(final Chapter chapter, IPage page) {
         this.page = page;
+        TextConfig textConfig = TextConfig.getConfig();
+        tvTime.setText(TimeUtils.millis2String(System.currentTimeMillis(), new SimpleDateFormat("HH:mm")));
+        textConfig.applyColor(tvTime);
+        textConfig.applyColor(tvChapterName);
+        textConfig.applyColor(tvProgress);
+        textConfig.applyColor(tv_notify_net);
+        textConfig.applyColor(tvRetry);
+        itemView.setBackgroundColor(itemView.getResources().getColor(textConfig.getBackgroundColor()));
+        tvChapterName.setText(chapter.getChapter_name());
 
         if (this.page.getIndex() > 0) {
             this.chapter = chapter;
-            TextConfig textConfig = TextConfig.getConfig();
-            //textConfig.apply(tv);
-            textConfig.applyColor(tvTime);
-            textConfig.applyColor(tvChapterName);
-            textConfig.applyColor(tvProgress);
-
-            itemView.setBackgroundColor(itemView.getResources().getColor(textConfig.getBackgroundColor()));
-            tvTime.setText(TimeUtils.millis2String(System.currentTimeMillis(), new SimpleDateFormat("HH:mm")));
-            tvChapterName.setText(chapter.getChapter_name());
-            //tv.setText(page.toString());
             tv.setPage((Page) page);
             tvProgress.setText(page.getIndex() + "/" + chapter.getPages().size());
-            llProgress.setVisibility(View.GONE);
+            tv.setVisibility(View.VISIBLE);
+            llProgress.setVisibility(View.INVISIBLE);
         } else {
+            tv.setVisibility(View.INVISIBLE);
             llProgress.setVisibility(View.VISIBLE);
-            LogUtils.e("LOADING_PAGE");
-            if (page.getIndex() == IPage.LOADING_PAGE) {
-                //加载下一页
-                if (pageScrollListener != null) {
-
+            tvProgress.setText("-/-");
+            llNotify.setVisibility(View.VISIBLE);
+            tvRetry.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mILoadChapter != null) {
+                        mILoadChapter.load(IChapterProvider.TYPE_DETAIL, chapter);
+                    }
                 }
-            }
+            });
         }
-
     }
 
 }

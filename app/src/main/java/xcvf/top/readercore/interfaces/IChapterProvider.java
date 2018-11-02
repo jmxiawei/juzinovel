@@ -14,6 +14,6 @@ public interface IChapterProvider {
     int TYPE_DETAIL = 3;
     void getChapter(int type,String bookid,String chapterid,Chapter chapter,IChapterListener chapterListener);
 
-    void saveChapter(List<Chapter> chapterList,IChapterListener chapterListener);
+    void saveChapter(String booid,List<Chapter> chapterList,IChapterListener chapterListener);
 
 }

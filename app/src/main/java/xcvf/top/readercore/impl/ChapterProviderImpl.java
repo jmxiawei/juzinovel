@@ -14,6 +14,8 @@ import top.iscore.freereader.http.BaseHttpHandler;
 import top.iscore.freereader.http.BaseModel;
 import top.iscore.freereader.http.BookService;
 import xcvf.top.readercore.bean.Chapter;
+import xcvf.top.readercore.daos.ChapterDao;
+import xcvf.top.readercore.daos.DBManager;
 import xcvf.top.readercore.interfaces.IChapterListener;
 import xcvf.top.readercore.interfaces.IChapterProvider;
 
@@ -92,7 +94,7 @@ public class ChapterProviderImpl implements IChapterProvider {
     }
 
     @Override
-    public void saveChapter(final List<Chapter> chapterList, final IChapterListener chapterListener) {
+    public void saveChapter(final String booid, final List<Chapter> chapterList, final IChapterListener chapterListener) {
         Task.callInBackground(new Callable<List<Chapter>>() {
             @Override
             public List<Chapter> call() throws Exception {
@@ -101,7 +103,15 @@ public class ChapterProviderImpl implements IChapterProvider {
                 // 第二次 先查所有的，再插入
                 LogUtils.e("start read chapter " + System.currentTimeMillis());
                 List<Chapter> chapters = null;
-                //Chapter.find(Chapter.class, null, null, null, " chapterid ASC ", null);
+                ChapterDao chapterDao = DBManager.
+                        getDaoMaster().
+                        newSession().
+                        getChapterDao();
+                chapters = chapterDao.
+                        queryBuilder().
+                        where(ChapterDao.Properties.Extern_bookid.eq(booid)).
+                        orderAsc(ChapterDao.Properties.Chapterid).
+                        build().list();
                 LogUtils.e("finish read chapter " + System.currentTimeMillis());
                 if (chapters == null || chapters.size() == 0) {
                     //没有数据
@@ -110,7 +120,7 @@ public class ChapterProviderImpl implements IChapterProvider {
                     chapters.addAll(chapterList);
                 }
                 LogUtils.e("start save chapter " + System.currentTimeMillis());
-                //Chapter.saveInTx(chapterList);
+                chapterDao.saveInTx(chapterList);
                 LogUtils.e("finish save chapter " + System.currentTimeMillis());
                 if (chapterList != null && chapterList.size() > 0) {
                     //保存最大的章节id

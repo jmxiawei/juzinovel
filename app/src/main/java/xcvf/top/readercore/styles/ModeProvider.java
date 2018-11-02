@@ -100,17 +100,17 @@ public class ModeProvider {
 
     private static void addNightModelConfig() {
         List<ModeConfig> configs = new ArrayList<>();
-        configs.add(ModeConfig.newInstance(0, Mode.NightMode, R.color.reader_styleclor4, R.color.reader_styletxtclor4));
-        configs.add(ModeConfig.newInstance(1, Mode.NightMode, R.color.reader_styleclor5, R.color.reader_styletxtclor5));
+        configs.add(ModeConfig.newInstance(0, Mode.NightMode, R.color.reader_styleclor4, R.color.reader_styletxtclor4,R.color.reader_light_notify_clor));
+        configs.add(ModeConfig.newInstance(1, Mode.NightMode, R.color.reader_styleclor5, R.color.reader_styletxtclor5,R.color.reader_light_notify_clor));
         configList.put(Mode.NightMode.toString(), configs);
     }
 
 
     private static void addDayModeConfig() {
         List<ModeConfig> configs = new ArrayList<>();
-        configs.add(ModeConfig.newInstance(0, Mode.DayMode, R.color.reader_styleclor1, R.color.reader_styletxtclor1));
-        configs.add(ModeConfig.newInstance(1, Mode.DayMode, R.color.reader_styleclor2, R.color.reader_styletxtclor2));
-        configs.add(ModeConfig.newInstance(2, Mode.DayMode, R.color.reader_styleclor3, R.color.reader_styletxtclor3));
+        configs.add(ModeConfig.newInstance(0, Mode.DayMode, R.color.reader_styleclor1, R.color.reader_styletxtclor1,R.color.reader_dark_notify_clor));
+        configs.add(ModeConfig.newInstance(1, Mode.DayMode, R.color.reader_styleclor2, R.color.reader_styletxtclor2,R.color.reader_dark_notify_clor));
+        configs.add(ModeConfig.newInstance(2, Mode.DayMode, R.color.reader_styleclor3, R.color.reader_styletxtclor3,R.color.reader_dark_notify_clor));
         configList.put(Mode.DayMode.toString(), configs);
     }
 

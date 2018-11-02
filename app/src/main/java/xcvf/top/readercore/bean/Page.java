@@ -19,8 +19,35 @@ public class Page implements IPage {
 
     int totalPage;
 
-
+    public String chapterid;
     public Page() {
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Page page = (Page) o;
+
+        if (index != page.index) return false;
+        return chapterid != null ? chapterid.equals(page.chapterid) : page.chapterid == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = index;
+        result = 31 * result + (chapterid != null ? chapterid.hashCode() : 0);
+        return result;
+    }
+
+    public String getChapterid() {
+        return chapterid;
+    }
+
+    public Page setChapterid(String chapterid) {
+        this.chapterid = chapterid;
+        return this;
     }
 
     @Override

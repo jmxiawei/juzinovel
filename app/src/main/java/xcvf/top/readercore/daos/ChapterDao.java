@@ -27,11 +27,7 @@ public class ChapterDao extends AbstractDao<Chapter, Void> {
         public final static Property Chapter_name = new Property(0, String.class, "chapter_name", false, "CHAPTER_NAME");
         public final static Property Extern_bookid = new Property(1, String.class, "extern_bookid", false, "EXTERN_BOOKID");
         public final static Property Self_page = new Property(2, String.class, "self_page", false, "SELF_PAGE");
-        public final static Property Is_fetch = new Property(3, int.class, "is_fetch", false, "IS_FETCH");
-        public final static Property Engine_domain = new Property(4, String.class, "engine_domain", false, "ENGINE_DOMAIN");
-        public final static Property Extra_info = new Property(5, String.class, "extra_info", false, "EXTRA_INFO");
-        public final static Property Fetch_code = new Property(6, String.class, "fetch_code", false, "FETCH_CODE");
-        public final static Property Chapterid = new Property(7, int.class, "chapterid", false, "CHAPTERID");
+        public final static Property Chapterid = new Property(3, int.class, "chapterid", false, "CHAPTERID");
     }
 
 
@@ -50,11 +46,7 @@ public class ChapterDao extends AbstractDao<Chapter, Void> {
                 "\"CHAPTER_NAME\" TEXT," + // 0: chapter_name
                 "\"EXTERN_BOOKID\" TEXT," + // 1: extern_bookid
                 "\"SELF_PAGE\" TEXT," + // 2: self_page
-                "\"IS_FETCH\" INTEGER NOT NULL ," + // 3: is_fetch
-                "\"ENGINE_DOMAIN\" TEXT," + // 4: engine_domain
-                "\"EXTRA_INFO\" TEXT," + // 5: extra_info
-                "\"FETCH_CODE\" TEXT," + // 6: fetch_code
-                "\"CHAPTERID\" INTEGER NOT NULL UNIQUE );"); // 7: chapterid
+                "\"CHAPTERID\" INTEGER NOT NULL UNIQUE );"); // 3: chapterid
     }
 
     /** Drops the underlying database table. */
@@ -81,23 +73,7 @@ public class ChapterDao extends AbstractDao<Chapter, Void> {
         if (self_page != null) {
             stmt.bindString(3, self_page);
         }
-        stmt.bindLong(4, entity.getIs_fetch());
- 
-        String engine_domain = entity.getEngine_domain();
-        if (engine_domain != null) {
-            stmt.bindString(5, engine_domain);
-        }
- 
-        String extra_info = entity.getExtra_info();
-        if (extra_info != null) {
-            stmt.bindString(6, extra_info);
-        }
- 
-        String fetch_code = entity.getFetch_code();
-        if (fetch_code != null) {
-            stmt.bindString(7, fetch_code);
-        }
-        stmt.bindLong(8, entity.getChapterid());
+        stmt.bindLong(4, entity.getChapterid());
     }
 
     @Override
@@ -118,23 +94,7 @@ public class ChapterDao extends AbstractDao<Chapter, Void> {
         if (self_page != null) {
             stmt.bindString(3, self_page);
         }
-        stmt.bindLong(4, entity.getIs_fetch());
- 
-        String engine_domain = entity.getEngine_domain();
-        if (engine_domain != null) {
-            stmt.bindString(5, engine_domain);
-        }
- 
-        String extra_info = entity.getExtra_info();
-        if (extra_info != null) {
-            stmt.bindString(6, extra_info);
-        }
- 
-        String fetch_code = entity.getFetch_code();
-        if (fetch_code != null) {
-            stmt.bindString(7, fetch_code);
-        }
-        stmt.bindLong(8, entity.getChapterid());
+        stmt.bindLong(4, entity.getChapterid());
     }
 
     @Override
@@ -148,11 +108,7 @@ public class ChapterDao extends AbstractDao<Chapter, Void> {
             cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // chapter_name
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // extern_bookid
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // self_page
-            cursor.getInt(offset + 3), // is_fetch
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // engine_domain
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // extra_info
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // fetch_code
-            cursor.getInt(offset + 7) // chapterid
+            cursor.getInt(offset + 3) // chapterid
         );
         return entity;
     }
@@ -162,11 +118,7 @@ public class ChapterDao extends AbstractDao<Chapter, Void> {
         entity.setChapter_name(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
         entity.setExtern_bookid(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setSelf_page(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setIs_fetch(cursor.getInt(offset + 3));
-        entity.setEngine_domain(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setExtra_info(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setFetch_code(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setChapterid(cursor.getInt(offset + 7));
+        entity.setChapterid(cursor.getInt(offset + 3));
      }
     
     @Override

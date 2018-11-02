@@ -53,7 +53,7 @@ public class BookHolder extends CommonViewHolder<Book> {
             llEmpty.setVisibility(View.GONE);
             RoundedCornersTransformation roundedCornersTransformation
                     = new RoundedCornersTransformation(itemView.getContext(), 10, 0);
-            Glide.with(itemView.getContext()).load(book.cover).placeholder(R.mipmap.ic_placehold_book).bitmapTransform(roundedCornersTransformation).into(imgCover);
+            Glide.with(itemView.getContext()).load(book.cover).placeholder(R.color.text_gray_light).bitmapTransform(roundedCornersTransformation).into(imgCover);
             tvName.setText(Html.fromHtml(book.name));
             tvChapter.setText(book.latest_chapter_name);
             llNew.setVisibility(View.INVISIBLE);

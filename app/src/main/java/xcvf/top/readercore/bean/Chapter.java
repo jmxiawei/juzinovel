@@ -5,6 +5,7 @@ import android.os.Parcelable;
 import android.text.TextUtils;
 
 
+import org.greenrobot.greendao.Property;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Transient;
 import org.greenrobot.greendao.annotation.Unique;
@@ -13,17 +14,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import top.iscore.freereader.App;
+import xcvf.top.readercore.daos.ChapterDao;
+import xcvf.top.readercore.daos.DBManager;
 import xcvf.top.readercore.interfaces.IPage;
+
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.query.WhereCondition;
 
 /**
  * 章节
  * Created by xiaw on 2018/6/30.
  */
 @Entity
-public class Chapter  implements Parcelable {
+public class Chapter implements Parcelable {
 
-
+    @Transient
+    public static final int STATUS_ERROR = 1;
+    @Transient
+    public static final int STATUS_OK = 0;
 
     public String chapter_name;
 
@@ -33,33 +41,20 @@ public class Chapter  implements Parcelable {
 
     public String self_page;
 
-
-    public int is_fetch;
-
-
-    public String engine_domain;
-
-
-    public String extra_info;
-
-
-    public String fetch_code;
-
+    @Transient
+    int status = STATUS_OK;
 
     @Unique
     public int chapterid;
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
         Chapter chapter = (Chapter) o;
 
+        if (chapterid != chapter.chapterid) return false;
         if (extern_bookid != null ? !extern_bookid.equals(chapter.extern_bookid) : chapter.extern_bookid != null)
             return false;
         return self_page != null ? self_page.equals(chapter.self_page) : chapter.self_page == null;
@@ -69,9 +64,18 @@ public class Chapter  implements Parcelable {
     public int hashCode() {
         int result = extern_bookid != null ? extern_bookid.hashCode() : 0;
         result = 31 * result + (self_page != null ? self_page.hashCode() : 0);
+        result = 31 * result + chapterid;
         return result;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public Chapter setStatus(int status) {
+        this.status = status;
+        return this;
+    }
 
     @Transient
     List<IPage> pages = new ArrayList<>();
@@ -100,38 +104,6 @@ public class Chapter  implements Parcelable {
         this.self_page = self_page;
     }
 
-    public int getIs_fetch() {
-        return is_fetch;
-    }
-
-    public void setIs_fetch(int is_fetch) {
-        this.is_fetch = is_fetch;
-    }
-
-    public String getEngine_domain() {
-        return engine_domain;
-    }
-
-    public void setEngine_domain(String engine_domain) {
-        this.engine_domain = engine_domain;
-    }
-
-    public String getExtra_info() {
-        return extra_info;
-    }
-
-    public void setExtra_info(String extra_info) {
-        this.extra_info = extra_info;
-    }
-
-    public String getFetch_code() {
-        return fetch_code;
-    }
-
-    public void setFetch_code(String fetch_code) {
-        this.fetch_code = fetch_code;
-    }
-
 
     public List<IPage> getPages() {
         return pages;
@@ -150,15 +122,13 @@ public class Chapter  implements Parcelable {
      * @param chapterid
      * @return
      */
-    public static Chapter getNextChapter(String bookid,String chapterid) {
-//        List<Chapter> chapters = Chapter.find(Chapter.class, " chapterid >  ?  and extern_bookid = ? ", new String[]{String.valueOf(chapterid),bookid}, null, " chapterid ASC ", " 1 ");
-//        if (chapters != null && chapters.size() > 0) {
-//            return chapters.get(0);
-//        }
-
-        App.getmDaoSession().getChapterDao().queryRaw(" chapterid >  ?  and extern_bookid = ? ", new String[]{String.valueOf(chapterid),bookid});
-        //App.getmDaoSession().getChapterDao().queryBuilder()
-        return null;
+    public static Chapter getNextChapter(String bookid, String chapterid) {
+        return DBManager.getDaoSession().
+                getChapterDao().
+                queryBuilder().
+                where(ChapterDao.Properties.Chapterid.gt(String.valueOf(chapterid))).
+                where(ChapterDao.Properties.Extern_bookid.eq(bookid)).
+                orderAsc(ChapterDao.Properties.Chapterid).limit(1).build().unique();
     }
 
 
@@ -168,15 +138,17 @@ public class Chapter  implements Parcelable {
      * @param chapterid
      * @return
      */
-    public static Chapter getChapter(String bookid,String chapterid) {
+    public static Chapter getChapter(String bookid, String chapterid) {
         if (TextUtils.isEmpty(chapterid)) {
             return null;
         }
-//        List<Chapter> chapters = Chapter.find(Chapter.class, " chapterid =  ? and extern_bookid = ?", chapterid,bookid);
-//        if (chapters != null && chapters.size() > 0) {
-//            return chapters.get(0);
-//        }
-        return null;
+        return DBManager.getDaoSession().
+                getChapterDao().
+                queryBuilder().
+                where(ChapterDao.Properties.Chapterid.eq(String.valueOf(chapterid))).
+                where(ChapterDao.Properties.Extern_bookid.eq(bookid)).
+                orderAsc(ChapterDao.Properties.Chapterid).limit(1).build().unique();
+
     }
 
     /**
@@ -185,28 +157,13 @@ public class Chapter  implements Parcelable {
      * @param chapterid
      * @return
      */
-    public static Chapter getPreChapter(String bookid,String chapterid) {
-//        List<Chapter> chapters = Chapter.find(Chapter.class, " chapterid <  ? and extern_booid = ? ", new String[]{String.valueOf(chapterid),bookid}, null, " chapterid DESC ", " 1 ");
-//        if (chapters != null && chapters.size() > 0) {
-//            return chapters.get(0);
-//        }
-        return null;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.chapter_name);
-        dest.writeString(this.extern_bookid);
-        dest.writeString(this.self_page);
-        dest.writeInt(this.is_fetch);
-        dest.writeString(this.engine_domain);
-        dest.writeString(this.extra_info);
-        dest.writeString(this.fetch_code);
+    public static Chapter getPreChapter(String bookid, String chapterid) {
+        return DBManager.getDaoSession().
+                getChapterDao().
+                queryBuilder().
+                where(ChapterDao.Properties.Chapterid.lt(String.valueOf(chapterid))).
+                where(ChapterDao.Properties.Extern_bookid.eq(bookid)).
+                orderAsc(ChapterDao.Properties.Chapterid).limit(1).build().unique();
     }
 
     public int getChapterid() {
@@ -220,28 +177,35 @@ public class Chapter  implements Parcelable {
     public Chapter() {
     }
 
+    @Generated(hash = 1021098423)
+    public Chapter(String chapter_name, String extern_bookid, String self_page, int chapterid) {
+        this.chapter_name = chapter_name;
+        this.extern_bookid = extern_bookid;
+        this.self_page = self_page;
+        this.chapterid = chapterid;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.chapter_name);
+        dest.writeString(this.extern_bookid);
+        dest.writeString(this.self_page);
+        dest.writeInt(this.chapterid);
+        dest.writeList(this.pages);
+    }
+
     protected Chapter(Parcel in) {
         this.chapter_name = in.readString();
         this.extern_bookid = in.readString();
         this.self_page = in.readString();
-        this.is_fetch = in.readInt();
-        this.engine_domain = in.readString();
-        this.extra_info = in.readString();
-        this.fetch_code = in.readString();
-
-
-    }
-
-    @Generated(hash = 1409677621)
-    public Chapter(String chapter_name, String extern_bookid, String self_page, int is_fetch, String engine_domain, String extra_info, String fetch_code, int chapterid) {
-        this.chapter_name = chapter_name;
-        this.extern_bookid = extern_bookid;
-        this.self_page = self_page;
-        this.is_fetch = is_fetch;
-        this.engine_domain = engine_domain;
-        this.extra_info = extra_info;
-        this.fetch_code = fetch_code;
-        this.chapterid = chapterid;
+        this.chapterid = in.readInt();
+        this.pages = new ArrayList<IPage>();
+        in.readList(this.pages, IPage.class.getClassLoader());
     }
 
     public static final Creator<Chapter> CREATOR = new Creator<Chapter>() {

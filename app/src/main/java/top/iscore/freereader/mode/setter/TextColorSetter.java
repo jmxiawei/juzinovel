@@ -25,7 +25,7 @@ public class TextColorSetter extends ViewSetter {
         if (mView == null) {
             return;
         }
-        LogUtils.e("设置字体颜色:" + mView.getId());
+        //LogUtils.e("设置字体颜色:" + mView.getId());
         ((TextView) mView).setTextColor(getColor(newTheme));
     }
 

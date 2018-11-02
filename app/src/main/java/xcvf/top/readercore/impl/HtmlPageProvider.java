@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import xcvf.top.readercore.bean.Chapter;
 import xcvf.top.readercore.bean.Line;
 import xcvf.top.readercore.bean.Page;
 import xcvf.top.readercore.interfaces.IPage;
@@ -34,7 +35,7 @@ public class HtmlPageProvider implements IPageProvider {
     }
 
     @Override
-    public List<IPage> providerPages(String path, int maxWidth, int maxLinesPerPage, Paint paint) {
+    public List<IPage> providerPages(Chapter chapter, String path, int maxWidth, int maxLinesPerPage, Paint paint) {
 
         Document document = null;
         ArrayList<IPage> pageList = new ArrayList<>();
@@ -64,18 +65,20 @@ public class HtmlPageProvider implements IPageProvider {
                 Line line = (Line) TextBreakUtil.getLine(content, maxWidth, paint);
                 if (page == null) {
                     page = new Page();
+                    page.setChapterid(String.valueOf(chapter.chapterid));
                 }
                 if (page.getLines().size() >= maxLinesPerPage) {
                     //这页已经满了
                     pageList.add(page);
                     page.setIndex(pageList.size());
                     page = new Page();
+                    page.setChapterid(String.valueOf(chapter.chapterid));
                 }
                 page.addLines(line);
                 content = content.substring(line.getChars().size());
             }
 
-            if(page!=null){
+            if (page != null) {
                 pageList.add(page);
                 page.setIndex(pageList.size());
             }

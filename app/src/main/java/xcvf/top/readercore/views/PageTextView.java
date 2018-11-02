@@ -8,10 +8,13 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 
+import java.util.List;
+
 import xcvf.top.readercore.bean.Line;
 import xcvf.top.readercore.bean.Page;
 import xcvf.top.readercore.bean.TextConfig;
 import xcvf.top.readercore.bean.TxtChar;
+import xcvf.top.readercore.interfaces.ILine;
 
 /**
  * 显示一页数据
@@ -55,6 +58,13 @@ public class PageTextView extends AppCompatTextView {
     protected void onDraw(Canvas canvas) {
         if (DEBUG) {
             canvas.drawColor(Color.RED);
+        }
+        if (page == null) {
+            return;
+        }
+        List<ILine> lines = page.getLines();
+        if (lines == null || lines.size() == 0) {
+            return;
         }
         int line = page.getLines().size();
         TextConfig config = TextConfig.getConfig();

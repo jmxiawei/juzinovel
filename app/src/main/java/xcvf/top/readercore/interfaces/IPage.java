@@ -11,7 +11,7 @@ import java.util.List;
 public interface IPage {
 
     int LOADING_PAGE = -1;
-
+    int ERROR_PAGE = -2;
     int getIndex();
     int getTotalPage();
      void setTotalPage(int totalPage);

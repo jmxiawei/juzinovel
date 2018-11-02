@@ -27,7 +27,7 @@ android {
 
 
     greendao {
-        schemaVersion 1 //数据库版本号
+        schemaVersion 4 //数据库版本号
         daoPackage 'xcvf.top.readercore.daos'// 设置DaoMaster、DaoSession、Dao 包名
         targetGenDir 'src/main/java'//设置DaoMaster、DaoSession、Dao目录
     }
@@ -49,7 +49,6 @@ dependencies {
     compile rootProject.ext.glide
     compile rootProject.ext.utilcode
     compile rootProject.ext.okhttp
-    compile rootProject.ext.sugar
     compile rootProject.ext.retrofit
     compile rootProject.ext.converterGson
     compile rootProject.ext.stethoOkhttp3

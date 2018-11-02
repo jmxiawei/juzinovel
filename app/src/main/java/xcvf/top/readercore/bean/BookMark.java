@@ -4,34 +4,30 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.blankj.utilcode.util.EncryptUtils;
-import com.blankj.utilcode.util.Utils;
-import com.orm.SugarRecord;
-import com.orm.dsl.Column;
-import com.orm.dsl.Unique;
 
-import java.util.List;
+
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Unique;
+
+import xcvf.top.readercore.daos.BookMarkDao;
+import xcvf.top.readercore.daos.DBManager;
 
 /**
  * 书籍标签
  * Created by xiaw on 2018/10/24.
  */
-public class BookMark extends SugarRecord implements Parcelable {
+@Entity
+public class BookMark  implements Parcelable {
 
 
-    @Column(name = "time_stamp")
     long time_stamp;
-
     @Unique
-    @Column(name = "unique_key")
     String unique_key;
-
-    @Column(name = "userid")
     String userid;
-    @Column(name = "extern_bookid")
     String extern_bookid;
-    @Column(name = "chapterid")
     String chapterid;
-    @Column(name = "page")
+
     int page;
 
     public long getTime_stamp() {
@@ -53,8 +49,8 @@ public class BookMark extends SugarRecord implements Parcelable {
     }
 
 
-    public static void saveMark(BookMark mark) {
-        BookMark.update(mark);
+    public  void save() {
+        DBManager.getDaoSession().getBookMarkDao().insertOrReplace(this);
     }
 
     public BookMark(String userid, String extern_bookid) {
@@ -65,11 +61,8 @@ public class BookMark extends SugarRecord implements Parcelable {
 
     public static BookMark getMark(Book book, String userid) {
         String uniquekey = EncryptUtils.encryptMD5ToString((userid + book.extern_bookid));
-        List<BookMark> bookMarks = BookMark.find(BookMark.class, " unique_key = ? ", uniquekey);
-        if (bookMarks != null && bookMarks.size() > 0) {
-            return bookMarks.get(0);
-        }
-        return null;
+        return DBManager.getDaoSession().getBookMarkDao().queryBuilder().where(BookMarkDao.Properties.Unique_key.eq(uniquekey))
+                .limit(1).build().unique();
     }
 
     public String getChapterid() {
@@ -109,6 +102,22 @@ public class BookMark extends SugarRecord implements Parcelable {
         dest.writeInt(this.page);
     }
 
+    public String getUnique_key() {
+        return this.unique_key;
+    }
+
+    public void setUnique_key(String unique_key) {
+        this.unique_key = unique_key;
+    }
+
+    public String getUserid() {
+        return this.userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
+
     protected BookMark(Parcel in) {
         this.time_stamp = in.readLong();
         this.unique_key = in.readString();
@@ -116,6 +125,17 @@ public class BookMark extends SugarRecord implements Parcelable {
         this.extern_bookid = in.readString();
         this.chapterid = in.readString();
         this.page = in.readInt();
+    }
+
+    @Generated(hash = 173078373)
+    public BookMark(long time_stamp, String unique_key, String userid, String extern_bookid,
+            String chapterid, int page) {
+        this.time_stamp = time_stamp;
+        this.unique_key = unique_key;
+        this.userid = userid;
+        this.extern_bookid = extern_bookid;
+        this.chapterid = chapterid;
+        this.page = page;
     }
 
     public static final Creator<BookMark> CREATOR = new Creator<BookMark>() {
