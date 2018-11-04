@@ -69,7 +69,9 @@ public class ModeProvider {
      * @param mode
      */
     public static void save(int id, Mode mode) {
-        SPUtils.getInstance().put(getKetId(mode), id);
+        if(id>=0){
+            SPUtils.getInstance().put(getKetId(mode), id);
+        }
         SPUtils.getInstance().put(KET_MODE, mode.toInt());
     }
 

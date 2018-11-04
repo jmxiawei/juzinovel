@@ -29,18 +29,8 @@
             android:name="xcvf.top.readercore.ReaderActivity"
             android:screenOrientation="portrait" />
 
-        <meta-data
-            android:name="DATABASE"
-            android:value="reader.db" />
-        <meta-data
-            android:name="VERSION"
-            android:value="6" />
-        <meta-data
-            android:name="QUERY_LOG"
-            android:value="true" />
-        <meta-data
-            android:name="DOMAIN_PACKAGE_NAME"
-            android:value="xcvf.top.readercore" />
+        <activity android:name=".SearchActivity"
+            android:screenOrientation="portrait"/>
 
     </application>
 

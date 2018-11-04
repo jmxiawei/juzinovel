@@ -78,6 +78,7 @@ public class App extends Application {
     }
 
 
+
 //    /**
 //     * 设置各个视图与颜色属性的关联
 //     */

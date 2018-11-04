@@ -11,8 +11,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import top.iscore.freereader.R;
+import top.iscore.freereader.SwitchModeHandler;
 import top.iscore.freereader.fragment.adapters.CommonViewHolder;
 import top.iscore.freereader.mode.Colorful;
+import top.iscore.freereader.mode.SwitchModeListener;
 import top.iscore.freereader.mode.setter.ViewBackgroundColorSetter;
 import top.iscore.freereader.mode.setter.ViewGroupSetter;
 import xcvf.top.readercore.bean.Category;
@@ -22,16 +24,28 @@ import xcvf.top.readercore.styles.ModeProvider;
 /**
  * 发现页面
  */
-public class FinderFragment extends BaseListFragment<Category> {
+public class FinderFragment extends BaseListFragment<Category> implements SwitchModeListener {
 
 
     private ArrayList<Category> categories = new ArrayList<>();
+    SwitchModeHandler switchModeListener;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_finder,container,false);
+        View view =  inflater.inflate(R.layout.fragment_finder,container,false);
+        switchModeListener = new SwitchModeHandler(this,getActivity());
+        switchModeListener.onCreate();
+        return  view;
     }
 
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        switchModeListener.onDestroy();
+
+
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -52,6 +66,8 @@ public class FinderFragment extends BaseListFragment<Category> {
         super.onResume();
         changeMode();
     }
+
+
 
     @Override
     public void onHiddenChanged(boolean hidden) {
@@ -80,5 +96,10 @@ public class FinderFragment extends BaseListFragment<Category> {
                 img_cate.setImageResource(category.getResid());
             }
         };
+    }
+
+    @Override
+    public void switchMode(Mode mode) {
+         changeMode();
     }
 }

@@ -63,7 +63,7 @@ public class BookShelfPresenter extends MvpBasePresenter<BookShelfView> {
      */
     public void addBookShelf(String userid, String bookid) {
 
-        Call<BaseModel<String>> resCall = BaseHttpHandler.create().getProxy(BookService.class).addBookShelf("Book.getBookshelf", userid, bookid);
+        Call<BaseModel<String>> resCall = BaseHttpHandler.create().getProxy(BookService.class).addBookShelf("Book.addShelf", userid, bookid);
         resCall.enqueue(new Callback<BaseModel<String>>() {
             @Override
             public void onResponse(Call<BaseModel<String>> call, final Response<BaseModel<String>> response) {
@@ -97,7 +97,7 @@ public class BookShelfPresenter extends MvpBasePresenter<BookShelfView> {
      */
     public void deleteBookShelf(String userid, String bookid) {
 
-        Call<BaseModel<String>> resCall = BaseHttpHandler.create().getProxy(BookService.class).addBookShelf("Book.getBookshelf", userid, bookid);
+        Call<BaseModel<String>> resCall = BaseHttpHandler.create().getProxy(BookService.class).addBookShelf("Book.deleteShelf", userid, bookid);
         resCall.enqueue(new Callback<BaseModel<String>>() {
             @Override
             public void onResponse(Call<BaseModel<String>> call, final Response<BaseModel<String>> response) {

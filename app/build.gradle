@@ -55,6 +55,7 @@ dependencies {
     compile rootProject.ext.stetho
     compile rootProject.ext.bolts
     compile rootProject.ext.greendao
+    compile rootProject.ext.wechat
     implementation 'jp.wasabeef:glide-transformations:2.0.0'
     annotationProcessor butterknifeAnnotationProcessor
     compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-14'

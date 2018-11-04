@@ -22,16 +22,19 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import top.iscore.freereader.R;
+import top.iscore.freereader.SwitchModeHandler;
 import top.iscore.freereader.adapter.BookShelfAdapter;
 import top.iscore.freereader.adapter.WhiteItemDivider;
 import top.iscore.freereader.fragment.adapters.CommonViewHolder;
 import top.iscore.freereader.fragment.adapters.OnRecyclerViewItemClickListener;
 import top.iscore.freereader.mode.Colorful;
+import top.iscore.freereader.mode.SwitchModeListener;
 import top.iscore.freereader.mode.setter.ViewGroupSetter;
 import top.iscore.freereader.mvp.presenters.BookShelfPresenter;
 import top.iscore.freereader.mvp.view.BookShelfView;
 import xcvf.top.readercore.ReaderActivity;
 import xcvf.top.readercore.bean.Book;
+import xcvf.top.readercore.bean.Mode;
 import xcvf.top.readercore.bean.User;
 import xcvf.top.readercore.daos.BookDao;
 import xcvf.top.readercore.daos.DBManager;
@@ -41,7 +44,7 @@ import xcvf.top.readercore.styles.ModeProvider;
  * 书架
  * Created by xiaw on 2018/9/18.
  */
-public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPresenter> implements BookShelfView, OnRecyclerViewItemClickListener<Book> {
+public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPresenter> implements BookShelfView, OnRecyclerViewItemClickListener<Book>,SwitchModeListener {
 
     @BindView(R.id.recycler)
     RecyclerView recycler;
@@ -50,7 +53,7 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
     Unbinder unbinder;
     BookShelfAdapter mBookShelfAdapter;
     User mUser;
-
+    SwitchModeHandler switchModeListener;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -59,7 +62,8 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
         mUser = User.currentUser();
         presenter.attachView(this);
         initViews(view);
-
+        switchModeListener = new SwitchModeHandler(this,getActivity());
+        switchModeListener.onCreate();
         return view;
     }
 
@@ -158,6 +162,7 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        switchModeListener.onDestroy();
         unbinder.unbind();
     }
 
@@ -166,5 +171,10 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
         if (item.bookid != -1) {
             ReaderActivity.toReadPage(getActivity(), item);
         }
+    }
+
+    @Override
+    public void switchMode(Mode mode) {
+         updateMode();
     }
 }

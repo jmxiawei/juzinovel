@@ -31,31 +31,7 @@ public class FileDownloader {
         Task.callInBackground(new Callable<String>() {
             @Override
             public String call() throws Exception {
-                OkHttpClient.Builder builder = new OkHttpClient.Builder();
-                Request request = new Request.Builder().url(url).build();
-                try {
-                    FileUtils.createOrExistsDir(Constant.getDir(destPath));
-                    File file = new File(destPath);
-                    if (file.exists()) {
-                        return destPath;
-                    }
-                    Response response = builder.build().newCall(request).execute();
-                    if (response.code() == 200) {
-                        FileOutputStream fileOutputStream = new FileOutputStream(file);
-                        InputStream inputStream = response.body().byteStream();
-                        int len = 0;
-                        byte[] buff = new byte[32 * 1024];
-                        while ((len = inputStream.read(buff)) != -1) {
-                            fileOutputStream.write(buff, 0, len);
-                        }
-                        fileOutputStream.close();
-                        inputStream.close();
-                        return destPath;
-                    }
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                if (downloadUrl(url, destPath)) return destPath;
                 return null;
             }
         }).continueWith(new Continuation<String, Object>() {
@@ -77,6 +53,41 @@ public class FileDownloader {
             }
         }, Task.UI_THREAD_EXECUTOR);
 
+    }
+
+    /**
+     * 下载文件
+     * @param url
+     * @param destPath
+     * @return
+     */
+    public static boolean downloadUrl(String url, String destPath) {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        Request request = new Request.Builder().url(url).build();
+        try {
+            FileUtils.createOrExistsDir(Constant.getDir(destPath));
+            File file = new File(destPath);
+            if (file.exists()) {
+                return true;
+            }
+            Response response = builder.build().newCall(request).execute();
+            if (response.code() == 200) {
+                FileOutputStream fileOutputStream = new FileOutputStream(file);
+                InputStream inputStream = response.body().byteStream();
+                int len;
+                byte[] buff = new byte[32 * 1024];
+                while ((len = inputStream.read(buff)) != -1) {
+                    fileOutputStream.write(buff, 0, len);
+                }
+                fileOutputStream.close();
+                inputStream.close();
+                return true;
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 

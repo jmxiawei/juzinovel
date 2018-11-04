@@ -143,6 +143,15 @@
         </LinearLayout>
 
     </LinearLayout>
-
+    <TextView
+        android:id="@+id/tv_download"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/horizon_margin"
+        android:textColor="@color/bg_light_color"
+        android:layout_above="@id/ll_setting_bottom"
+        android:background="@color/text_gray_light"
+        android:text="正在下载。.."/>
 
 </RelativeLayout>

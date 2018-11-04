@@ -19,6 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import top.iscore.freereader.R;
+import top.iscore.freereader.SwitchModeHandler;
 import top.iscore.freereader.adapter.ChapterListAdapter;
 import top.iscore.freereader.fragment.adapters.CommonViewHolder;
 import top.iscore.freereader.fragment.adapters.OnReachBottomListener;

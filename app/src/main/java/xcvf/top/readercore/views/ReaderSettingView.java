@@ -11,8 +11,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.SPUtils;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -20,7 +18,6 @@ import top.iscore.freereader.R;
 import xcvf.top.readercore.bean.Book;
 import xcvf.top.readercore.bean.Mode;
 import xcvf.top.readercore.bean.SettingAction;
-import xcvf.top.readercore.utils.Constant;
 
 /**
  * 设置界面
@@ -65,6 +62,8 @@ public class ReaderSettingView extends FrameLayout {
     LinearLayout llChapterList;
 
     ISettingListener settingListener;
+    @BindView(R.id.tv_download)
+    TextView tvDownload;
 
     public ISettingListener getSettingListener() {
         return settingListener;

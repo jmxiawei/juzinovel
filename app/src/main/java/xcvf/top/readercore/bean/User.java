@@ -100,7 +100,7 @@ public class User implements Parcelable {
     }
 
     public void save() {
-        DBManager.getDaoSession().getUserDao().save(this);
+        DBManager.getDaoSession().getUserDao().insertOrReplace(this);
     }
 
     public User() {

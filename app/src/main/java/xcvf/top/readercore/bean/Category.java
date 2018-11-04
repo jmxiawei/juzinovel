@@ -7,6 +7,7 @@ public class Category implements Parcelable {
     int id;
     String name;
     int resid;
+    String resUrl;
     public int getId() {
         return id;
     }
@@ -29,6 +30,14 @@ public class Category implements Parcelable {
 
     public void setResid(int resid) {
         this.resid = resid;
+    }
+
+    public String getResUrl() {
+        return resUrl;
+    }
+
+    public void setResUrl(String resUrl) {
+        this.resUrl = resUrl;
     }
 
     public Category(int id, String name, int resid) {

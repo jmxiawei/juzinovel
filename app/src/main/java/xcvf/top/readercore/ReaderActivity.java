@@ -111,7 +111,6 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
             mBookShelfPresenter = new BookShelfPresenter();
             mBookShelfPresenter.addBookShelf(mUser.getUid(), book.extern_bookid);
         }
-
         initReadView();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
