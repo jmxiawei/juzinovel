@@ -98,7 +98,6 @@ public class ChapterProviderImpl implements IChapterProvider {
         Task.callInBackground(new Callable<List<Chapter>>() {
             @Override
             public List<Chapter> call() throws Exception {
-
                 // 第一次 直接使用原始列表
                 // 第二次 先查所有的，再插入
                 LogUtils.e("start read chapter " + System.currentTimeMillis());
@@ -117,10 +116,14 @@ public class ChapterProviderImpl implements IChapterProvider {
                     //没有数据
                     chapters = chapterList;
                 } else {
-                    chapters.addAll(chapterList);
+                    if(chapterList!=null){
+                        chapters.addAll(chapterList);
+                    }
                 }
                 LogUtils.e("start save chapter " + System.currentTimeMillis());
-                chapterDao.saveInTx(chapterList);
+                if(chapterList!=null){
+                    chapterDao.saveInTx(chapterList);
+                }
                 LogUtils.e("finish save chapter " + System.currentTimeMillis());
                 if (chapterList != null && chapterList.size() > 0) {
                     //保存最大的章节id
@@ -133,6 +136,9 @@ public class ChapterProviderImpl implements IChapterProvider {
             @Override
             public Object then(Task<List<Chapter>> task) throws Exception {
                 if (chapterListener != null) {
+                    if (task.getError() != null) {
+                        LogUtils.e(task.getError());
+                    }
                     HashMap<String, Object> params = new HashMap<>();
                     params.put(KEY_CHAPTER_LIST, task.getResult());
                     chapterListener.onChapter(IChapterListener.CODE_OK, null, null, params);

@@ -54,6 +54,7 @@
                 android:id="@+id/iv_mode"
                 android:layout_width="@dimen/size_bottom_icon"
                 android:layout_height="@dimen/size_bottom_icon"
+                android:scaleType="centerCrop"
                 android:src="@mipmap/ic_mode_night" />
 
             <TextView
@@ -79,6 +80,7 @@
                 android:id="@+id/iv_font"
                 android:layout_width="@dimen/size_bottom_icon"
                 android:layout_height="@dimen/size_bottom_icon"
+                android:scaleType="centerCrop"
                 android:src="@mipmap/ic_font_setting" />
 
             <TextView
@@ -104,6 +106,7 @@
                 android:id="@+id/iv_cache"
                 android:layout_width="@dimen/size_bottom_icon"
                 android:layout_height="@dimen/size_bottom_icon"
+                android:scaleType="centerCrop"
                 android:src="@mipmap/ic_down_cache" />
 
             <TextView
@@ -129,6 +132,7 @@
                 android:id="@+id/iv_list"
                 android:layout_width="@dimen/size_bottom_icon"
                 android:layout_height="@dimen/size_bottom_icon"
+                android:scaleType="centerCrop"
                 android:src="@mipmap/ic_chapter_list" />
 
             <TextView
@@ -149,6 +153,7 @@
         android:layout_height="20dp"
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/horizon_margin"
+        android:visibility="gone"
         android:textColor="@color/bg_light_color"
         android:layout_above="@id/ll_setting_bottom"
         android:background="@color/text_gray_light"

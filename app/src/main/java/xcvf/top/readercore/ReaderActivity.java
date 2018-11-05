@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.widget.FrameLayout;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.SPUtils;
@@ -22,6 +23,8 @@ import butterknife.ButterKnife;
 import top.iscore.freereader.R;
 import top.iscore.freereader.fragment.ChapterFragment;
 import top.iscore.freereader.fragment.LoadingFragment;
+import top.iscore.freereader.mode.Colorful;
+import top.iscore.freereader.mode.setter.ViewBackgroundColorSetter;
 import top.iscore.freereader.mvp.presenters.BookReadPresenter;
 import top.iscore.freereader.mvp.presenters.BookShelfPresenter;
 import top.iscore.freereader.mvp.view.BookReadView;
@@ -89,6 +92,8 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
     boolean loadedChapter = false;
 
     boolean isShowSuccess = false;
+    @BindView(R.id.activity_content)
+    FrameLayout activityContent;
 
     /**
      * 阅读页面
@@ -126,6 +131,18 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
         }
         checkChapters(loadedChapter);
         fullScreenHandler = new FullScreenHandler(this, readerView, settingView);
+        updateMode();
+    }
+
+    /**
+     *
+     */
+    private void updateMode() {
+        new Colorful.Builder(this)
+                .setter(new ViewBackgroundColorSetter(activityContent,R.attr.colorPrimary))
+                .setter(new ViewBackgroundColorSetter(settingView,R.attr.bg_dark))
+                .create()
+                .setTheme(ModeProvider.getCurrentModeTheme());
     }
 
     @Override
@@ -138,6 +155,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
     protected void onResume() {
         super.onResume();
         fullScreenHandler.hide();
+        updateMode();
     }
 
 
@@ -187,13 +205,14 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
                 onTextConfigChangedListener.onChanged(TextConfig.TYPE_FONT_COLOR);
                 ModeProvider.save(config.getId(), dest);
                 fullScreenHandler.check();
+                updateMode();
             } else if (action == SettingAction.ACTION_FONT) {
                 PopFontSetting popFontSetting = new PopFontSetting(getBaseContext());
                 popFontSetting.setOnTextConfigChangedListener(onTextConfigChangedListener);
                 popFontSetting.showAsDropDown(getWindow().getDecorView());
             } else if (action == SettingAction.ACTION_CACHE) {
                 //缓存
-                PopDownload popDownload = new PopDownload(getBaseContext(), readerView.getCurrentChapter());
+                PopDownload popDownload = new PopDownload(getBaseContext(), readerView.getCurrentChapter(), mChapterList);
                 popDownload.setOnDownloadCmdListener(onDownloadCmdListener);
                 popDownload.showAsDropDown(getWindow().getDecorView());
 

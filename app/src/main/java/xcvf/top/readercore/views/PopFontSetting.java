@@ -85,6 +85,7 @@ public class PopFontSetting extends PopupWindow {
     }
 
     private void initStyle() {
+        tvFont.setText(TextConfig.getConfig().getTextSize()+"");
         modelColorAdapter = new ModelColorAdapter();
         styleRecycler.setLayoutManager(new GridLayoutManager(getContentView().getContext(), 5));
         modelColorAdapter.setDataList(ModeProvider.getAllConfig());

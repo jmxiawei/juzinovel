@@ -4,8 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
-
-import org.greenrobot.greendao.Property;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Transient;
 import org.greenrobot.greendao.annotation.Unique;
@@ -13,13 +11,11 @@ import org.greenrobot.greendao.annotation.Unique;
 import java.util.ArrayList;
 import java.util.List;
 
-import top.iscore.freereader.App;
 import xcvf.top.readercore.daos.ChapterDao;
 import xcvf.top.readercore.daos.DBManager;
 import xcvf.top.readercore.interfaces.IPage;
 
 import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.query.WhereCondition;
 
 /**
  * 章节
@@ -174,7 +170,8 @@ public class Chapter implements Parcelable {
      * @return
      */
     public static int getLeftChapter(String extern_bookid, String chappterid) {
-        return (int) DBManager.getDaoSession().getChapterDao().queryBuilder().where(ChapterDao.Properties.Extern_bookid.eq(extern_bookid))
+        return (int) DBManager.getDaoSession().getChapterDao().queryBuilder()
+                .where(ChapterDao.Properties.Extern_bookid.eq(extern_bookid))
                 .where(ChapterDao.Properties.Chapterid.gt(chappterid)).count();
     }
 
@@ -186,8 +183,12 @@ public class Chapter implements Parcelable {
      * @return
      */
     public static List<Chapter> getLeftChapter(String extern_bookid, String chappterid, int count) {
-        return DBManager.getDaoSession().getChapterDao().queryBuilder().where(ChapterDao.Properties.Extern_bookid.eq(extern_bookid))
-                .where(ChapterDao.Properties.Chapterid.gt(chappterid)).limit(count).build().list();
+        return DBManager.getDaoSession().getChapterDao().queryBuilder()
+                .where(ChapterDao.Properties.Extern_bookid.eq(extern_bookid))
+                .where(ChapterDao.Properties.Chapterid.gt(chappterid))
+                .limit(count)
+                .build()
+                .list();
     }
 
 
