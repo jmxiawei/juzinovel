@@ -9,10 +9,13 @@ import android.widget.TextView;
 import java.util.HashSet;
 import java.util.Set;
 
+import top.iscore.freereader.mode.setter.StatusBarSetter;
 import top.iscore.freereader.mode.setter.TextColorSetter;
 import top.iscore.freereader.mode.setter.ViewBackgroundColorSetter;
 import top.iscore.freereader.mode.setter.ViewBackgroundDrawableSetter;
 import top.iscore.freereader.mode.setter.ViewSetter;
+import xcvf.top.readercore.bean.Mode;
+import xcvf.top.readercore.styles.ModeProvider;
 
 
 /**
@@ -67,6 +70,7 @@ public final class Colorful {
 		 */
 		public Builder(Activity activity) {
 			mActivity = activity;
+			setter(new StatusBarSetter(null,0, ModeProvider.getCurrentMode() == Mode.NightMode,activity));
 		}
 
 		/**

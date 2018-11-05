@@ -1,9 +1,12 @@
 package top.iscore.freereader.mode.setter;
 
 import android.content.res.Resources.Theme;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.LogUtils;
+
+import top.iscore.freereader.R;
 
 /**
  * TextView 文本颜色Setter
@@ -25,7 +28,6 @@ public class TextColorSetter extends ViewSetter {
         if (mView == null) {
             return;
         }
-        //LogUtils.e("设置字体颜色:" + mView.getId());
         ((TextView) mView).setTextColor(getColor(newTheme));
     }
 

@@ -27,7 +27,7 @@ android {
 
 
     greendao {
-        schemaVersion 4 //数据库版本号
+        schemaVersion 5 //数据库版本号
         daoPackage 'xcvf.top.readercore.daos'// 设置DaoMaster、DaoSession、Dao 包名
         targetGenDir 'src/main/java'//设置DaoMaster、DaoSession、Dao目录
     }
@@ -55,6 +55,7 @@ dependencies {
     compile rootProject.ext.stetho
     compile rootProject.ext.bolts
     compile rootProject.ext.greendao
+    compile rootProject.ext.wechat
     implementation 'jp.wasabeef:glide-transformations:2.0.0'
     annotationProcessor butterknifeAnnotationProcessor
     compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-14'

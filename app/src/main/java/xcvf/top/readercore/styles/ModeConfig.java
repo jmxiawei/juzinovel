@@ -15,8 +15,18 @@ public class ModeConfig implements Parcelable {
     Mode mode;
     int id;
     int notifyTxtColor;
+    boolean checked = false;
     public int getId() {
         return id;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public ModeConfig setChecked(boolean checked) {
+        this.checked = checked;
+        return this;
     }
 
     public ModeConfig setId(int id) {

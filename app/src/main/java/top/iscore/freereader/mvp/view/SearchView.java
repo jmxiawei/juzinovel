@@ -12,5 +12,6 @@ import xcvf.top.readercore.bean.Book;
 public interface SearchView extends MvpView {
 
     void onLoad(List<Book> books);
-
+    void showLoading();
+    void dismissLoading();
 }

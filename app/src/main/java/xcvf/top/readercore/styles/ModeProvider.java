@@ -31,6 +31,17 @@ public class ModeProvider {
 
 
     /**
+     * 所有的配置
+     * @return
+     */
+    public static List<ModeConfig> getAllConfig() {
+        List<ModeConfig> list = new ArrayList<>();
+        list.addAll(configList.get(Mode.DayMode.toString()));
+        list.addAll(configList.get(Mode.NightMode.toString()));
+        return list;
+    }
+
+    /**
      * 获取日间模式默认显示
      *
      * @return
@@ -69,7 +80,9 @@ public class ModeProvider {
      * @param mode
      */
     public static void save(int id, Mode mode) {
-        SPUtils.getInstance().put(getKetId(mode), id);
+        if (id >= 0) {
+            SPUtils.getInstance().put(getKetId(mode), id);
+        }
         SPUtils.getInstance().put(KET_MODE, mode.toInt());
     }
 
@@ -92,6 +105,11 @@ public class ModeProvider {
         return configList.get(mode.toString()).get(id);
     }
 
+    public static ModeConfig getModeConfig(Mode mode) {
+        int id = SPUtils.getInstance().getInt(getKetId(mode), 0);
+        return configList.get(mode.toString()).get(id);
+    }
+
 
     public static ModeConfig get(int id, Mode mode) {
         return configList.get(mode.toString()).get(id);
@@ -100,17 +118,17 @@ public class ModeProvider {
 
     private static void addNightModelConfig() {
         List<ModeConfig> configs = new ArrayList<>();
-        configs.add(ModeConfig.newInstance(0, Mode.NightMode, R.color.reader_styleclor4, R.color.reader_styletxtclor4,R.color.reader_light_notify_clor));
-        configs.add(ModeConfig.newInstance(1, Mode.NightMode, R.color.reader_styleclor5, R.color.reader_styletxtclor5,R.color.reader_light_notify_clor));
+        configs.add(ModeConfig.newInstance(0, Mode.NightMode, R.color.reader_styleclor4, R.color.reader_styletxtclor4, R.color.reader_light_notify_clor));
+        configs.add(ModeConfig.newInstance(1, Mode.NightMode, R.color.reader_styleclor5, R.color.reader_styletxtclor5, R.color.reader_light_notify_clor));
         configList.put(Mode.NightMode.toString(), configs);
     }
 
 
     private static void addDayModeConfig() {
         List<ModeConfig> configs = new ArrayList<>();
-        configs.add(ModeConfig.newInstance(0, Mode.DayMode, R.color.reader_styleclor1, R.color.reader_styletxtclor1,R.color.reader_dark_notify_clor));
-        configs.add(ModeConfig.newInstance(1, Mode.DayMode, R.color.reader_styleclor2, R.color.reader_styletxtclor2,R.color.reader_dark_notify_clor));
-        configs.add(ModeConfig.newInstance(2, Mode.DayMode, R.color.reader_styleclor3, R.color.reader_styletxtclor3,R.color.reader_dark_notify_clor));
+        configs.add(ModeConfig.newInstance(0, Mode.DayMode, R.color.reader_styleclor1, R.color.reader_styletxtclor1, R.color.reader_dark_notify_clor));
+        configs.add(ModeConfig.newInstance(1, Mode.DayMode, R.color.reader_styleclor2, R.color.reader_styletxtclor2, R.color.reader_dark_notify_clor));
+        configs.add(ModeConfig.newInstance(2, Mode.DayMode, R.color.reader_styleclor3, R.color.reader_styletxtclor3, R.color.reader_dark_notify_clor));
         configList.put(Mode.DayMode.toString(), configs);
     }
 

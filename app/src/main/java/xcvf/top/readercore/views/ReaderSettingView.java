@@ -1,8 +1,13 @@
 package xcvf.top.readercore.views;
 
+import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.LogUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,7 +25,7 @@ import top.iscore.freereader.R;
 import xcvf.top.readercore.bean.Book;
 import xcvf.top.readercore.bean.Mode;
 import xcvf.top.readercore.bean.SettingAction;
-import xcvf.top.readercore.utils.Constant;
+import xcvf.top.readercore.services.DownloadIntentService;
 
 /**
  * 设置界面
@@ -65,10 +70,8 @@ public class ReaderSettingView extends FrameLayout {
     LinearLayout llChapterList;
 
     ISettingListener settingListener;
-
-    public ISettingListener getSettingListener() {
-        return settingListener;
-    }
+    @BindView(R.id.tv_download)
+    TextView tvDownload;
 
     public void setSettingListener(ISettingListener settingListener) {
         this.settingListener = settingListener;
@@ -88,6 +91,44 @@ public class ReaderSettingView extends FrameLayout {
         ButterKnife.bind(this, this);
         initView();
     }
+
+
+    public void ActivityonCreate(Activity activity) {
+        IntentFilter filter = new IntentFilter(DownloadIntentService.PROGRESS);
+        LocalBroadcastManager.getInstance(activity).registerReceiver(downloadReceive, filter);
+    }
+
+    public void ActivityonDestory(Activity activity) {
+        LocalBroadcastManager.getInstance(activity).unregisterReceiver(downloadReceive);
+    }
+
+
+    /**
+     * 接收下载进度
+     */
+    BroadcastReceiver downloadReceive = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String bookid = intent.getStringExtra("bookid");
+            final String info = intent.getStringExtra("info");
+            final int finish = intent.getIntExtra("finish", 0);
+            LogUtils.e("bookid="+bookid+",info="+info+",finish="+finish+",mybook="+mBook.extern_bookid);
+            if (mBook.extern_bookid.equals(bookid)) {
+                post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (finish == 1) {
+                            tvDownload.setVisibility(GONE);
+                        } else {
+                            tvDownload.setVisibility(VISIBLE);
+                        }
+                        tvDownload.setText(info);
+                    }
+                });
+            }
+        }
+    };
 
     public Book getBook() {
         return mBook;

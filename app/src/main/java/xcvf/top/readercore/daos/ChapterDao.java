@@ -26,8 +26,9 @@ public class ChapterDao extends AbstractDao<Chapter, Void> {
     public static class Properties {
         public final static Property Chapter_name = new Property(0, String.class, "chapter_name", false, "CHAPTER_NAME");
         public final static Property Extern_bookid = new Property(1, String.class, "extern_bookid", false, "EXTERN_BOOKID");
-        public final static Property Self_page = new Property(2, String.class, "self_page", false, "SELF_PAGE");
-        public final static Property Chapterid = new Property(3, int.class, "chapterid", false, "CHAPTERID");
+        public final static Property Is_download = new Property(2, boolean.class, "is_download", false, "IS_DOWNLOAD");
+        public final static Property Self_page = new Property(3, String.class, "self_page", false, "SELF_PAGE");
+        public final static Property Chapterid = new Property(4, int.class, "chapterid", false, "CHAPTERID");
     }
 
 
@@ -45,8 +46,9 @@ public class ChapterDao extends AbstractDao<Chapter, Void> {
         db.execSQL("CREATE TABLE " + constraint + "\"CHAPTER\" (" + //
                 "\"CHAPTER_NAME\" TEXT," + // 0: chapter_name
                 "\"EXTERN_BOOKID\" TEXT," + // 1: extern_bookid
-                "\"SELF_PAGE\" TEXT," + // 2: self_page
-                "\"CHAPTERID\" INTEGER NOT NULL UNIQUE );"); // 3: chapterid
+                "\"IS_DOWNLOAD\" INTEGER NOT NULL ," + // 2: is_download
+                "\"SELF_PAGE\" TEXT," + // 3: self_page
+                "\"CHAPTERID\" INTEGER NOT NULL UNIQUE );"); // 4: chapterid
     }
 
     /** Drops the underlying database table. */
@@ -68,12 +70,13 @@ public class ChapterDao extends AbstractDao<Chapter, Void> {
         if (extern_bookid != null) {
             stmt.bindString(2, extern_bookid);
         }
+        stmt.bindLong(3, entity.getIs_download() ? 1L: 0L);
  
         String self_page = entity.getSelf_page();
         if (self_page != null) {
-            stmt.bindString(3, self_page);
+            stmt.bindString(4, self_page);
         }
-        stmt.bindLong(4, entity.getChapterid());
+        stmt.bindLong(5, entity.getChapterid());
     }
 
     @Override
@@ -89,12 +92,13 @@ public class ChapterDao extends AbstractDao<Chapter, Void> {
         if (extern_bookid != null) {
             stmt.bindString(2, extern_bookid);
         }
+        stmt.bindLong(3, entity.getIs_download() ? 1L: 0L);
  
         String self_page = entity.getSelf_page();
         if (self_page != null) {
-            stmt.bindString(3, self_page);
+            stmt.bindString(4, self_page);
         }
-        stmt.bindLong(4, entity.getChapterid());
+        stmt.bindLong(5, entity.getChapterid());
     }
 
     @Override
@@ -107,8 +111,9 @@ public class ChapterDao extends AbstractDao<Chapter, Void> {
         Chapter entity = new Chapter( //
             cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // chapter_name
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // extern_bookid
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // self_page
-            cursor.getInt(offset + 3) // chapterid
+            cursor.getShort(offset + 2) != 0, // is_download
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // self_page
+            cursor.getInt(offset + 4) // chapterid
         );
         return entity;
     }
@@ -117,8 +122,9 @@ public class ChapterDao extends AbstractDao<Chapter, Void> {
     public void readEntity(Cursor cursor, Chapter entity, int offset) {
         entity.setChapter_name(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
         entity.setExtern_bookid(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setSelf_page(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setChapterid(cursor.getInt(offset + 3));
+        entity.setIs_download(cursor.getShort(offset + 2) != 0);
+        entity.setSelf_page(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setChapterid(cursor.getInt(offset + 4));
      }
     
     @Override

@@ -109,11 +109,11 @@ public class ReaderView extends FrameLayout {
      * 初始设置章节
      *
      * @param mChapter   章节
-     * @param toLastPage 是否直接跳转到最后一页
+     * @param jumpCharPosition 是否直接跳转某个位置
      * @param page       直接跳转到哪一页
      */
-    public void setChapter(boolean reset, Chapter mChapter, final boolean toLastPage, int page) {
-        mBookContentAdapter.setChapter(mBookContentView,reset, mChapter, page);
+    public void setChapter(boolean reset, Chapter mChapter, int jumpCharPosition, int page) {
+        mBookContentAdapter.setChapter(mBookContentView,reset, mChapter, page,jumpCharPosition);
     }
 
 }

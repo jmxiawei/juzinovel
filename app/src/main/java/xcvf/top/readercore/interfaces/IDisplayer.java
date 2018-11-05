@@ -1,7 +1,5 @@
 package xcvf.top.readercore.interfaces;
 
-import android.support.v4.widget.ContentLoadingProgressBar;
-
 import xcvf.top.readercore.bean.Chapter;
 import xcvf.top.readercore.views.ReaderView;
 
@@ -14,10 +12,10 @@ public interface IDisplayer {
     /**
      *
      * @param readerView
-     * @param fromLast
+     * @param jumpCharPosition
      * @param page 直接跳到第几页
      * @param chapter
      */
-    void showChapter(boolean reset,ReaderView readerView,boolean fromLast,int page,Chapter chapter);
+    void showChapter(boolean reset,ReaderView readerView, int jumpCharPosition,int page,Chapter chapter);
 
 }

@@ -1,6 +1,7 @@
 package top.iscore.freereader;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,10 +24,14 @@ import top.iscore.freereader.adapter.TabFragmentAdapter;
 import top.iscore.freereader.fragment.BookshelfFragment;
 import top.iscore.freereader.fragment.FinderFragment;
 import top.iscore.freereader.mode.Colorful;
+import top.iscore.freereader.mode.SwitchModeListener;
+import top.iscore.freereader.mode.setter.StatusBarSetter;
 import top.iscore.freereader.mode.setter.TabIndicatorSetter;
 import top.iscore.freereader.mode.setter.ViewBackgroundColorSetter;
+import xcvf.top.readercore.bean.Mode;
 import xcvf.top.readercore.bean.User;
 import xcvf.top.readercore.styles.ModeProvider;
+import xcvf.top.readercore.views.PopMenu;
 
 
 /**
@@ -55,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout activityContent;
     @BindView(R.id.img_search)
     ImageView imgSearch;
-
+    SwitchModeHandler switchModeListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         User user = new User();
         user.setUid("4");
         user.setAccount("admin");
+        user.setNickname("用户007");
         user.save();
         // startActivity(new Intent(this,ReaderActivity.class));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -72,7 +79,8 @@ public class MainActivity extends AppCompatActivity {
                 requestPermissions(permissions, 1);
             }
         }
-
+        switchModeListener = new SwitchModeHandler(mSwitchModeListener,this);
+        switchModeListener.onCreate();
         fragmentList.add(new BookshelfFragment());
         fragmentList.add(new FinderFragment());
         titles.add("书架");
@@ -104,11 +112,33 @@ public class MainActivity extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.img_search:
+                Intent intent = new Intent(this,SearchActivity.class);
+                startActivity(intent);
                 break;
             case R.id.img_more:
+                PopMenu popMenu = new PopMenu(this);
+                popMenu.setSwitchModeListener(mSwitchModeListener);
+                popMenu.showAtLocation(llToolbar, Gravity.TOP|Gravity.RIGHT,120,110);
                 break;
             default:
                 break;
         }
     }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        switchModeListener.onDestroy();
+    }
+
+    /**
+     * 切换日间和夜间模式
+     */
+    private SwitchModeListener mSwitchModeListener= new SwitchModeListener() {
+        @Override
+        public void switchMode(Mode mode) {
+            updateMode();
+        }
+    };
 }

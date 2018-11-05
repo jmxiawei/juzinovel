@@ -27,12 +27,12 @@ import xcvf.top.readercore.views.ReaderView;
 public class ChapterDisplayedImpl implements IDisplayer {
 
 
-    public static ChapterDisplayedImpl newInsrance() {
+    public static ChapterDisplayedImpl newInstance() {
         return new ChapterDisplayedImpl();
     }
 
     @Override
-    public void showChapter(final boolean reset, final ReaderView readerView, final boolean toLastPage, final int page, final Chapter chapter) {
+    public void showChapter(final boolean reset, final ReaderView readerView, final int jumpCharPosition, final int page, final Chapter chapter) {
         //重新加载
         //下载文件
         FileDownloader.download(App.oss_domain + chapter.self_page, Constant.getCachePath(readerView.getContext(), chapter.self_page), new DownloadListener() {
@@ -51,7 +51,7 @@ public class ChapterDisplayedImpl implements IDisplayer {
                         @Override
                         public Object then(Task<List<IPage>> task) throws Exception {
                             chapter.setPages(task.getResult());
-                            readerView.setChapter(reset, chapter, toLastPage, page);
+                            readerView.setChapter(reset, chapter, jumpCharPosition, page);
                             return null;
                         }
                     }, Task.UI_THREAD_EXECUTOR);
@@ -64,7 +64,7 @@ public class ChapterDisplayedImpl implements IDisplayer {
                     pages.add(errorPage);
                     chapter.setPages(pages);
                     chapter.setStatus(Chapter.STATUS_ERROR);
-                    readerView.setChapter(false, chapter, toLastPage, page);
+                    readerView.setChapter(false, chapter, jumpCharPosition, page);
                 }
             }
         });

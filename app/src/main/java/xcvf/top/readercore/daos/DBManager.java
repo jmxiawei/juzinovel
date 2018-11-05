@@ -3,6 +3,9 @@ package xcvf.top.readercore.daos;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.SPUtils;
+
 /**
  * Created by xiaw on 2018/11/2.
  */
@@ -20,10 +23,17 @@ public class DBManager {
 
     public static final void init(Context context) {
         mContext = context;
+        int version = SPUtils.getInstance().getInt("dbversion");
+        int newVersion = DaoMaster.SCHEMA_VERSION;
+        if (newVersion != version) {
+            //数据库升级了
+            SPUtils.getInstance().clear();
+            SPUtils.getInstance().put("dbversion", newVersion);
+            LogUtils.e("数据库升级了!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        }
     }
 
     private DBManager() {
-
         // 初始化数据库信息
         mDevOpenHelper = new DaoMaster.DevOpenHelper(mContext, DB_NAME);
         getDaoMaster();

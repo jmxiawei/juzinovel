@@ -1,4 +1,4 @@
-package xcvf.top.readercore;
+package top.iscore.freereader.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,21 +10,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.List;
-import java.util.concurrent.Callable;
+import com.blankj.utilcode.util.LogUtils;
 
-import bolts.Continuation;
-import bolts.Task;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import top.iscore.freereader.R;
 import top.iscore.freereader.adapter.ChapterListAdapter;
 import top.iscore.freereader.fragment.adapters.CommonViewHolder;
-import top.iscore.freereader.fragment.adapters.OnReachBottomListener;
 import top.iscore.freereader.fragment.adapters.OnRecyclerViewItemClickListener;
+import top.iscore.freereader.mode.Colorful;
+import top.iscore.freereader.mode.setter.TextColorSetter;
+import top.iscore.freereader.mode.setter.ViewBackgroundColorSetter;
+import top.iscore.freereader.mode.setter.ViewGroupSetter;
 import xcvf.top.readercore.bean.Book;
 import xcvf.top.readercore.bean.Chapter;
+import xcvf.top.readercore.bean.Mode;
+import xcvf.top.readercore.styles.ModeProvider;
 
 /**
  * 章节列表
@@ -77,6 +81,27 @@ public class ChapterFragment extends DialogFragment {
         }
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        changeMode();
+    }
+
+    private void changeMode() {
+
+        new Colorful
+                .Builder(getActivity())
+                .setter(new ViewBackgroundColorSetter(getView(), R.attr.colorPrimary))
+                .setter(new TextColorSetter(tvBook, R.attr.text_color))
+                .setter(new ViewGroupSetter(recycler, R.attr.colorPrimary)
+                        .childViewTextColor(R.id.tv_chapter_name, R.attr.text_color)
+                        .childViewTextColor(R.id.tv_download_status, R.attr.text_second_color)
+                        .childViewBgColor(R.id.ll_content, R.attr.colorPrimary))
+                .create()
+                .setTheme(ModeProvider.getCurrentModeTheme());
+
     }
 
 

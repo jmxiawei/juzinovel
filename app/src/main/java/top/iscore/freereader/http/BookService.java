@@ -79,7 +79,17 @@ public interface BookService {
             , @Field("shelfid") String shelfid);
 
 
-
+    /**
+     * 搜索书籍
+     *
+     * @param service
+     * @param keyword
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("reader/public/v1/")
+    Call<BaseModel<ArrayList<Book>>> search(@Field("service") String service
+            , @Field("keyword") String keyword);
 
 
 }

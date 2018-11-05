@@ -19,14 +19,45 @@ public class Page implements IPage {
 
     int totalPage;
 
+    int pageTotalChars;
+    //本页起始的字符在本章节中的位置
+    int startPositionInChapter;
+
     public String chapterid;
     public Page() {
     }
 
+    public int getPageTotalChars() {
+        return pageTotalChars;
+    }
+
+    public Page setPageTotalChars(int pageTotalChars) {
+        this.pageTotalChars = pageTotalChars;
+        return this;
+    }
+
+    public Page setLines(List<ILine> lines) {
+        this.lines = lines;
+        return this;
+    }
+
+    public int getStartPositionInChapter() {
+        return startPositionInChapter;
+    }
+
+    public Page setStartPositionInChapter(int startPositionInChapter) {
+        this.startPositionInChapter = startPositionInChapter;
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Page page = (Page) o;
 

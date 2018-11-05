@@ -11,7 +11,9 @@ public class TextBreakUtil {
 
 
     public static ILine getLine(String content, float measureWidth, Paint paint) {
-
+        if (content == null || content.length() == 0) {
+            return null;
+        }
         float width = 0;
         char[] chars = content.toCharArray();
         Line line = new Line();

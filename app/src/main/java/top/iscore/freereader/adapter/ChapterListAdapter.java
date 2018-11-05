@@ -34,7 +34,15 @@ public class ChapterListAdapter extends BaseRecyclerAdapter<Chapter> {
                         View img = itemView.findViewById(R.id.iv_status);
                         ImageView iv_current = itemView.findViewById(R.id.iv_current);
                         TextView tv = itemView.findViewById(R.id.tv_chapter_name);
+                        TextView tv_download_status = itemView.findViewById(R.id.tv_download_status);
                         tv.setText(cpt.chapter_name);
+
+                        if (cpt.is_download) {
+                            tv_download_status.setVisibility(View.INVISIBLE);
+                        } else {
+                            tv_download_status.setVisibility(View.VISIBLE);
+                        }
+
                         if (mCurrentChapter != null && mCurrentChapter.chapterid == cpt.chapterid) {
                             //当前章节
                             iv_current.setVisibility(View.VISIBLE);

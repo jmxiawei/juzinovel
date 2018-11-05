@@ -18,6 +18,11 @@ import top.iscore.freereader.R;
  */
 public class TextConfig {
 
+
+    public static final int TYPE_FONT_SIZE = 1;
+    public static final int TYPE_FONT_COLOR = 2;
+
+
     private static final String SAVE_NAME = "TxtConfig";
     private static final String C_TEXT_SIZE = "TEXT_SIZE ";
     private static final String C_TEXT_COLOR = "TEXT_COLOR";

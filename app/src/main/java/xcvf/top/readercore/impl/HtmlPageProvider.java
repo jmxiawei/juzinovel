@@ -59,28 +59,32 @@ public class HtmlPageProvider implements IPageProvider {
             }
 
             String content = textBuff.toString();
-            //LogUtils.e(content);
-            Page page = null;
+            int chapter_total_length = content.length();
+            Page page = new Page();
+            page.setChapterid(String.valueOf(chapter.chapterid));
+            int pageTotalChars = 0;
             while (content.length() > 0) {
-                Line line = (Line) TextBreakUtil.getLine(content, maxWidth, paint);
-                if (page == null) {
-                    page = new Page();
-                    page.setChapterid(String.valueOf(chapter.chapterid));
-                }
                 if (page.getLines().size() >= maxLinesPerPage) {
                     //这页已经满了
+                    page.setStartPositionInChapter(chapter_total_length - content.length() - pageTotalChars);
+                    page.setPageTotalChars(pageTotalChars);
+                    page.setIndex(pageList.size() + 1);
                     pageList.add(page);
-                    page.setIndex(pageList.size());
                     page = new Page();
                     page.setChapterid(String.valueOf(chapter.chapterid));
+                    pageTotalChars = 0;
                 }
+                Line line = (Line) TextBreakUtil.getLine(content, maxWidth, paint);
+                pageTotalChars += line.getChars().size();
                 page.addLines(line);
                 content = content.substring(line.getChars().size());
             }
 
-            if (page != null) {
+            if (page.getLines().size() > 0) {
+                page.setStartPositionInChapter(chapter_total_length - pageTotalChars);
+                page.setPageTotalChars(pageTotalChars);
+                page.setIndex(pageList.size() + 1);
                 pageList.add(page);
-                page.setIndex(pageList.size());
             }
 
         } catch (IOException e) {

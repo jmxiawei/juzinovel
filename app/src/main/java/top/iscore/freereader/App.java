@@ -75,7 +75,11 @@ public class App extends Application {
                 LogUtils.e(crashInfo);
             }
         });
+
+
+
     }
+
 
 
 //    /**

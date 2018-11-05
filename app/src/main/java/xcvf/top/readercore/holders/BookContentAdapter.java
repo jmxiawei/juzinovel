@@ -48,7 +48,7 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
      * @param mChapter
      * @param startPage
      */
-    public void setChapter(BookContentView bookContentView, boolean reset, Chapter mChapter, int startPage) {
+    public void setChapter(BookContentView bookContentView, boolean reset, Chapter mChapter, int startPage, int jumpCharPosition) {
         if (reset) {
             mCacheChapterList.clear();
             pageList.clear();
@@ -89,16 +89,14 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
             if (index == size) {
                 mCacheChapterList.addLast(mChapter);
                 appendList(mChapter.getPages());
-                //LogUtils.e("addLast chapter_name="+mChapter.chapter_name);
             } else {
                 mCacheChapterList.addFirst(mChapter);
                 appendListTop(mChapter.getPages());
-                LogUtils.e("addFirst chapter_name=" + mChapter.chapter_name);
                 //添加到前面
             }
-
             if (reset) {
-                bookContentView.scrollToPosition(0);
+                int page = findPageByPosition(jumpCharPosition, mChapter.getPages());
+                bookContentView.scrollToPosition(page);
             } else {
                 if (startPage != IPage.LOADING_PAGE && startPage > 0) {
                     //历史记录
@@ -120,6 +118,23 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
                 }
             }
         }
+    }
+
+
+    /**
+     * 找到
+     *
+     * @return
+     */
+    private int findPageByPosition(int p, List<IPage> pages) {
+        int size = pages == null ? 0 : pages.size();
+        for (int i = 0; i < size; i--) {
+            Page page = (Page) pages.get(i);
+            if (page.getStartPositionInChapter() >= p) {
+                return i;
+            }
+        }
+        return 0;
     }
 
 

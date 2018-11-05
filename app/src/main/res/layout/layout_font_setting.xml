@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:gravity="bottom"
-    android:layout_height="match_parent">
+    android:orientation="vertical">
 
 
     <LinearLayout
+        android:id="@+id/ll_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/bg_setting_font"
         android:orientation="vertical">
 
 
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -25,35 +27,38 @@
                 android:layout_height="20dp"
                 android:layout_marginLeft="@dimen/horizon_margin"
                 android:layout_marginRight="@dimen/horizon_margin"
-                android:src="@mipmap/ic_brightless_min"/>
+                android:src="@mipmap/ic_brightless_min" />
 
             <SeekBar
+                android:id="@+id/seek_brightness"
                 android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
 
 
             <ImageView
+
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginLeft="@dimen/horizon_margin"
                 android:layout_marginRight="@dimen/horizon_margin"
-                android:src="@mipmap/ic_brightless_max"/>
+                android:src="@mipmap/ic_brightless_max" />
 
 
             <TextView
+                android:id="@+id/tv_brightness_system"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="跟随系统"
-                android:gravity="center"
-                android:textSize="10sp"
-                android:paddingLeft="@dimen/horizon_margin"
-                android:paddingRight="@dimen/horizon_margin"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp"
                 android:layout_marginRight="@dimen/horizon_margin"
                 android:background="@drawable/bg_rectange_shape"
-                android:textColor="@color/color_white"/>
+                android:gravity="center"
+                android:paddingBottom="8dp"
+                android:paddingLeft="@dimen/horizon_margin"
+                android:paddingRight="@dimen/horizon_margin"
+                android:paddingTop="8dp"
+                android:text="跟随系统"
+                android:textColor="@color/color_white"
+                android:textSize="10sp" />
 
 
         </LinearLayout>
@@ -62,48 +67,52 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/vertical_margin"
             android:layout_marginBottom="@dimen/vertical_margin"
+            android:layout_marginTop="@dimen/vertical_margin"
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/tv_font_reduce"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"
-                android:minWidth="64dp"
-                android:textColor="@color/color_white"
-                android:textSize="14sp"
-                android:gravity="center"
                 android:layout_marginLeft="@dimen/horizon_margin"
                 android:background="@drawable/bg_rectange_shape"
-                android:text="Aa-"/>
+                android:gravity="center"
+                android:minWidth="64dp"
+                android:text="Aa-"
+                android:textColor="@color/color_white"
+                android:textSize="14sp" />
 
 
             <TextView
+                android:id="@+id/tv_font"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:gravity="center"
                 android:minWidth="64dp"
                 android:text="50"
                 android:textColor="@color/color_white"
-                android:gravity="center"/>
+                android:textSize="14sp" />
 
 
             <TextView
+                android:id="@+id/tv_font_add"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"
-                android:minWidth="64dp"
-                android:textColor="@color/color_white"
-                android:textSize="14sp"
-                android:gravity="center"
                 android:background="@drawable/bg_rectange_shape"
-                android:text="Aa+"/>
+                android:gravity="center"
+                android:minWidth="64dp"
+                android:text="Aa+"
+                android:textColor="@color/color_white"
+                android:textSize="14sp" />
 
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/style_recycler"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/horizon_margin" />
     </LinearLayout>
 
 </LinearLayout>

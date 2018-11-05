@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_content"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
@@ -7,7 +8,7 @@
     android:orientation="vertical">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -41,7 +42,8 @@
 
         <TextView
             android:id="@+id/tv_chapter_name"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:ellipsize="end"
@@ -50,6 +52,15 @@
             android:singleLine="true"
             android:textColor="@color/text_gray_dark"
             android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_download_status"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:text="已缓存"
+            android:textColor="?attr/text_second_color"/>
+
 
     </LinearLayout>
 
