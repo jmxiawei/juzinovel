@@ -35,9 +35,6 @@ android {
 }
 
 dependencies {
-    //implementation project(':hwtxtreaderlib')
-    //implementation project(':readercore')
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     compile rootProject.ext.supportV4
     compile files('libs/chardet.jar')
     compile files('libs/jsoup-1.11.3.jar')
@@ -64,5 +61,5 @@ dependencies {
     //版本 23以上（必须）
     compile rootProject.ext.mosby3Lce
     compile rootProject.ext.mosby3queuing
-    //implementation 'com.tencent:mmkv:1.0.10'
+    compile 'com.qianwen:update-app:3.5.2'
 }
