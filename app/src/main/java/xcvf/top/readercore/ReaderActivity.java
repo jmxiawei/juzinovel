@@ -131,19 +131,9 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
         }
         checkChapters(loadedChapter);
         fullScreenHandler = new FullScreenHandler(this, readerView, settingView);
-        updateMode();
+
     }
 
-    /**
-     *
-     */
-    private void updateMode() {
-        new Colorful.Builder(this)
-                .setter(new ViewBackgroundColorSetter(activityContent,R.attr.colorPrimary))
-                .setter(new ViewBackgroundColorSetter(settingView,R.attr.bg_dark))
-                .create()
-                .setTheme(ModeProvider.getCurrentModeTheme());
-    }
 
     @Override
     protected void onDestroy() {
@@ -155,7 +145,6 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
     protected void onResume() {
         super.onResume();
         fullScreenHandler.hide();
-        updateMode();
     }
 
 
@@ -205,7 +194,6 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
                 onTextConfigChangedListener.onChanged(TextConfig.TYPE_FONT_COLOR);
                 ModeProvider.save(config.getId(), dest);
                 fullScreenHandler.check();
-                updateMode();
             } else if (action == SettingAction.ACTION_FONT) {
                 PopFontSetting popFontSetting = new PopFontSetting(getBaseContext());
                 popFontSetting.setOnTextConfigChangedListener(onTextConfigChangedListener);

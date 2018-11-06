@@ -22,6 +22,9 @@ public class Book  implements Parcelable {
     @Transient
     public List<Chapter> chapters = new ArrayList<>();
 
+    @Transient
+    public List<Book> priorities = new ArrayList<>();
+
     public int bookid;
     public String cover  ;
     @Unique
@@ -37,6 +40,14 @@ public class Book  implements Parcelable {
     public String extern_bookid;
     public String update_time;
 
+    public List<Book> getPriorities() {
+        return priorities;
+    }
+
+    public Book setPriorities(List<Book> priorities) {
+        this.priorities = priorities;
+        return this;
+    }
 
     public String getUserid() {
         return userid;

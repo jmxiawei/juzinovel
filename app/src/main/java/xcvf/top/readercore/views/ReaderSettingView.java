@@ -26,6 +26,7 @@ import xcvf.top.readercore.bean.Book;
 import xcvf.top.readercore.bean.Mode;
 import xcvf.top.readercore.bean.SettingAction;
 import xcvf.top.readercore.services.DownloadIntentService;
+import xcvf.top.readercore.styles.ModeProvider;
 
 /**
  * 设置界面
@@ -140,7 +141,7 @@ public class ReaderSettingView extends FrameLayout {
     }
 
     private void initView() {
-
+        changeMode(ModeProvider.getCurrentMode());
     }
 
     /**
@@ -149,7 +150,7 @@ public class ReaderSettingView extends FrameLayout {
      * @param mode
      */
     public void changeMode(Mode mode) {
-        if (mode == Mode.DayMode) {
+        if (mode == Mode.NightMode) {
             ivMode.setImageResource(R.mipmap.ic_mode_day);
             tvMode.setText("日间");
         } else {

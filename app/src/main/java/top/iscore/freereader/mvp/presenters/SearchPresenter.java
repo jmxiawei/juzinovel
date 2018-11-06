@@ -28,7 +28,7 @@ public class SearchPresenter extends MvpBasePresenter<SearchView> {
      * 搜索书籍
      * @param keyword
      */
-    public  void searchBook(String keyword){
+    public  void searchBook(String keyword,String catename,int page){
 
 
       ifViewAttached(new ViewAction<SearchView>() {
@@ -37,7 +37,7 @@ public class SearchPresenter extends MvpBasePresenter<SearchView> {
               view.showLoading();
           }
       });
-      retrofit2.Call<BaseModel<ArrayList<Book>>> arrayListCall =  BaseHttpHandler.create().getProxy(BookService.class).search("Book.search",keyword);
+      retrofit2.Call<BaseModel<ArrayList<Book>>> arrayListCall =  BaseHttpHandler.create().getProxy(BookService.class).search("Book.search",keyword,catename,page);
       arrayListCall.enqueue(new Callback<BaseModel<ArrayList<Book>>>() {
           @Override
           public void onResponse(retrofit2.Call<BaseModel<ArrayList<Book>>> call, final Response<BaseModel<ArrayList<Book>>> response) {

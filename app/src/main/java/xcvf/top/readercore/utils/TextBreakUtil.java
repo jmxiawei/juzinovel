@@ -7,6 +7,7 @@ import xcvf.top.readercore.bean.Line;
 import xcvf.top.readercore.bean.TxtChar;
 import xcvf.top.readercore.interfaces.ILine;
 
+
 public class TextBreakUtil {
 
 

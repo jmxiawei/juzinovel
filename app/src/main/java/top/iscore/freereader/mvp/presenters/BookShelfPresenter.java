@@ -14,6 +14,7 @@ import top.iscore.freereader.http.BaseModel;
 import top.iscore.freereader.http.BookService;
 import top.iscore.freereader.mvp.view.BookShelfView;
 import xcvf.top.readercore.bean.Book;
+import xcvf.top.readercore.bean.Category;
 
 /**
  * 书架
@@ -21,6 +22,43 @@ import xcvf.top.readercore.bean.Book;
  */
 public class BookShelfPresenter extends MvpBasePresenter<BookShelfView> {
 
+
+    /**
+     * 获取书架数据
+     *
+     * @param
+     */
+    public void loadAllCate() {
+
+        Call<BaseModel<ArrayList<Category>>> resCall = BaseHttpHandler.create().getProxy(BookService.class).allcate("Book.Allcate");
+        resCall.enqueue(new Callback<BaseModel<ArrayList<Category>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<ArrayList<Category>>> call, final Response<BaseModel<ArrayList<Category>>> response) {
+
+                ifViewAttached(new ViewAction<BookShelfView>() {
+                    @Override
+                    public void run(@NonNull BookShelfView view) {
+                        if (response != null && response.isSuccessful()) {
+                            view.onLoadAllCate(response.body().getData());
+                        } else {
+                            view.onLoadAllCate(null);
+                        }
+                    }
+                });
+
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<ArrayList<Category>>> call, Throwable t) {
+                ifViewAttached(new ViewAction<BookShelfView>() {
+                    @Override
+                    public void run(@NonNull BookShelfView view) {
+                        view.onLoadAllCate(null);
+                    }
+                });
+            }
+        });
+    }
 
     /**
      * 获取书架数据
@@ -122,6 +160,44 @@ public class BookShelfPresenter extends MvpBasePresenter<BookShelfView> {
             }
         });
 
+    }
+
+    /**
+     * 书籍
+     *
+     * @param userid
+     * @param bookid
+     */
+    public void loadBookDetail(String userid, String bookid) {
+        final Call<BaseModel<Book>> resCall = BaseHttpHandler.create().getProxy(BookService.class).detail("Book.Detail", bookid, userid);
+        resCall.enqueue(new Callback<BaseModel<Book>>() {
+            @Override
+            public void onResponse(Call<BaseModel<Book>> call, final Response<BaseModel<Book>> response) {
+
+                ifViewAttached(new ViewAction<BookShelfView>() {
+                    @Override
+                    public void run(@NonNull BookShelfView view) {
+                        if (response != null && response.isSuccessful()) {
+                            view.onLoadBookDetail(response.body().getData());
+                        } else {
+                            view.onLoadBookDetail(null);
+                        }
+                    }
+                });
+
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<Book>> call, Throwable t) {
+                ifViewAttached(new ViewAction<BookShelfView>() {
+                    @Override
+                    public void run(@NonNull BookShelfView view) {
+                        view.onLoadBookDetail(null);
+                    }
+                });
+
+            }
+        });
     }
 
 

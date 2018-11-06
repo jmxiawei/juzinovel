@@ -23,6 +23,17 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Common
 
     private OnRecyclerViewItemClickListener<T> onRecyclerViewItemClickListener;
 
+    private OnRecyclerViewItemClickListener<T> onRecyclerViewItemLongClickListener;
+
+    public OnRecyclerViewItemClickListener<T> getOnRecyclerViewItemLongClickListener() {
+        return onRecyclerViewItemLongClickListener;
+    }
+
+    public BaseRecyclerAdapter setOnRecyclerViewItemLongClickListener(OnRecyclerViewItemClickListener<T> onRecyclerViewItemLongClickListener) {
+        this.onRecyclerViewItemLongClickListener = onRecyclerViewItemLongClickListener;
+        return this;
+    }
+
     protected ViewHolderCreator viewHolderCreator;
 
     public abstract ViewHolderCreator createViewHolderCreator();
@@ -72,6 +83,17 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Common
                     if (onRecyclerViewItemClickListener != null) {
                         onRecyclerViewItemClickListener.onRecyclerViewItemClick(holder, position, getItem(position));
                     }
+                }
+            });
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+
+                    if (onRecyclerViewItemLongClickListener != null) {
+                        onRecyclerViewItemLongClickListener.onRecyclerViewItemClick(holder, position, getItem(position));
+                    }
+
+                    return true;
                 }
             });
 

@@ -46,18 +46,12 @@ public class DownloadIntentService extends IntentService {
         super("DownloadIntentService");
     }
 
-    /**
-     * Creates an IntentService.  Invoked by your subclass's constructor.
-     *
-     * @param name Used to name the worker thread, important only for debugging.
-     */
-    public DownloadIntentService(String name) {
-        super(name);
-    }
 
     @Override
     protected void onHandleIntent(@Nullable final Intent intent) {
-
+        if (intent == null) {
+            return;
+        }
         chapterList = intent.getParcelableArrayListExtra("chapters");
         chapter = intent.getParcelableExtra("chapter");
         DaoSession session = DBManager.getDaoMaster().newSession();
@@ -65,8 +59,8 @@ public class DownloadIntentService extends IntentService {
         for (int i = 0; i < mCount; i++) {
             final Chapter chapter = chapterList.get(i);
             String dest = Constant.getCachePath(getBaseContext(), chapter.self_page);
-            boolean result =FileDownloader.downloadUrl(Constant.buildChapterFilePath(chapter.self_page), dest);
-            if(result){
+            boolean result = FileDownloader.downloadUrl(Constant.buildChapterFilePath(chapter.self_page), dest);
+            if (result) {
                 chapter.setIs_download(true);
                 session.getChapterDao().insertOrReplace(chapter);
             }
@@ -76,7 +70,6 @@ public class DownloadIntentService extends IntentService {
             itn.putExtra("bookid", chapter.extern_bookid);
             itn.putExtra("finish", finishCount == mCount ? 1 : 0);
             LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(itn);
-            LogUtils.e("sendBroadCast="+dest);
         }
     }
 }

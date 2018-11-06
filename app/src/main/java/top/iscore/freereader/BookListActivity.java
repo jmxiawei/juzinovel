@@ -1,10 +1,11 @@
 package top.iscore.freereader;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
@@ -15,7 +16,6 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
-import com.tencent.mm.opensdk.modelmsg.SendAuth;
 
 import java.util.List;
 
@@ -30,27 +30,22 @@ import top.iscore.freereader.mode.setter.ViewBackgroundColorSetter;
 import top.iscore.freereader.mode.setter.ViewGroupSetter;
 import top.iscore.freereader.mvp.presenters.SearchPresenter;
 import top.iscore.freereader.mvp.view.SearchView;
-import xcvf.top.readercore.ReaderActivity;
 import xcvf.top.readercore.bean.Book;
 import xcvf.top.readercore.bean.Mode;
 import xcvf.top.readercore.styles.ModeProvider;
 
 /**
- * 搜索
- * Created by xiaw on 2018/11/2.
+ * 书籍列表，根据不同的询条件
  */
-public class SearchActivity extends MvpActivity<SearchView, SearchPresenter> implements SearchView, SwitchModeListener {
+public class BookListActivity extends MvpActivity<SearchView, SearchPresenter> implements SearchView, SwitchModeListener {
 
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout refreshLayout;
-    @BindView(R.id.view_search)
-    android.support.v7.widget.SearchView viewSearch;
     @BindView(R.id.recycler)
     RecyclerView recycler;
     @BindView(R.id.ll_loading)
     LinearLayout llLoading;
     SearchBookAdapter mBookAdapter;
-    android.support.v7.widget.SearchView.SearchAutoComplete searchAutoComplete;
     @BindView(R.id.activity_content)
     LinearLayout activityContent;
     @BindView(R.id.img_back)
@@ -59,51 +54,47 @@ public class SearchActivity extends MvpActivity<SearchView, SearchPresenter> imp
     LinearLayout llTitle;
     SwitchModeHandler switchModeListener;
     int page = 1;
+    String title;
+    int type;
+    String params;
+
+    /**
+     * 查询列表
+     *
+     * @param activity
+     * @param title
+     * @param type
+     * @param params
+     */
+    public static void toBookList(Activity activity, String title, int type, String params) {
+        Intent intent = new Intent(activity, BookListActivity.class);
+        intent.putExtra("title", title);
+        intent.putExtra("type", type);
+        intent.putExtra("params", params);
+        activity.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
+        getIntentData();
+        setContentView(R.layout.activity_book_list);
         ButterKnife.bind(this);
         presenter.attachView(this);
         recycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mBookAdapter = new SearchBookAdapter();
         recycler.setAdapter(mBookAdapter);
-        viewSearch.setOnSearchClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                page = 1;
-                load();
-            }
-        });
-        searchAutoComplete = viewSearch.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-        searchAutoComplete.setTextColor(getResources().getColor(R.color.color_white));
-        searchAutoComplete.setHintTextColor(getResources().getColor(R.color.text_gray_light));
+
+
         mBookAdapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener<Book>() {
             @Override
             public void onRecyclerViewItemClick(CommonViewHolder holder, int position, Book item) {
-                BookDetailActivity.toBookDetail(SearchActivity.this, item.extern_bookid);
+                BookDetailActivity.toBookDetail(BookListActivity.this, item.extern_bookid);
             }
         });
         switchModeListener = new SwitchModeHandler(this, this);
         switchModeListener.onCreate();
-        viewSearch.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                page = 1;
-                load();
-                return true;
-            }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-        viewSearch.setIconifiedByDefault(true);
-        viewSearch.setFocusable(true);
-        viewSearch.setIconified(false);
-        viewSearch.requestFocusFromTouch();
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,17 +120,13 @@ public class SearchActivity extends MvpActivity<SearchView, SearchPresenter> imp
 
     private void load() {
 
-        InputMethodManager im = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        if (im != null) {
-            View view = getCurrentFocus();
-            if (view != null) {
-                im.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-            }
+        if (type == 0) {
+            //根绝类别搜索
+            presenter.searchBook(null, params, page);
+        } else if (type == 1) {
+            presenter.searchBook(params, params, page);
         }
-        String text = viewSearch.getQuery().toString();
-        if (!TextUtils.isEmpty(text)) {
-            presenter.searchBook(viewSearch.getQuery().toString(), null, page);
-        }
+
     }
 
 
@@ -174,7 +161,6 @@ public class SearchActivity extends MvpActivity<SearchView, SearchPresenter> imp
         } else {
             mBookAdapter.appendDataList(books);
         }
-
         page++;
         dismissLoading();
         refreshLayout.finishLoadMore();
@@ -200,5 +186,16 @@ public class SearchActivity extends MvpActivity<SearchView, SearchPresenter> imp
     protected void onDestroy() {
         super.onDestroy();
         switchModeListener.onDestroy();
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
+    public void getIntentData() {
+        title = getIntent().getStringExtra("title");
+        type = getIntent().getIntExtra("type", 0);
+        params = getIntent().getStringExtra("params");
     }
 }

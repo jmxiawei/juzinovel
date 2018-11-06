@@ -21,7 +21,7 @@ import xcvf.top.readercore.bean.Book;
  * 书籍
  * Created by xiaw on 2018/9/18.
  */
-public class BookHolder extends CommonViewHolder<Book> {
+public class BookShelfHolder extends CommonViewHolder<Book> {
 
 
     @BindView(R.id.img_cover)
@@ -37,7 +37,7 @@ public class BookHolder extends CommonViewHolder<Book> {
     @BindView(R.id.ll_content)
     LinearLayout llContent;
 
-    public BookHolder(Context context, ViewGroup root) {
+    public BookShelfHolder(Context context, ViewGroup root) {
         super(context, root, R.layout.item_holder_bookself);
         ButterKnife.bind(this, itemView);
     }

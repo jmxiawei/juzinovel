@@ -102,6 +102,12 @@
                 android:background="@drawable/bg_round" />
         </LinearLayout>
 
-
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="@dimen/horizon_margin"
+        android:background="@color/color_line" />
+
 </LinearLayout>

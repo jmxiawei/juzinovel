@@ -34,6 +34,7 @@ import top.iscore.freereader.mvp.presenters.BookShelfPresenter;
 import top.iscore.freereader.mvp.view.BookShelfView;
 import xcvf.top.readercore.ReaderActivity;
 import xcvf.top.readercore.bean.Book;
+import xcvf.top.readercore.bean.Category;
 import xcvf.top.readercore.bean.Mode;
 import xcvf.top.readercore.bean.User;
 import xcvf.top.readercore.daos.BookDao;
@@ -44,7 +45,7 @@ import xcvf.top.readercore.styles.ModeProvider;
  * 书架
  * Created by xiaw on 2018/9/18.
  */
-public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPresenter> implements BookShelfView, OnRecyclerViewItemClickListener<Book>,SwitchModeListener {
+public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPresenter> implements BookShelfView, OnRecyclerViewItemClickListener<Book>, SwitchModeListener {
 
     @BindView(R.id.recycler)
     RecyclerView recycler;
@@ -54,6 +55,7 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
     BookShelfAdapter mBookShelfAdapter;
     User mUser;
     SwitchModeHandler switchModeListener;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -62,7 +64,7 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
         mUser = User.currentUser();
         presenter.attachView(this);
         initViews(view);
-        switchModeListener = new SwitchModeHandler(this,getActivity());
+        switchModeListener = new SwitchModeHandler(this, getActivity());
         switchModeListener.onCreate();
         return view;
     }
@@ -101,6 +103,13 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
         mBookShelfAdapter = new BookShelfAdapter();
         recycler.setAdapter(mBookShelfAdapter);
         mBookShelfAdapter.setOnRecyclerViewItemClickListener(this);
+        mBookShelfAdapter.setOnRecyclerViewItemLongClickListener(new OnRecyclerViewItemClickListener<Book>() {
+            @Override
+            public void onRecyclerViewItemClick(CommonViewHolder holder, int position, Book item) {
+
+
+            }
+        });
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
@@ -175,6 +184,16 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
 
     @Override
     public void switchMode(Mode mode) {
-         updateMode();
+        updateMode();
+    }
+
+    @Override
+    public void onLoadBookDetail(Book book) {
+
+    }
+
+    @Override
+    public void onLoadAllCate(List<Category> categories) {
+
     }
 }

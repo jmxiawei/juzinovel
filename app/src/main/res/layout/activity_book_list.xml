@@ -27,13 +27,13 @@
             android:scaleType="centerInside"
             android:src="@mipmap/icon_back"/>
 
-        <android.support.v7.widget.SearchView
-            android:id="@+id/view_search"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:defaultQueryHint="输入 书名/作者名"
-            />
+            android:textSize="16sp"
+            android:text="感兴趣的书籍"
+            android:textColor="?attr/text_color"/>
     </LinearLayout>
 
 
@@ -65,7 +65,6 @@
             android:orientation="horizontal"
             android:visibility="gone"
             android:gravity="center">
-
 
             <ProgressBar
                 android:layout_width="40dp"

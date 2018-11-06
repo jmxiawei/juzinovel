@@ -28,11 +28,16 @@
         <activity
             android:name="xcvf.top.readercore.ReaderActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".SearchActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".SearchActivity"
-            android:screenOrientation="portrait"/>
-        <service android:name="xcvf.top.readercore.services.DownloadIntentService"
-            />
+        <service android:name="xcvf.top.readercore.services.DownloadIntentService" />
+
+        <activity
+            android:name=".BookDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".BookListActivity"></activity>
     </application>
 
 </manifest>

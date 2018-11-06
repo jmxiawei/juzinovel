@@ -7,6 +7,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 import xcvf.top.readercore.bean.Book;
+import xcvf.top.readercore.bean.Category;
 import xcvf.top.readercore.bean.Chapter;
 
 /**
@@ -89,7 +90,41 @@ public interface BookService {
     @FormUrlEncoded
     @POST("reader/public/v1/")
     Call<BaseModel<ArrayList<Book>>> search(@Field("service") String service
-            , @Field("keyword") String keyword);
+            , @Field("keyword") String keyword, @Field("catename") String catename,
+                                            @Field("page") int page);
 
+    /**
+     * 书籍分类
+     *
+     * @param service
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("reader/public/v1/")
+    Call<BaseModel<ArrayList<Category>>> allcate(@Field("service") String service);
+
+    /**
+     * 书籍详情
+     *
+     * @param service
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("reader/public/v1/")
+    Call<BaseModel<Book>> detail(@Field("service") String service
+            , @Field("extern_bookid") String extern_bookid,@Field("userid") String userid);
+
+    /**
+     * 书籍详情
+     *
+     * @param service
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("reader/public/v1/")
+    Call<BaseModel<Book>> addReadLog(@Field("service") String service
+            , @Field("extern_bookid") String extern_bookid,
+                                     @Field("chapterid") String chapterid,
+                                     @Field("userid") String userid);
 
 }

@@ -51,11 +51,15 @@ String getVersionName(){
 
 
 ext {
-
-    compileSdkVersion = 26
-    buildToolsVersion = "26.0.2"
-    minSdkVersion = 16
-    targetSdkVersion = 26
+//    compileSdkVersion = 26
+//    buildToolsVersion = "26.0.1"
+//    minSdkVersion = 16
+//    targetSdkVersion = 26
+//    support = "26.0.0-alpha1"
+    compileSdkVersion = 28
+    buildToolsVersion = "28.0.3"
+    minSdkVersion = 21
+    targetSdkVersion = 28
     support = "26.0.0-alpha1"
     appcompatSupport = "26.0.0-alpha1"
 //  versionCode = 195

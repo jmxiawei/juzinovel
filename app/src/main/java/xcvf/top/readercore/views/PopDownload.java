@@ -69,7 +69,12 @@ public class PopDownload extends PopupWindow {
         setOutsideTouchable(true);
         setTouchable(true);
         ButterKnife.bind(this, view);
-        llContent.setBackgroundResource(R.drawable.bg_menu_nightmode);
+        Mode mode = ModeProvider.getCurrentMode();
+        if(mode == Mode.DayMode){
+            llContent.setBackgroundResource(R.drawable.bg_menu_daymode);
+        }else {
+            llContent.setBackgroundResource(R.drawable.bg_menu_nightmode);
+        }
         initStyle();
         getContentView().setOnClickListener(new View.OnClickListener() {
             @Override

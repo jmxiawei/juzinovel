@@ -29,6 +29,7 @@
         <item name="text_color">@color/text_black</item>
         <item name="text_second_color">@color/text_gray_light</item>
         <item name="bg_dark">@color/light_black</item>
+
     </style>
 
     <!-- 夜间主题 -->

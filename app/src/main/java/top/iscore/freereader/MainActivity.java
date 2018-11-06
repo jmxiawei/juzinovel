@@ -25,7 +25,6 @@ import top.iscore.freereader.fragment.BookshelfFragment;
 import top.iscore.freereader.fragment.FinderFragment;
 import top.iscore.freereader.mode.Colorful;
 import top.iscore.freereader.mode.SwitchModeListener;
-import top.iscore.freereader.mode.setter.StatusBarSetter;
 import top.iscore.freereader.mode.setter.TabIndicatorSetter;
 import top.iscore.freereader.mode.setter.ViewBackgroundColorSetter;
 import xcvf.top.readercore.bean.Mode;
@@ -51,8 +50,6 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<Fragment> fragmentList = new ArrayList<>();
     ArrayList<String> titles = new ArrayList<>();
-    @BindView(R.id.tv_title)
-    TextView tvTitle;
     @BindView(R.id.img_more)
     ImageView imgMore;
     @BindView(R.id.ll_toolbar)
