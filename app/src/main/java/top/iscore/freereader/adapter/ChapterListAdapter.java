@@ -1,5 +1,6 @@
 package top.iscore.freereader.adapter;
 
+import android.app.Activity;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,10 @@ import top.iscore.freereader.R;
 import top.iscore.freereader.fragment.adapters.BaseRecyclerAdapter;
 import top.iscore.freereader.fragment.adapters.CommonViewHolder;
 import top.iscore.freereader.fragment.adapters.ViewHolderCreator;
+import top.iscore.freereader.mode.setter.ViewSetter;
 import xcvf.top.readercore.bean.Chapter;
+import xcvf.top.readercore.bean.Mode;
+import xcvf.top.readercore.styles.ModeProvider;
 
 /**
  * 章节列表
@@ -19,8 +23,14 @@ public class ChapterListAdapter extends BaseRecyclerAdapter<Chapter> {
 
     Chapter mCurrentChapter = null;
 
+    int colorSecondText = 0;
     public void setCurrentChapter(Chapter mCurrentChapter) {
         this.mCurrentChapter = mCurrentChapter;
+    }
+
+    public void setColorSecond(int color){
+        this.colorSecondText = color;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -52,7 +62,7 @@ public class ChapterListAdapter extends BaseRecyclerAdapter<Chapter> {
                         } else {
                             iv_current.setVisibility(View.GONE);
                             img.setVisibility(View.VISIBLE);
-                            tv.setTextColor(itemView.getResources().getColor(R.color.text_gray_light));
+                            tv.setTextColor(colorSecondText);
                             tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
                         }
                     }

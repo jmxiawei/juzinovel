@@ -1,5 +1,6 @@
 package top.iscore.freereader.fragment;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -25,6 +26,7 @@ import top.iscore.freereader.mode.Colorful;
 import top.iscore.freereader.mode.setter.TextColorSetter;
 import top.iscore.freereader.mode.setter.ViewBackgroundColorSetter;
 import top.iscore.freereader.mode.setter.ViewGroupSetter;
+import top.iscore.freereader.mode.setter.ViewSetter;
 import xcvf.top.readercore.bean.Book;
 import xcvf.top.readercore.bean.Chapter;
 import xcvf.top.readercore.bean.Mode;
@@ -95,12 +97,12 @@ public class ChapterFragment extends DialogFragment {
                 .Builder(getActivity())
                 .setter(new ViewBackgroundColorSetter(getView(), R.attr.colorPrimary))
                 .setter(new TextColorSetter(tvBook, R.attr.text_color))
-                .setter(new ViewGroupSetter(recycler, R.attr.colorPrimary)
-                        .childViewTextColor(R.id.tv_chapter_name, R.attr.text_color)
-                        .childViewTextColor(R.id.tv_download_status, R.attr.text_second_color)
-                        .childViewBgColor(R.id.ll_content, R.attr.colorPrimary))
+                .setter(new ViewBackgroundColorSetter(recycler,R.attr.colorPrimary))
                 .create()
                 .setTheme(ModeProvider.getCurrentModeTheme());
+
+        Resources.Theme theme = getActivity().getTheme();
+        mChapterListAdapter.setColorSecond(ViewSetter.getColor(theme, R.attr.text_second_color));
 
     }
 

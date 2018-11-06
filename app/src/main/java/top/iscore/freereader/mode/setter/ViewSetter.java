@@ -73,7 +73,7 @@ public abstract class ViewSetter {
 	 * @param mAttrResId
 	 * @return
 	 */
-	protected int getColor(Theme newTheme,int mAttrResId) {
+	public static int getColor(Theme newTheme,int mAttrResId) {
 		TypedValue typedValue = new TypedValue();
 		newTheme.resolveAttribute(mAttrResId, typedValue, true);
 		return typedValue.data;
