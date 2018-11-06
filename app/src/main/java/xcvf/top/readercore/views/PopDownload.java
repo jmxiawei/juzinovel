@@ -46,17 +46,21 @@ public class PopDownload extends PopupWindow {
     DAdapter mDAdapter;
     Chapter chapter;
     OnDownloadCmdListener onDownloadCmdListener;
-
-
+    int mLeftCount = 0;
     public PopDownload setOnDownloadCmdListener(OnDownloadCmdListener onDownloadCmdListener) {
         this.onDownloadCmdListener = onDownloadCmdListener;
         return this;
     }
 
-    public PopDownload(Context context, Chapter chapter) {
+    public PopDownload(Context context, Chapter chapter,List<Chapter> chapters) {
         super(context);
-        Mode mode = ModeProvider.getCurrentMode();
         this.chapter = chapter;
+        int size = chapters == null?0:chapters.size();
+        if(size>0){
+            int index = chapters.indexOf(chapter);
+            mLeftCount = size - index - 1;
+        }
+
         View view = LayoutInflater.from(context).inflate(R.layout.layout_download_select_amount, null);
         setContentView(view);
         setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
@@ -101,7 +105,8 @@ public class PopDownload extends PopupWindow {
 
     private void initOptions() {
         List<Category> categories = new ArrayList<>();
-        int left = Chapter.getLeftChapter(this.chapter.extern_bookid, this.chapter.chapterid + "");
+        int left = mLeftCount;
+                //Chapter.getLeftChapter(this.chapter.extern_bookid, this.chapter.chapterid + "");
         int start = 50;
         while (checkAmount(start, left, categories)) {
             start *= 2;

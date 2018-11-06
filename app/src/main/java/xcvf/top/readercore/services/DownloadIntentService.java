@@ -13,6 +13,8 @@ import java.util.List;
 
 import bolts.Task;
 import xcvf.top.readercore.bean.Chapter;
+import xcvf.top.readercore.daos.DBManager;
+import xcvf.top.readercore.daos.DaoSession;
 import xcvf.top.readercore.impl.FileDownloader;
 import xcvf.top.readercore.utils.Constant;
 
@@ -58,14 +60,19 @@ public class DownloadIntentService extends IntentService {
 
         chapterList = intent.getParcelableArrayListExtra("chapters");
         chapter = intent.getParcelableExtra("chapter");
+        DaoSession session = DBManager.getDaoMaster().newSession();
         mCount = chapterList == null ? 0 : chapterList.size();
         for (int i = 0; i < mCount; i++) {
             final Chapter chapter = chapterList.get(i);
             String dest = Constant.getCachePath(getBaseContext(), chapter.self_page);
-            FileDownloader.downloadUrl(Constant.buildChapterFilePath(chapter.self_page), dest);
+            boolean result =FileDownloader.downloadUrl(Constant.buildChapterFilePath(chapter.self_page), dest);
+            if(result){
+                chapter.setIs_download(true);
+                session.getChapterDao().insertOrReplace(chapter);
+            }
             Intent itn = new Intent(PROGRESS);
             finishCount++;
-            itn.putExtra("info", "正在下载" + finishCount + "/" + mCount);
+            itn.putExtra("info", "正在下载: " + finishCount + "/" + mCount);
             itn.putExtra("bookid", chapter.extern_bookid);
             itn.putExtra("finish", finishCount == mCount ? 1 : 0);
             LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(itn);

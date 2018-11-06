@@ -47,7 +47,7 @@ public class ChapterListAdapter extends BaseRecyclerAdapter<Chapter> {
                         TextView tv_download_status = itemView.findViewById(R.id.tv_download_status);
                         tv.setText(cpt.chapter_name);
 
-                        if (cpt.is_download) {
+                        if (!cpt.is_download) {
                             tv_download_status.setVisibility(View.INVISIBLE);
                         } else {
                             tv_download_status.setVisibility(View.VISIBLE);
