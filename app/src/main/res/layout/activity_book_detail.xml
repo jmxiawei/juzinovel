@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="书籍详情"
-            android:textColor="?attr/text_color"
+            android:textColor="@color/color_white"
             android:textSize="16sp" />
 
 
@@ -138,7 +138,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginTop="@dimen/vertical_margin"
+            android:layout_marginTop="20dp"
             android:orientation="horizontal">
 
             <TextView

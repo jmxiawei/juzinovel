@@ -1,5 +1,6 @@
 package top.iscore.freereader.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import top.iscore.freereader.CateListActivity;
 import top.iscore.freereader.R;
 import top.iscore.freereader.SwitchModeHandler;
 import top.iscore.freereader.fragment.adapters.CommonViewHolder;
@@ -54,12 +56,18 @@ public class FinderFragment extends BaseListFragment<Category> implements Switch
     }
 
     private void initCateogry() {
-
-        categories.clear();;
+        categories.clear();
         categories.add(new Category(0,"分类",R.mipmap.ic_category));
         getAdapter().setDataList(categories);
+
     }
 
+
+    @Override
+    public void onItemClick(CommonViewHolder holder, int position, Category item) {
+        Intent intent = new Intent(getActivity(), CateListActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     public void onResume() {

@@ -131,11 +131,11 @@ public class BookShelfPresenter extends MvpBasePresenter<BookShelfView> {
     /**
      * 删除书架
      *
-     * @param userid
+     * @param shelfid
      */
-    public void deleteBookShelf(String userid, String bookid) {
+    public void deleteBookShelf(String shelfid) {
 
-        Call<BaseModel<String>> resCall = BaseHttpHandler.create().getProxy(BookService.class).addBookShelf("Book.deleteShelf", userid, bookid);
+        Call<BaseModel<String>> resCall = BaseHttpHandler.create().getProxy(BookService.class).deleteBookShelf("Book.deleteShelf", shelfid);
         resCall.enqueue(new Callback<BaseModel<String>>() {
             @Override
             public void onResponse(Call<BaseModel<String>> call, final Response<BaseModel<String>> response) {
@@ -146,7 +146,6 @@ public class BookShelfPresenter extends MvpBasePresenter<BookShelfView> {
                         view.setData(null);
                     }
                 });
-
             }
 
             @Override

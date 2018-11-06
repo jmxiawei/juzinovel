@@ -121,7 +121,6 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
     private void changeMode() {
 
         new Colorful.Builder(this)
-                .setter(new TextColorSetter(tvBookName, R.attr.text_color))
                 .setter(new TextColorSetter(tvCate, R.attr.text_second_color))
                 .setter(new TextColorSetter(tvLatest, R.attr.text_second_color))
                 .setter(new TextColorSetter(tvDesc, R.attr.text_second_color))
@@ -182,9 +181,11 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
                 break;
             case R.id.tv_add:
                 if (mUser != null && mBook != null) {
-                    presenter.addBookShelf(mUser.getUid(), mBook.getExtern_bookid());
-                } else {
-
+                    if(mBook.shelfid==null){
+                        presenter.addBookShelf(mUser.getUid(), mBook.getExtern_bookid());
+                    }else {
+                        presenter.deleteBookShelf(mBook.shelfid);
+                    }
                 }
                 break;
             case R.id.tv_start:
@@ -194,7 +195,7 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
                 break;
             case R.id.tv_more:
                 if (mBook != null) {
-                    BookListActivity.toBookList(this, "你可能感兴趣的书籍", 0, mBook.cate_name);
+                    BookListActivity.toBookList(this, "你可能感兴趣", 0, mBook.cate_name);
                 }
                 break;
             default:

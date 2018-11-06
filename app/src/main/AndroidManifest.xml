@@ -37,7 +37,8 @@
         <activity
             android:name=".BookDetailActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".BookListActivity"></activity>
+        <activity android:name=".BookListActivity" />
+        <activity android:name=".CateListActivity"></activity>
     </application>
 
 </manifest>

@@ -7,9 +7,9 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.hannesdorfmann.mosby3.mvp.MvpActivity;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -57,6 +57,8 @@ public class BookListActivity extends MvpActivity<SearchView, SearchPresenter> i
     String title;
     int type;
     String params;
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
 
     /**
      * 查询列表
@@ -85,7 +87,7 @@ public class BookListActivity extends MvpActivity<SearchView, SearchPresenter> i
         mBookAdapter = new SearchBookAdapter();
         recycler.setAdapter(mBookAdapter);
 
-
+        tvTitle.setText(title);
         mBookAdapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener<Book>() {
             @Override
             public void onRecyclerViewItemClick(CommonViewHolder holder, int position, Book item) {
@@ -116,6 +118,8 @@ public class BookListActivity extends MvpActivity<SearchView, SearchPresenter> i
         });
         refreshLayout.setEnableRefresh(false);
         refreshLayout.setEnableLoadMore(true);
+
+        load();
     }
 
     private void load() {
@@ -124,7 +128,7 @@ public class BookListActivity extends MvpActivity<SearchView, SearchPresenter> i
             //根绝类别搜索
             presenter.searchBook(null, params, page);
         } else if (type == 1) {
-            presenter.searchBook(params, params, page);
+            presenter.searchBook(params, null, page);
         }
 
     }
