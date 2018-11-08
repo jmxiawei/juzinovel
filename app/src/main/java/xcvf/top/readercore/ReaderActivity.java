@@ -145,6 +145,11 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
     protected void onResume() {
         super.onResume();
         fullScreenHandler.hide();
+        changeMode();
+    }
+
+    private void changeMode() {
+        new Colorful.Builder(this).create().setTheme(ModeProvider.getCurrentModeTheme());
     }
 
 

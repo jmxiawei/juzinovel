@@ -47,6 +47,19 @@ public interface BookService {
 
 
     /**
+     * 检查更新
+     *
+     * @param service
+     * @param vcode 版本号
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("reader/public/v1/")
+    Call<BaseModel<String>> update(@Field("service") String service
+            , @Field("versionCode") String vcode);
+
+
+    /**
      * 加载书架
      *
      * @param service

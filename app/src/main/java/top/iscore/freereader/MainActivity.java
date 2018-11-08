@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -15,7 +17,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.vector.update_app.UpdateAppManager;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,6 +32,7 @@ import top.iscore.freereader.mode.Colorful;
 import top.iscore.freereader.mode.SwitchModeListener;
 import top.iscore.freereader.mode.setter.TabIndicatorSetter;
 import top.iscore.freereader.mode.setter.ViewBackgroundColorSetter;
+import top.iscore.freereader.update.UpdateAppHttpUtil;
 import xcvf.top.readercore.bean.Mode;
 import xcvf.top.readercore.bean.User;
 import xcvf.top.readercore.styles.ModeProvider;
@@ -59,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.img_search)
     ImageView imgSearch;
     SwitchModeHandler switchModeListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 requestPermissions(permissions, 1);
             }
         }
-        switchModeListener = new SwitchModeHandler(mSwitchModeListener,this);
+        switchModeListener = new SwitchModeHandler(mSwitchModeListener, this);
         switchModeListener.onCreate();
         fragmentList.add(new BookshelfFragment());
         fragmentList.add(new FinderFragment());
@@ -86,7 +93,25 @@ public class MainActivity extends AppCompatActivity {
         viewpager.setAdapter(adapter);
         tablayout.setupWithViewPager(viewpager);
         TabUtils.setIndicator(this, tablayout, 64, 64, 0, 0);
+        checkUpdate();
+    }
 
+    private void checkUpdate() {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("vcode", "1");
+        new UpdateAppManager
+                .Builder()
+                //当前Activity
+                .setActivity(this)
+                //更新地址
+                .setUpdateUrl("http://iscore.top/reader/public/v1/")
+                .setParams(params)
+                .setThemeColor(getResources().getColor(R.color.colorAccent))
+                .setTopPic(R.mipmap.top_8)
+                //实现httpManager接口的对象
+                .setHttpManager(new UpdateAppHttpUtil())
+                .build()
+                .update();
     }
 
 
@@ -109,13 +134,13 @@ public class MainActivity extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.img_search:
-                Intent intent = new Intent(this,SearchActivity.class);
+                Intent intent = new Intent(this, SearchActivity.class);
                 startActivity(intent);
                 break;
             case R.id.img_more:
                 PopMenu popMenu = new PopMenu(this);
                 popMenu.setSwitchModeListener(mSwitchModeListener);
-                popMenu.showAtLocation(llToolbar, Gravity.TOP|Gravity.RIGHT,120,110);
+                popMenu.showAtLocation(llToolbar, Gravity.TOP | Gravity.RIGHT, 120, 110);
                 break;
             default:
                 break;
@@ -132,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 切换日间和夜间模式
      */
-    private SwitchModeListener mSwitchModeListener= new SwitchModeListener() {
+    private SwitchModeListener mSwitchModeListener = new SwitchModeListener() {
         @Override
         public void switchMode(Mode mode) {
             updateMode();
