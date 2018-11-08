@@ -17,7 +17,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.vector.update_app.UpdateAppBean;
 import com.vector.update_app.UpdateAppManager;
+import com.vector.update_app.listener.IUpdateDialogFragmentListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
