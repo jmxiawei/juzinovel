@@ -42,6 +42,7 @@ public interface BookService {
     @FormUrlEncoded
     @POST("reader/public/v1/")
     Call<BaseModel<Chapter>> getOneChapter(@Field("service") String service
+            , @Field("extern_bookid") String extern_bookid
             , @Field("chapterid") String chapterid
             , @Field("type") int type);
 

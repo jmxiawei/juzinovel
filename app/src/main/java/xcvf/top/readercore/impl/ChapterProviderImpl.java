@@ -41,21 +41,21 @@ public class ChapterProviderImpl implements IChapterProvider {
                     if (next == null) {
                         //接口请求  0本章节,1上一章节，2下一章节
                         LogUtils.e("本地没有，从服务器获取");
-                        next = getChapterFromNet(chapterid, 2);
+                        next = getChapterFromNet(bookid,chapterid, 2);
                     }
                     return next;
                 } else if (type == IChapterProvider.TYPE_PRE) {
                     Chapter pre = Chapter.getPreChapter(bookid, chapterid);
                     if (pre == null) {
                         LogUtils.e("本地没有，从服务器获取");
-                        pre = getChapterFromNet(chapterid, 1);
+                        pre = getChapterFromNet(bookid,chapterid, 1);
                     }
                     return pre;
                 } else if (type == IChapterProvider.TYPE_DETAIL) {
                     Chapter chp = Chapter.getChapter(bookid, chapterid);
                     if (chp == null) {
                         LogUtils.e("本地没有，从服务器获取");
-                        chp = getChapterFromNet(chapterid, 0);
+                        chp = getChapterFromNet(bookid,chapterid, 0);
                     }
                     return chp;
                 }
@@ -81,9 +81,9 @@ public class ChapterProviderImpl implements IChapterProvider {
      * @return
      * @throws Exception
      */
-    private Chapter getChapterFromNet(String chapterid, int type) throws Exception {
+    private Chapter getChapterFromNet(String bookid,String chapterid, int type) throws Exception {
         try {
-            Response<BaseModel<Chapter>> chapter = BaseHttpHandler.create().getProxy(BookService.class).getOneChapter("Chapter.getSingleChapter", chapterid, type).execute();
+            Response<BaseModel<Chapter>> chapter = BaseHttpHandler.create().getProxy(BookService.class).getOneChapter("Chapter.getSingleChapter",bookid, chapterid, type).execute();
             if (chapter != null && chapter.isSuccessful()) {
                 return chapter.body().getData();
             }
