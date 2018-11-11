@@ -11,4 +11,12 @@
         android:textSize="14sp"
         android:gravity="center"
         android:textColor="?attr/text_color"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_line"
+        android:layout_marginRight="@dimen/horizon_margin"
+        android:layout_marginLeft="@dimen/horizon_margin"/>
+
 </LinearLayout>

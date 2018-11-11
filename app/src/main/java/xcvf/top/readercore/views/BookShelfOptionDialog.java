@@ -24,14 +24,18 @@ import top.iscore.freereader.fragment.adapters.OnRecyclerViewItemClickListener;
 import top.iscore.freereader.fragment.adapters.ViewHolderCreator;
 import top.iscore.freereader.mode.Colorful;
 import top.iscore.freereader.mode.setter.ViewBackgroundColorSetter;
+import top.iscore.freereader.mvp.presenters.BookShelfPresenter;
+import top.iscore.freereader.mvp.view.BookShelfView;
 import xcvf.top.readercore.bean.Book;
 import xcvf.top.readercore.bean.Category;
+import xcvf.top.readercore.bean.User;
+import xcvf.top.readercore.services.DownloadIntentService;
 import xcvf.top.readercore.styles.ModeProvider;
 
 /**
  * 长按
  */
-public class BookShelfOptionDialog extends DialogFragment {
+public class BookShelfOptionDialog extends DialogFragment implements BookShelfView {
 
 
     @BindView(R.id.recycler)
@@ -40,7 +44,10 @@ public class BookShelfOptionDialog extends DialogFragment {
     BAdapter mBAdapter;
 
     Book mBook;
-
+    BookShelfPresenter mBookShelfPresenter;
+    @BindView(R.id.tv_book_name)
+    TextView tvBookName;
+    User mUser;
     public void setBook(Book mBook) {
         this.mBook = mBook;
     }
@@ -50,6 +57,9 @@ public class BookShelfOptionDialog extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.layout_dialog_bookshelf, container, false);
         unbinder = ButterKnife.bind(this, view);
+        mBookShelfPresenter = new BookShelfPresenter();
+        mBookShelfPresenter.attachView(this);
+        mUser = User.currentUser();
         initView();
         return view;
     }
@@ -62,33 +72,33 @@ public class BookShelfOptionDialog extends DialogFragment {
 
     private void changeMode() {
         new Colorful.Builder(getActivity())
-                .setter(new ViewBackgroundColorSetter(getView(),R.attr.colorPrimary))
+                .setter(new ViewBackgroundColorSetter(getView(), R.attr.colorPrimary))
                 .create()
                 .setTheme(ModeProvider.getCurrentModeTheme());
     }
 
     private void initView() {
+        tvBookName.setText(mBook.name);
         mBAdapter = new BAdapter();
-        recycler.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
+        recycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         recycler.setAdapter(mBAdapter);
         mBAdapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener<Category>() {
             @Override
             public void onRecyclerViewItemClick(CommonViewHolder holder, int position, Category item) {
-                if(item.getId() == 0){
-                    BookDetailActivity.toBookDetail(getActivity(),mBook.extern_bookid);
-                }else if(item.getId() == 1){
-
-                }else if(item.getId() == 2){
-
+                if (item.getId() == 0) {
+                    BookDetailActivity.toBookDetail(getActivity(), mBook.extern_bookid);
+                } else if (item.getId() == 1) {
+                    mBookShelfPresenter.deleteBookShelf(mUser!=null?mUser.getUid():null,mBook.shelfid);
+                } else if (item.getId() == 2) {
+                    DownloadIntentService.startDownloadService(getActivity(), mBook);
                 }
-
-
+                dismiss();
             }
         });
         List<Category> categories = new ArrayList<>();
-        categories.add(new Category(0,"书籍详情",0));
-        categories.add(new Category(1,"删除书籍",1));
-        categories.add(new Category(2,"缓存全本",2));
+        categories.add(new Category(0, "书籍详情", 0));
+        categories.add(new Category(1, "删除书籍", 1));
+        categories.add(new Category(2, "缓存全本", 2));
         mBAdapter.setDataList(categories);
 
     }
@@ -99,15 +109,50 @@ public class BookShelfOptionDialog extends DialogFragment {
         unbinder.unbind();
     }
 
+    @Override
+    public void onLoadBookDetail(Book book) {
 
-    private  static  class BAdapter extends BaseRecyclerAdapter<Category>{
+    }
+
+    @Override
+    public void onLoadAllCate(List<Category> categories) {
+
+    }
+
+    @Override
+    public void showLoading(boolean pullToRefresh) {
+
+    }
+
+    @Override
+    public void showContent() {
+
+    }
+
+    @Override
+    public void showError(Throwable e, boolean pullToRefresh) {
+
+    }
+
+    @Override
+    public void setData(List<Book> data) {
+
+    }
+
+    @Override
+    public void loadData(boolean pullToRefresh) {
+
+    }
+
+
+    private static class BAdapter extends BaseRecyclerAdapter<Category> {
 
         @Override
         public ViewHolderCreator createViewHolderCreator() {
             return new ViewHolderCreator() {
                 @Override
                 public CommonViewHolder<Category> createByViewGroupAndType(ViewGroup parent, int viewType, Object... p) {
-                    return new CommonViewHolder<Category>(parent.getContext(),parent,R.layout.item_bookshelf_option) {
+                    return new CommonViewHolder<Category>(parent.getContext(), parent, R.layout.item_bookshelf_option) {
                         @Override
                         public void bindData(Category category, int position) {
                             TextView tv_option = itemView.findViewById(R.id.tv_option);

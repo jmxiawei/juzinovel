@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bolts.Task;
+import top.iscore.freereader.mvp.presenters.BookReadPresenter;
+import top.iscore.freereader.mvp.presenters.BookShelfPresenter;
+import xcvf.top.readercore.bean.Book;
 import xcvf.top.readercore.bean.Chapter;
 import xcvf.top.readercore.daos.DBManager;
 import xcvf.top.readercore.daos.DaoSession;
@@ -28,7 +31,8 @@ public class DownloadIntentService extends IntentService {
     int mCount;
     int finishCount = 0;
     Chapter chapter;
-
+    Book  mBook;
+    BookReadPresenter bookReadPresenter;
     /**
      * 启动一个下载任务
      *
@@ -42,6 +46,18 @@ public class DownloadIntentService extends IntentService {
     }
 
 
+    /**
+     * 启动一个下载全本
+     *
+     * @param context
+     */
+    public static void startDownloadService(Context context,Book book) {
+        Intent intent = new Intent(context, DownloadIntentService.class);
+        intent.putExtra("book", book);
+        context.startService(intent);
+    }
+
+
     public DownloadIntentService() {
         super("DownloadIntentService");
     }
@@ -51,6 +67,14 @@ public class DownloadIntentService extends IntentService {
     protected void onHandleIntent(@Nullable final Intent intent) {
         if (intent == null) {
             return;
+        }
+        mBook =  intent.getParcelableExtra("book");
+        if(mBook != null){
+            bookReadPresenter = new BookReadPresenter();
+            chapterList = bookReadPresenter.loadChaptersSync(mBook,0);
+            if(chapterList!=null && chapterList.size()>0){
+                chapter = chapterList.get(0);
+            }
         }
         chapterList = intent.getParcelableArrayListExtra("chapters");
         chapter = intent.getParcelableExtra("chapter");
