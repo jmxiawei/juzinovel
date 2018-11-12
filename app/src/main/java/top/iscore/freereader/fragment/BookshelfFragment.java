@@ -40,6 +40,7 @@ import xcvf.top.readercore.bean.User;
 import xcvf.top.readercore.daos.BookDao;
 import xcvf.top.readercore.daos.DBManager;
 import xcvf.top.readercore.styles.ModeProvider;
+import xcvf.top.readercore.views.BookShelfOptionDialog;
 
 /**
  * 书架
@@ -107,6 +108,9 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
             @Override
             public void onRecyclerViewItemClick(CommonViewHolder holder, int position, Book item) {
 
+                BookShelfOptionDialog dialog = new BookShelfOptionDialog();
+                dialog.setBook(item);
+                dialog.show(getChildFragmentManager(),"BookShelfOptionDialog");
 
             }
         });

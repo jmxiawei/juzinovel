@@ -184,7 +184,7 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
                     if(mBook.shelfid==null){
                         presenter.addBookShelf(mUser.getUid(), mBook.getExtern_bookid());
                     }else {
-                        presenter.deleteBookShelf(mBook.shelfid);
+                        presenter.deleteBookShelf(mUser.getUid(),mBook.shelfid);
                     }
                 }
                 break;

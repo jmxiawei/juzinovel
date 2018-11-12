@@ -79,7 +79,7 @@ public interface BookService {
      */
     @FormUrlEncoded
     @POST("reader/public/v1/")
-    Call<BaseModel<String>> addBookShelf(@Field("service") String service
+    Call<BaseModel<Book>> addBookShelf(@Field("service") String service
             , @Field("userid") String userid
             , @Field("extern_bookid") String extern_bookid);
 
@@ -90,8 +90,8 @@ public interface BookService {
      */
     @FormUrlEncoded
     @POST("reader/public/v1/")
-    Call<BaseModel<String>> deleteBookShelf(@Field("service") String service
-            , @Field("shelfid") String shelfid);
+    Call<BaseModel<Book>> deleteBookShelf(@Field("service") String service
+            , @Field("userid") String userid, @Field("shelfid") String shelfid);
 
 
     /**

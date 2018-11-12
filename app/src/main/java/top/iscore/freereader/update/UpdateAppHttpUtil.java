@@ -35,8 +35,6 @@ public class UpdateAppHttpUtil implements HttpManager {
 
     @Override
     public void asyncGet(@NonNull String url, @NonNull Map<String, String> params, @NonNull final Callback callBack) {
-
-
         String vcode = params.get("vcode");
         BaseHttpHandler.create().getProxy(BookService.class).update("User.Update", vcode).enqueue(new retrofit2.Callback<BaseModel<String>>() {
             @Override

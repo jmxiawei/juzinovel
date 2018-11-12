@@ -199,6 +199,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
                 onTextConfigChangedListener.onChanged(TextConfig.TYPE_FONT_COLOR);
                 ModeProvider.save(config.getId(), dest);
                 fullScreenHandler.check();
+                changeMode();
             } else if (action == SettingAction.ACTION_FONT) {
                 PopFontSetting popFontSetting = new PopFontSetting(getBaseContext());
                 popFontSetting.setOnTextConfigChangedListener(onTextConfigChangedListener);
