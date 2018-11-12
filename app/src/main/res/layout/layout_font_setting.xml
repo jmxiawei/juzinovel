@@ -23,6 +23,7 @@
 
 
             <ImageView
+                android:id="@+id/img_min_brightness"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginLeft="@dimen/horizon_margin"
@@ -37,7 +38,7 @@
 
 
             <ImageView
-
+                android:id="@+id/img_max_brightness"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginLeft="@dimen/horizon_margin"

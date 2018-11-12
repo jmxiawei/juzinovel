@@ -15,6 +15,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -104,7 +105,6 @@ public class UpdateDialogFragment extends DialogFragment implements View.OnClick
         mActivity = getActivity();
 
 
-
     }
 
     @Override
@@ -191,20 +191,22 @@ public class UpdateDialogFragment extends DialogFragment implements View.OnClick
             final String dialogTitle = mUpdateApp.getUpdateDefDialogTitle();
             final String newVersion = mUpdateApp.getNewVersion();
             final String targetSize = mUpdateApp.getTargetSize();
-            final String updateLog = mUpdateApp.getUpdateLog();
+            String updateLog = mUpdateApp.getUpdateLog();
 
             String msg = "";
 
             if (!TextUtils.isEmpty(targetSize)) {
-                msg = "新版本大小：" + targetSize + "\n\n";
+                msg = "新版本大小：" + targetSize + "<br/><br/>";
             }
 
+
             if (!TextUtils.isEmpty(updateLog)) {
+                updateLog = updateLog.replace("\n", "<br/>");
                 msg += updateLog;
             }
 
             //更新内容
-            mContentTextView.setText(msg);
+            mContentTextView.setText(Html.fromHtml(msg));
             //标题
             mTitleTextView.setText(TextUtils.isEmpty(dialogTitle) ? String.format("是否升级到%s版本？", newVersion) : dialogTitle);
             //强制更新

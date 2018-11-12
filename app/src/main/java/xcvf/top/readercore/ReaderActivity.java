@@ -2,6 +2,7 @@ package xcvf.top.readercore;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -149,7 +150,10 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
     }
 
     private void changeMode() {
-        new Colorful.Builder(this).create().setTheme(ModeProvider.getCurrentModeTheme());
+        new Colorful.Builder(this)
+                .setter(new ViewBackgroundColorSetter(settingView.findViewById(R.id.ll_setting_top),R.attr.bg_dark))
+                .setter(new ViewBackgroundColorSetter(settingView.findViewById(R.id.ll_setting_bottom),R.attr.bg_dark))
+                .create().setTheme(ModeProvider.getCurrentModeTheme());
     }
 
 
@@ -201,7 +205,8 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
                 fullScreenHandler.check();
                 changeMode();
             } else if (action == SettingAction.ACTION_FONT) {
-                PopFontSetting popFontSetting = new PopFontSetting(getBaseContext());
+                Context act = ReaderActivity.this;
+                PopFontSetting popFontSetting = new PopFontSetting(act);
                 popFontSetting.setOnTextConfigChangedListener(onTextConfigChangedListener);
                 popFontSetting.showAsDropDown(getWindow().getDecorView());
             } else if (action == SettingAction.ACTION_CACHE) {

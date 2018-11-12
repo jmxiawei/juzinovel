@@ -44,6 +44,7 @@ android {
 
 dependencies {
     api rootProject.ext.supportV4
+    api files('libs/open_sdk_r6019_lite.jar')
     api files('libs/chardet.jar')
     api files('libs/jsoup-1.11.3.jar')
     api rootProject.ext.easypermissions

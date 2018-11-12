@@ -29,9 +29,9 @@ public class BrightnessHandler {
     /**
      * 设置当前屏幕的亮度
      * @param activity
-     * @param brightness
+     * @param brightness 1-255
      */
-    public static void setWindowBrightness(Activity activity,int brightness) {
+    public static void setWindowBrightness(Activity activity,float brightness) {
         Window window = activity.getWindow();
         WindowManager.LayoutParams lp = window.getAttributes();
         lp.screenBrightness = brightness / 255.0f;

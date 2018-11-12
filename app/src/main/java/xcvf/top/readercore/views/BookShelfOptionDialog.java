@@ -28,6 +28,7 @@ import top.iscore.freereader.mvp.presenters.BookShelfPresenter;
 import top.iscore.freereader.mvp.view.BookShelfView;
 import xcvf.top.readercore.bean.Book;
 import xcvf.top.readercore.bean.Category;
+import xcvf.top.readercore.bean.Mode;
 import xcvf.top.readercore.bean.User;
 import xcvf.top.readercore.services.DownloadIntentService;
 import xcvf.top.readercore.styles.ModeProvider;
@@ -156,6 +157,14 @@ public class BookShelfOptionDialog extends DialogFragment implements BookShelfVi
                         @Override
                         public void bindData(Category category, int position) {
                             TextView tv_option = itemView.findViewById(R.id.tv_option);
+                            Mode mode = ModeProvider.getCurrentMode();
+
+                            if(mode == Mode.DayMode){
+                                itemView.setBackgroundResource(R.drawable.btn_select_day);
+                            }else {
+                                itemView.setBackgroundResource(R.drawable.btn_select_night);
+                            }
+
                             tv_option.setText(category.getName());
                         }
                     };

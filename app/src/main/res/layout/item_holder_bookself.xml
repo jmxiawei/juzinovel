@@ -50,11 +50,11 @@
 
         <ImageView
             android:id="@+id/img_cover"
-            android:layout_width="40dp"
+            android:layout_width="44dp"
             android:layout_height="56dp"
-            android:layout_marginBottom="@dimen/vertical_margin"
+            android:layout_marginBottom="8dp"
             android:layout_marginLeft="@dimen/horizon_margin"
-            android:layout_marginTop="@dimen/vertical_margin"
+            android:layout_marginTop="8dp"
             android:scaleType="fitXY" />
 
         <LinearLayout
@@ -71,7 +71,7 @@
                 android:singleLine="true"
                 android:text="都市特种兵"
                 android:textColor="?attr/text_color"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
 
 
             <TextView
@@ -107,7 +107,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_marginLeft="@dimen/horizon_margin"
+        android:layout_marginLeft="72dp"
+        android:layout_marginRight="@dimen/horizon_margin"
         android:background="@color/color_line" />
 
 </LinearLayout>
