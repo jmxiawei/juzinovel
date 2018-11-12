@@ -35,31 +35,31 @@ android {
 }
 
 dependencies {
-    compile rootProject.ext.supportV4
-    compile files('libs/chardet.jar')
-    compile files('libs/jsoup-1.11.3.jar')
-    compile rootProject.ext.easypermissions
-    compile rootProject.ext.supportDesign
-    compile rootProject.ext.supportAppcompat
-    compile rootProject.ext.supportrecyclerview
-    compile rootProject.ext.butterknife
-    compile rootProject.ext.stetho
-    compile rootProject.ext.glide
-    compile rootProject.ext.utilcode
-    compile rootProject.ext.okhttp
-    compile rootProject.ext.retrofit
-    compile rootProject.ext.converterGson
-    compile rootProject.ext.stethoOkhttp3
-    compile rootProject.ext.stetho
-    compile rootProject.ext.bolts
-    compile rootProject.ext.greendao
-    compile rootProject.ext.wechat
-    implementation 'jp.wasabeef:glide-transformations:2.0.0'
+    api rootProject.ext.supportV4
+    api files('libs/chardet.jar')
+    api files('libs/jsoup-1.11.3.jar')
+    api rootProject.ext.easypermissions
+    api rootProject.ext.supportDesign
+    api rootProject.ext.supportAppcompat
+    api rootProject.ext.supportrecyclerview
+    api rootProject.ext.butterknife
+    api rootProject.ext.stetho
+    api rootProject.ext.glide
+    api rootProject.ext.utilcode
+    api rootProject.ext.okhttp
+    api rootProject.ext.retrofit
+    api rootProject.ext.converterGson
+    api rootProject.ext.stethoOkhttp3
+    api rootProject.ext.stetho
+    api rootProject.ext.bolts
+    api rootProject.ext.greendao
+    api 'com.android.support:appcompat-v7:28.0.0'
+    api 'jp.wasabeef:glide-transformations:2.0.0'
     annotationProcessor butterknifeAnnotationProcessor
-    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-14'
-    compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-14'
+    api 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-14'
+    api 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-14'
     //版本 23以上（必须）
-    compile rootProject.ext.mosby3Lce
-    compile rootProject.ext.mosby3queuing
-    compile 'com.qianwen:update-app:3.5.2'
+    api rootProject.ext.mosby3Lce
+    api rootProject.ext.mosby3queuing
+    api 'com.qianwen:update-app:3.5.2'
 }
