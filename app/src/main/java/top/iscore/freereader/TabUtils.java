@@ -3,6 +3,7 @@ package top.iscore.freereader;
 import android.app.Activity;
 import android.content.Context;
 import android.support.design.widget.TabLayout;
+import android.support.v7.widget.CardView;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -19,7 +20,7 @@ public class TabUtils {
 		Class<?> tabLayout = tabs.getClass();
 		Field tabStrip = null;
 		try {
-			tabStrip = tabLayout.getDeclaredField("mTabStrip");
+			tabStrip = tabLayout.getDeclaredField("slidingTabIndicator");
 		} catch (NoSuchFieldException e) {
 			e.printStackTrace();
 		}
@@ -31,7 +32,6 @@ public class TabUtils {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
-
 		int left = (int) (getDisplayMetrics(context).density * leftDip);
 		int right = (int) (getDisplayMetrics(context).density * rightDip);
 		int top=(int) (getDisplayMetrics(context).density * topDip);

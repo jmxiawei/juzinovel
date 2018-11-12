@@ -92,14 +92,14 @@ public class UpdateAppHttpUtil implements HttpManager {
 
         public ProgressRunnable(FileCallback callback, long total, long progress) {
             this.total = total;
-            this.progress = progress * 100 / total;
+            this.progress = progress;
             this.callback = callback;
         }
 
         @Override
         public void run() {
             if (callback != null) {
-                callback.onProgress(progress, 100);
+                callback.onProgress(progress*1.0f/total, total);
             }
         }
     }
@@ -119,7 +119,9 @@ public class UpdateAppHttpUtil implements HttpManager {
         if (file.exists()) {
             file.delete();
         }
-
+        if (fileCallback != null) {
+            fileCallback.onBefore();
+        }
         builder.build().newCall(request).enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(okhttp3.Call call, IOException e) {
@@ -143,7 +145,7 @@ public class UpdateAppHttpUtil implements HttpManager {
                                 long total_length = response.body().contentLength();
                                 long read_length = 0;
                                 int len;
-                                byte[] buff = new byte[128];
+                                byte[] buff = new byte[16*1024];
                                 while ((len = inputStream.read(buff)) != -1) {
                                     fileOutputStream.write(buff, 0, len);
                                     read_length += len;

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -12,7 +11,6 @@ import android.view.ViewConfiguration;
 
 import com.blankj.utilcode.util.LogUtils;
 
-import xcvf.top.readercore.bean.Chapter;
 import xcvf.top.readercore.bean.TextConfig;
 import xcvf.top.readercore.impl.ChapterPagerSnapHelper;
 import xcvf.top.readercore.impl.SimplePageChangeListener;

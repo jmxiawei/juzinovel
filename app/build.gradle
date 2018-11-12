@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao' // apply plugin
+apply plugin: 'idea'
 android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -32,6 +33,13 @@ android {
         targetGenDir 'src/main/java'//设置DaoMaster、DaoSession、Dao目录
     }
 
+
+    idea {
+        module {
+            downloadJavadoc = true
+            downloadSources = true
+        }
+    }
 }
 
 dependencies {
@@ -53,7 +61,6 @@ dependencies {
     api rootProject.ext.stetho
     api rootProject.ext.bolts
     api rootProject.ext.greendao
-    api 'com.android.support:appcompat-v7:28.0.0'
     api 'jp.wasabeef:glide-transformations:2.0.0'
     annotationProcessor butterknifeAnnotationProcessor
     api 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-14'
@@ -61,5 +68,5 @@ dependencies {
     //版本 23以上（必须）
     api rootProject.ext.mosby3Lce
     api rootProject.ext.mosby3queuing
-    api 'com.qianwen:update-app:3.5.2'
+    api project(':update-app')
 }
