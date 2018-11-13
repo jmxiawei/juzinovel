@@ -39,6 +39,7 @@ import top.iscore.freereader.update.UpdateAppHttpUtil;
 import xcvf.top.readercore.bean.Mode;
 import xcvf.top.readercore.bean.User;
 import xcvf.top.readercore.styles.ModeProvider;
+import xcvf.top.readercore.views.LoginDialog;
 import xcvf.top.readercore.views.PopMenu;
 
 
@@ -97,6 +98,10 @@ public class MainActivity extends AppCompatActivity {
         tablayout.setupWithViewPager(viewpager);
         TabUtils.setIndicator(this, tablayout, 64, 64, 0, 0);
         checkUpdate();
+
+
+        LoginDialog loginDialog = new LoginDialog();
+        loginDialog.show(getSupportFragmentManager(),"LoginDialog");
     }
 
     private void checkUpdate() {
