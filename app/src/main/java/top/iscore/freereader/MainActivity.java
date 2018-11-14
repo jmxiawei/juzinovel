@@ -69,21 +69,19 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.img_search)
     ImageView imgSearch;
     SwitchModeHandler switchModeListener;
+    User mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        User user = new User();
-        user.setUid("4");
-        user.setAccount("admin");
-        user.setNickname("用户007");
-        user.save();
+        mUser = User.currentUser();
         // startActivity(new Intent(this,ReaderActivity.class));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                    || checkSelfPermission(Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
+                    || checkSelfPermission(Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED
+                    ) {
                 requestPermissions(permissions, 1);
             }
         }
@@ -101,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         LoginDialog loginDialog = new LoginDialog();
-        loginDialog.show(getSupportFragmentManager(),"LoginDialog");
+        loginDialog.show(getSupportFragmentManager(), "LoginDialog");
     }
 
     private void checkUpdate() {

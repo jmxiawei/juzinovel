@@ -89,7 +89,7 @@ public class BookShelfOptionDialog extends DialogFragment implements BookShelfVi
                 if (item.getId() == 0) {
                     BookDetailActivity.toBookDetail(getActivity(), mBook.extern_bookid);
                 } else if (item.getId() == 1) {
-                    mBookShelfPresenter.deleteBookShelf(mUser!=null?mUser.getUid():null,mBook.shelfid);
+                    mBookShelfPresenter.deleteBookShelf(mUser.getUid(),mBook.shelfid,mBook.extern_bookid);
                 } else if (item.getId() == 2) {
                     DownloadIntentService.startDownloadService(getActivity(), mBook);
                 }

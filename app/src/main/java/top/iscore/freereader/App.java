@@ -51,7 +51,6 @@ public class App extends Application {
         });
     }
 
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -75,7 +74,6 @@ public class App extends Application {
                 LogUtils.e(crashInfo);
             }
         });
-
 
 
     }

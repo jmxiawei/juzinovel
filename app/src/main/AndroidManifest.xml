@@ -37,7 +37,8 @@
             android:name=".BookDetailActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".BookListActivity" />
-        <activity android:name=".CateListActivity"></activity>
+        <activity android:name=".CateListActivity"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name="com.tencent.tauth.AuthActivity"
@@ -48,7 +49,6 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data android:scheme="tencent101523134" />
                 <!-- 100380359 100381104 222222 -->
             </intent-filter>
@@ -56,7 +56,9 @@
 
         <activity
             android:name="com.tencent.connect.common.AssistActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="behind"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
     </application>
 

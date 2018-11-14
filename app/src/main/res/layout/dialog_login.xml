@@ -1,15 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/color_white"
-    android:gravity="center_horizontal"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btn_ok"
+
+    <ImageView
+        android:id="@+id/img_bg"
+        android:layout_width="250dp"
+        android:layout_height="375dp"
+        android:alpha="0.3"
+        android:background="@mipmap/ic_login_back"
+        android:scaleType="centerCrop" />
+
+
+    <ImageView
+        android:id="@+id/img_logo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp"
+        android:alpha="0.8"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_launcher_round" />
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="登录"/>
+        android:layout_centerHorizontal="true"
+        android:layout_alignBottom="@id/img_bg"
+        android:layout_marginBottom="48dp"
+        android:gravity="center"
+        android:orientation="vertical">
 
-</LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/vertical_margin"
+            android:text="选择登录方式:"
+            android:textColor="@color/colorAccent"
+            android:textSize="10sp" />
+
+        <LinearLayout
+            android:id="@+id/img_qq"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_login_item"
+            android:gravity="center_vertical|left"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/vertical_margin">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:alpha="0.8"
+                android:src="@mipmap/ic_qq_logo389" />
+
+        </LinearLayout>
+
+
+        <ProgressBar
+            android:id="@+id/ll_progress"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="16dp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

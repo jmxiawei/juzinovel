@@ -1,6 +1,5 @@
 package top.iscore.freereader.mvp.view;
 
-import com.hannesdorfmann.mosby3.mvp.MvpView;
 import com.hannesdorfmann.mosby3.mvp.lce.MvpLceView;
 
 import java.util.ArrayList;

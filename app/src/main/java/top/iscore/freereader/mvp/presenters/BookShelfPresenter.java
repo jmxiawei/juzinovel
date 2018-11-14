@@ -101,6 +101,14 @@ public class BookShelfPresenter extends MvpBasePresenter<BookShelfView> {
      */
     public void addBookShelf(String userid, String bookid) {
 
+
+        ifViewAttached(new ViewAction<BookShelfView>() {
+            @Override
+            public void run(@NonNull BookShelfView view) {
+                view.showLoading(true);
+            }
+        });
+
         Call<BaseModel<Book>> resCall = BaseHttpHandler.create().getProxy(BookService.class).addBookShelf("Book.addShelf", userid, bookid);
         resCall.enqueue(new Callback<BaseModel<Book>>() {
             @Override
@@ -109,6 +117,7 @@ public class BookShelfPresenter extends MvpBasePresenter<BookShelfView> {
                     @Override
                     public void run(@NonNull BookShelfView view) {
                         view.onLoadBookDetail(response.body().getData());
+                        view.showLoading(false);
                     }
                 });
             }
@@ -119,6 +128,7 @@ public class BookShelfPresenter extends MvpBasePresenter<BookShelfView> {
                     @Override
                     public void run(@NonNull BookShelfView view) {
                         view.onLoadBookDetail(null);
+                        view.showLoading(false);
                     }
                 });
             }
@@ -131,9 +141,15 @@ public class BookShelfPresenter extends MvpBasePresenter<BookShelfView> {
      *
      * @param shelfid
      */
-    public void deleteBookShelf(String userid,String shelfid) {
+    public void deleteBookShelf(String userid,String shelfid,String bookid) {
+        ifViewAttached(new ViewAction<BookShelfView>() {
+            @Override
+            public void run(@NonNull BookShelfView view) {
+                view.showLoading(true);
+            }
+        });
 
-        Call<BaseModel<Book>> resCall = BaseHttpHandler.create().getProxy(BookService.class).deleteBookShelf("Book.deleteShelf",userid, shelfid);
+        Call<BaseModel<Book>> resCall = BaseHttpHandler.create().getProxy(BookService.class).deleteBookShelf("Book.deleteShelf",userid, shelfid,bookid);
         resCall.enqueue(new Callback<BaseModel<Book>>() {
             @Override
             public void onResponse(Call<BaseModel<Book>> call, final Response<BaseModel<Book>> response) {
@@ -142,6 +158,7 @@ public class BookShelfPresenter extends MvpBasePresenter<BookShelfView> {
                     @Override
                     public void run(@NonNull BookShelfView view) {
                         view.onLoadBookDetail(response.body().getData());
+                        view.showLoading(false);
                     }
                 });
             }
@@ -152,6 +169,7 @@ public class BookShelfPresenter extends MvpBasePresenter<BookShelfView> {
                     @Override
                     public void run(@NonNull BookShelfView view) {
                         view.onLoadBookDetail(null);
+                        view.showLoading(false);
                     }
                 });
             }

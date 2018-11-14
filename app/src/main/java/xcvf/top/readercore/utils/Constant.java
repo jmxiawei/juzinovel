@@ -16,7 +16,7 @@ public class Constant {
     public static final String BOOK_ROOT_FOLDER = "/freeBook/";
 
     public static final String ACTION_SWITCH_MODE = "ACTION_SWITCH_MODE";
-
+    public static final String ACTION_LOGIN_INFO = "ACTION_LOGIN_INFO";
     public static String getChapterPath(String sub) {
         return Environment.getExternalStorageDirectory() + BOOK_ROOT_FOLDER + sub;
     }

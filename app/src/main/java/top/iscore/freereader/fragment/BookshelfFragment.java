@@ -23,6 +23,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import top.iscore.freereader.R;
 import top.iscore.freereader.SwitchModeHandler;
+import top.iscore.freereader.UserInfoChangedHandler;
 import top.iscore.freereader.adapter.BookShelfAdapter;
 import top.iscore.freereader.adapter.WhiteItemDivider;
 import top.iscore.freereader.fragment.adapters.CommonViewHolder;
@@ -46,7 +47,7 @@ import xcvf.top.readercore.views.BookShelfOptionDialog;
  * 书架
  * Created by xiaw on 2018/9/18.
  */
-public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPresenter> implements BookShelfView, OnRecyclerViewItemClickListener<Book>, SwitchModeListener {
+public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPresenter> implements BookShelfView, OnRecyclerViewItemClickListener<Book>, SwitchModeListener, UserInfoChangedHandler.OnUserChanged {
 
     @BindView(R.id.recycler)
     RecyclerView recycler;
@@ -56,6 +57,7 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
     BookShelfAdapter mBookShelfAdapter;
     User mUser;
     SwitchModeHandler switchModeListener;
+    UserInfoChangedHandler userInfoChangedHandler;
 
     @Nullable
     @Override
@@ -67,6 +69,7 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
         initViews(view);
         switchModeListener = new SwitchModeHandler(this, getActivity());
         switchModeListener.onCreate();
+        userInfoChangedHandler = UserInfoChangedHandler.newInstance(getActivity()).register().put(this);
         return view;
     }
 
@@ -110,7 +113,7 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
 
                 BookShelfOptionDialog dialog = new BookShelfOptionDialog();
                 dialog.setBook(item);
-                dialog.show(getChildFragmentManager(),"BookShelfOptionDialog");
+                dialog.show(getChildFragmentManager(), "BookShelfOptionDialog");
 
             }
         });
@@ -129,6 +132,8 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
         refreshLayout.setEnableRefresh(true);
         refreshLayout.setEnableAutoLoadMore(true);
         loadData(true);
+
+
     }
 
 
@@ -175,6 +180,7 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        userInfoChangedHandler.unregister();
         switchModeListener.onDestroy();
         unbinder.unbind();
     }
@@ -199,5 +205,11 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
     @Override
     public void onLoadAllCate(List<Category> categories) {
 
+    }
+
+    @Override
+    public void onChanged(User user) {
+        mUser = user;
+        showContent();
     }
 }

@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 
-
 import org.greenrobot.greendao.annotation.Entity;
 
 import java.util.List;
@@ -95,11 +94,16 @@ public class User implements Parcelable {
     }
 
     public static User currentUser() {
-        return DBManager.getDaoSession().getUserDao().queryBuilder()
+        User user = DBManager.getDaoSession().getUserDao().queryBuilder()
                 .orderDesc(UserDao.Properties.Update_time).limit(1).build().unique();
+        if (user == null) {
+            user = new User();
+        }
+        return user;
     }
 
     public void save() {
+        update_time = String.valueOf(System.currentTimeMillis());
         DBManager.getDaoSession().getUserDao().insertOrReplace(this);
     }
 

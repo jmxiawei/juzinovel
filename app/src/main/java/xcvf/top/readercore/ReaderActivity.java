@@ -9,6 +9,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import com.blankj.utilcode.util.LogUtils;
@@ -52,6 +54,7 @@ import xcvf.top.readercore.interfaces.OnTextConfigChangedListener;
 import xcvf.top.readercore.services.DownloadIntentService;
 import xcvf.top.readercore.styles.ModeConfig;
 import xcvf.top.readercore.styles.ModeProvider;
+import xcvf.top.readercore.views.ContentDialofg;
 import xcvf.top.readercore.views.PopDownload;
 import xcvf.top.readercore.views.PopFontSetting;
 import xcvf.top.readercore.views.ReaderSettingView;
@@ -119,10 +122,6 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
         settingView.setBook(book);
         settingView.setSettingListener(mSettingListener);
         settingView.ActivityonCreate(this);
-        if (mUser != null) {
-            mBookShelfPresenter = new BookShelfPresenter();
-            mBookShelfPresenter.addBookShelf(mUser.getUid(), book.extern_bookid);
-        }
         initReadView();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
@@ -135,6 +134,27 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
 
     }
 
+
+    @Override
+    public void onBackPressed() {
+        if (book.shelfid != null) {
+            ContentDialofg dialog = new ContentDialofg();
+            dialog.setTitle("添书").setContent("是否将本书加入书架?").setNegativeListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            }).setPositiveListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            }).show(getSupportFragmentManager(), "ContentDialofg");
+        } else {
+            super.onBackPressed();
+        }
+
+    }
 
     @Override
     protected void onDestroy() {
@@ -151,8 +171,8 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
 
     private void changeMode() {
         new Colorful.Builder(this)
-                .setter(new ViewBackgroundColorSetter(settingView.findViewById(R.id.ll_setting_top),R.attr.bg_dark))
-                .setter(new ViewBackgroundColorSetter(settingView.findViewById(R.id.ll_setting_bottom),R.attr.bg_dark))
+                .setter(new ViewBackgroundColorSetter(settingView.findViewById(R.id.ll_setting_top), R.attr.bg_dark))
+                .setter(new ViewBackgroundColorSetter(settingView.findViewById(R.id.ll_setting_bottom), R.attr.bg_dark))
                 .create().setTheme(ModeProvider.getCurrentModeTheme());
     }
 

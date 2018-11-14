@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/vertical_margin"
-            android:text="正在获取章节"
+            android:text="waiting"
             android:textColor="?attr/text_second_color"
             android:textSize="14sp" />
     </LinearLayout>

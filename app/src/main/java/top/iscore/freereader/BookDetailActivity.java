@@ -22,6 +22,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import top.iscore.freereader.adapter.PriorityBookAdapter;
+import top.iscore.freereader.fragment.LoadingFragment;
 import top.iscore.freereader.fragment.adapters.CommonViewHolder;
 import top.iscore.freereader.fragment.adapters.OnRecyclerViewItemClickListener;
 import top.iscore.freereader.mode.Colorful;
@@ -36,6 +37,7 @@ import xcvf.top.readercore.bean.Category;
 import xcvf.top.readercore.bean.Mode;
 import xcvf.top.readercore.bean.User;
 import xcvf.top.readercore.styles.ModeProvider;
+import xcvf.top.readercore.views.LoadingDialog;
 
 /**
  * 书籍详情
@@ -75,6 +77,7 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
     private String bookid;
     User mUser;
     Book mBook;
+    LoadingFragment loadingFragment;
 
     public static void toBookDetail(Activity activity, String bookid) {
         Intent intent = new Intent(activity, BookDetailActivity.class);
@@ -146,6 +149,7 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
                     tvAdd.setBackgroundResource(R.color.reader_light_notify_clor);
                     tvAdd.setText("-不追了");
                 } else {
+                    tvAdd.setText("-追更新");
                     tvAdd.setBackgroundResource(R.color.colorPrimaryDark);
                 }
             } else {
@@ -158,14 +162,13 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
                     tvAdd.setBackgroundResource(R.color.reader_light_notify_clor);
                     tvAdd.setText("-不追了");
                 } else {
+                    tvAdd.setText("-追更新");
                     tvAdd.setBackgroundResource(R.color.colorAccent);
                 }
             } else {
                 tvAdd.setBackgroundResource(R.color.colorAccent);
             }
         }
-
-
     }
 
     @OnClick({R.id.iv_back, R.id.tv_author, R.id.tv_add, R.id.tv_start, R.id.tv_more})
@@ -181,10 +184,10 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
                 break;
             case R.id.tv_add:
                 if (mUser != null && mBook != null) {
-                    if(mBook.shelfid==null){
+                    if (mBook.shelfid == null) {
                         presenter.addBookShelf(mUser.getUid(), mBook.getExtern_bookid());
-                    }else {
-                        presenter.deleteBookShelf(mUser.getUid(),mBook.shelfid);
+                    } else {
+                        presenter.deleteBookShelf(mUser.getUid(), mBook.shelfid,mBook.extern_bookid);
                     }
                 }
                 break;
@@ -218,6 +221,14 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
 
     @Override
     public void showLoading(boolean pullToRefresh) {
+        if (pullToRefresh) {
+            loadingFragment = LoadingFragment.newOne("waiting...");
+            loadingFragment.show(getSupportFragmentManager(), "LoadingFragment");
+        } else {
+            if (loadingFragment != null) {
+                loadingFragment.dismiss();
+            }
+        }
 
     }
 

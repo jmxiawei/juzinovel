@@ -40,4 +40,7 @@
     <color name="color_light_green">#67ff67</color>
     <color name="color_green">#00d700</color>
 
+
+    <color name="light_white">#55ffffff</color>
+
 </resources>
