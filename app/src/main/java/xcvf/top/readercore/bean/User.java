@@ -23,7 +23,7 @@ public class User implements Parcelable {
 
     String nickname;
     @Unique
-    String uid;
+    int uid;
     String avatar;
     String account;
     String gender;
@@ -48,11 +48,11 @@ public class User implements Parcelable {
         return this;
     }
 
-    public String getUid() {
+    public  int getUid() {
         return uid;
     }
 
-    public User setUid(String uid) {
+    public User setUid(int uid) {
         this.uid = uid;
         return this;
     }
@@ -118,7 +118,7 @@ public class User implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.nickname);
-        dest.writeString(this.uid);
+        dest.writeInt(this.uid);
         dest.writeString(this.avatar);
         dest.writeString(this.account);
         dest.writeString(this.gender);
@@ -128,7 +128,7 @@ public class User implements Parcelable {
 
     protected User(Parcel in) {
         this.nickname = in.readString();
-        this.uid = in.readString();
+        this.uid = in.readInt();
         this.avatar = in.readString();
         this.account = in.readString();
         this.gender = in.readString();
@@ -136,9 +136,9 @@ public class User implements Parcelable {
         this.update_time = in.readString();
     }
 
-    @Generated(hash = 1186859381)
-    public User(String nickname, String uid, String avatar, String account, String gender, String token,
-                String update_time) {
+    @Generated(hash = 1687928020)
+    public User(String nickname, int uid, String avatar, String account, String gender,
+            String token, String update_time) {
         this.nickname = nickname;
         this.uid = uid;
         this.avatar = avatar;
@@ -147,6 +147,7 @@ public class User implements Parcelable {
         this.token = token;
         this.update_time = update_time;
     }
+
 
     public static final Creator<User> CREATOR = new Creator<User>() {
         @Override

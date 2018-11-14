@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import org.greenrobot.greendao.annotation.Generated;
 
+import xcvf.top.readercore.daos.BookDao;
+import xcvf.top.readercore.daos.DBManager;
+
 /**本地书架
  * Created by xiaw on 2018/6/29.
  */
@@ -26,7 +29,7 @@ public class Book  implements Parcelable {
     public List<Book> priorities = new ArrayList<>();
 
     public int bookid;
-    public String cover  ;
+    public String cover;
     @Unique
     public String shelfid ;
     public String userid;
@@ -134,6 +137,15 @@ public class Book  implements Parcelable {
 
     public void setLatest_chapter_name(String latest_chapter_name) {
         this.latest_chapter_name = latest_chapter_name;
+    }
+
+    public void save(String userid){
+      Book book =   DBManager.getDaoSession().getBookDao().queryBuilder().where(BookDao.Properties.Extern_bookid.eq(extern_bookid))
+                .where(BookDao.Properties.Userid.eq(userid)).limit(1).unique();
+      if(book==null){
+          setUserid(userid);
+          DBManager.getDaoSession().getBookDao().insert(this);
+      }
     }
 
     public String getLatest_chapter_url() {

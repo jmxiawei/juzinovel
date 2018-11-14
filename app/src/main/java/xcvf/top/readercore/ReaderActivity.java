@@ -142,12 +142,17 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
             dialog.setTitle("添书").setContent("是否将本书加入书架?").setNegativeListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                        finish();
                 }
             }).setPositiveListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                     if(mUser!=null){
+                         mBookShelfPresenter.addBookShelf(mUser.getUid(),book.extern_bookid);
+                     }else {
+                         book.save(null);
+                     }
+                     finish();
                 }
             }).show(getSupportFragmentManager(), "ContentDialofg");
         } else {
@@ -200,7 +205,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
         @Override
         public void onSettingChanged(SettingAction action) {
             if (action == SettingAction.ACTION_BACK) {
-                finish();
+                onBackPressed();
             } else if (action == SettingAction.ACTION_CHAPTER) {
                 chapterFragment = new ChapterFragment();
                 chapterFragment.setBook(book);

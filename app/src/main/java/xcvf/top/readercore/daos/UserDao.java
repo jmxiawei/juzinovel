@@ -25,7 +25,7 @@ public class UserDao extends AbstractDao<User, Void> {
      */
     public static class Properties {
         public final static Property Nickname = new Property(0, String.class, "nickname", false, "NICKNAME");
-        public final static Property Uid = new Property(1, String.class, "uid", false, "UID");
+        public final static Property Uid = new Property(1, int.class, "uid", false, "UID");
         public final static Property Avatar = new Property(2, String.class, "avatar", false, "AVATAR");
         public final static Property Account = new Property(3, String.class, "account", false, "ACCOUNT");
         public final static Property Gender = new Property(4, String.class, "gender", false, "GENDER");
@@ -47,7 +47,7 @@ public class UserDao extends AbstractDao<User, Void> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"USER\" (" + //
                 "\"NICKNAME\" TEXT," + // 0: nickname
-                "\"UID\" TEXT UNIQUE ," + // 1: uid
+                "\"UID\" INTEGER NOT NULL UNIQUE ," + // 1: uid
                 "\"AVATAR\" TEXT," + // 2: avatar
                 "\"ACCOUNT\" TEXT," + // 3: account
                 "\"GENDER\" TEXT," + // 4: gender
@@ -69,11 +69,7 @@ public class UserDao extends AbstractDao<User, Void> {
         if (nickname != null) {
             stmt.bindString(1, nickname);
         }
- 
-        String uid = entity.getUid();
-        if (uid != null) {
-            stmt.bindString(2, uid);
-        }
+        stmt.bindLong(2, entity.getUid());
  
         String avatar = entity.getAvatar();
         if (avatar != null) {
@@ -109,11 +105,7 @@ public class UserDao extends AbstractDao<User, Void> {
         if (nickname != null) {
             stmt.bindString(1, nickname);
         }
- 
-        String uid = entity.getUid();
-        if (uid != null) {
-            stmt.bindString(2, uid);
-        }
+        stmt.bindLong(2, entity.getUid());
  
         String avatar = entity.getAvatar();
         if (avatar != null) {
@@ -150,7 +142,7 @@ public class UserDao extends AbstractDao<User, Void> {
     public User readEntity(Cursor cursor, int offset) {
         User entity = new User( //
             cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // nickname
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // uid
+            cursor.getInt(offset + 1), // uid
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // avatar
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // account
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // gender
@@ -163,7 +155,7 @@ public class UserDao extends AbstractDao<User, Void> {
     @Override
     public void readEntity(Cursor cursor, User entity, int offset) {
         entity.setNickname(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
-        entity.setUid(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setUid(cursor.getInt(offset + 1));
         entity.setAvatar(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setAccount(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setGender(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
