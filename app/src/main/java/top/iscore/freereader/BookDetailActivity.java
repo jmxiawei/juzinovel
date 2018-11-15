@@ -93,7 +93,7 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
         ButterKnife.bind(this);
         initView();
         mUser = User.currentUser();
-        presenter.loadBookDetail(mUser == null ? null : mUser.getUid(), bookid);
+        presenter.loadBookDetail(mUser.getUid(), bookid);
     }
 
     private void initView() {

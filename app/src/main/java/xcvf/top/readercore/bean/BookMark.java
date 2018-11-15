@@ -24,7 +24,7 @@ public class BookMark  implements Parcelable {
     long time_stamp;
     @Unique
     String unique_key;
-    String userid;
+    int userid;
     String extern_bookid;
     String chapterid;
 
@@ -53,13 +53,13 @@ public class BookMark  implements Parcelable {
         DBManager.getDaoSession().getBookMarkDao().insertOrReplace(this);
     }
 
-    public BookMark(String userid, String extern_bookid) {
+    public BookMark(int userid, String extern_bookid) {
         this.userid = userid;
         this.extern_bookid = extern_bookid;
         unique_key = EncryptUtils.encryptMD5ToString((userid + extern_bookid));
     }
 
-    public static BookMark getMark(Book book, String userid) {
+    public static BookMark getMark(Book book, int userid) {
         String uniquekey = EncryptUtils.encryptMD5ToString((userid + book.extern_bookid));
         return DBManager.getDaoSession().getBookMarkDao().queryBuilder().where(BookMarkDao.Properties.Unique_key.eq(uniquekey))
                 .limit(1).build().unique();
@@ -96,7 +96,7 @@ public class BookMark  implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(this.time_stamp);
         dest.writeString(this.unique_key);
-        dest.writeString(this.userid);
+        dest.writeInt(this.userid);
         dest.writeString(this.extern_bookid);
         dest.writeString(this.chapterid);
         dest.writeInt(this.page);
@@ -110,26 +110,25 @@ public class BookMark  implements Parcelable {
         this.unique_key = unique_key;
     }
 
-    public String getUserid() {
+    public int getUserid() {
         return this.userid;
     }
 
-    public void setUserid(String userid) {
+    public void setUserid(int userid) {
         this.userid = userid;
     }
 
     protected BookMark(Parcel in) {
         this.time_stamp = in.readLong();
         this.unique_key = in.readString();
-        this.userid = in.readString();
+        this.userid = in.readInt();
         this.extern_bookid = in.readString();
         this.chapterid = in.readString();
         this.page = in.readInt();
     }
 
-    @Generated(hash = 173078373)
-    public BookMark(long time_stamp, String unique_key, String userid, String extern_bookid,
-            String chapterid, int page) {
+    @Generated(hash = 31109284)
+    public BookMark(long time_stamp, String unique_key, int userid, String extern_bookid, String chapterid, int page) {
         this.time_stamp = time_stamp;
         this.unique_key = unique_key;
         this.userid = userid;
@@ -137,6 +136,8 @@ public class BookMark  implements Parcelable {
         this.chapterid = chapterid;
         this.page = page;
     }
+
+
 
     public static final Creator<BookMark> CREATOR = new Creator<BookMark>() {
         @Override

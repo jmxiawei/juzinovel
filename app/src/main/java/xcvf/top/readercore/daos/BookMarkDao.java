@@ -26,7 +26,7 @@ public class BookMarkDao extends AbstractDao<BookMark, Void> {
     public static class Properties {
         public final static Property Time_stamp = new Property(0, long.class, "time_stamp", false, "TIME_STAMP");
         public final static Property Unique_key = new Property(1, String.class, "unique_key", false, "UNIQUE_KEY");
-        public final static Property Userid = new Property(2, String.class, "userid", false, "USERID");
+        public final static Property Userid = new Property(2, int.class, "userid", false, "USERID");
         public final static Property Extern_bookid = new Property(3, String.class, "extern_bookid", false, "EXTERN_BOOKID");
         public final static Property Chapterid = new Property(4, String.class, "chapterid", false, "CHAPTERID");
         public final static Property Page = new Property(5, int.class, "page", false, "PAGE");
@@ -47,7 +47,7 @@ public class BookMarkDao extends AbstractDao<BookMark, Void> {
         db.execSQL("CREATE TABLE " + constraint + "\"BOOK_MARK\" (" + //
                 "\"TIME_STAMP\" INTEGER NOT NULL ," + // 0: time_stamp
                 "\"UNIQUE_KEY\" TEXT UNIQUE ," + // 1: unique_key
-                "\"USERID\" TEXT," + // 2: userid
+                "\"USERID\" INTEGER NOT NULL ," + // 2: userid
                 "\"EXTERN_BOOKID\" TEXT," + // 3: extern_bookid
                 "\"CHAPTERID\" TEXT," + // 4: chapterid
                 "\"PAGE\" INTEGER NOT NULL );"); // 5: page
@@ -68,11 +68,7 @@ public class BookMarkDao extends AbstractDao<BookMark, Void> {
         if (unique_key != null) {
             stmt.bindString(2, unique_key);
         }
- 
-        String userid = entity.getUserid();
-        if (userid != null) {
-            stmt.bindString(3, userid);
-        }
+        stmt.bindLong(3, entity.getUserid());
  
         String extern_bookid = entity.getExtern_bookid();
         if (extern_bookid != null) {
@@ -95,11 +91,7 @@ public class BookMarkDao extends AbstractDao<BookMark, Void> {
         if (unique_key != null) {
             stmt.bindString(2, unique_key);
         }
- 
-        String userid = entity.getUserid();
-        if (userid != null) {
-            stmt.bindString(3, userid);
-        }
+        stmt.bindLong(3, entity.getUserid());
  
         String extern_bookid = entity.getExtern_bookid();
         if (extern_bookid != null) {
@@ -123,7 +115,7 @@ public class BookMarkDao extends AbstractDao<BookMark, Void> {
         BookMark entity = new BookMark( //
             cursor.getLong(offset + 0), // time_stamp
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // unique_key
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // userid
+            cursor.getInt(offset + 2), // userid
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // extern_bookid
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // chapterid
             cursor.getInt(offset + 5) // page
@@ -135,7 +127,7 @@ public class BookMarkDao extends AbstractDao<BookMark, Void> {
     public void readEntity(Cursor cursor, BookMark entity, int offset) {
         entity.setTime_stamp(cursor.getLong(offset + 0));
         entity.setUnique_key(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setUserid(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setUserid(cursor.getInt(offset + 2));
         entity.setExtern_bookid(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setChapterid(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setPage(cursor.getInt(offset + 5));
