@@ -9,8 +9,9 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
@@ -27,11 +28,15 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import top.iscore.freereader.R;
+import top.iscore.freereader.UserInfoChangedHandler;
 import top.iscore.freereader.mvp.presenters.UserPresenter;
 import top.iscore.freereader.mvp.view.ILoginView;
 import xcvf.top.readercore.bean.User;
 import xcvf.top.readercore.utils.Constant;
 
+/**
+ * 登录弹框
+ */
 public class LoginDialog extends DialogFragment implements ILoginView {
 
 
@@ -43,6 +48,19 @@ public class LoginDialog extends DialogFragment implements ILoginView {
     UserPresenter userPresenter;
     @BindView(R.id.ll_progress)
     ProgressBar llProgress;
+    UserInfoChangedHandler.OnUserChanged mFinishTask;
+    @BindView(R.id.ll_qq)
+    LinearLayout llQq;
+    @BindView(R.id.tv_logout)
+    TextView tvLogout;
+    @BindView(R.id.ll_logout)
+    LinearLayout llLogout;
+    User mUser;
+
+    public LoginDialog setFinishTask(UserInfoChangedHandler.OnUserChanged mFinishTask) {
+        this.mFinishTask = mFinishTask;
+        return this;
+    }
 
     @Nullable
     @Override
@@ -52,7 +70,20 @@ public class LoginDialog extends DialogFragment implements ILoginView {
         mTencent = Tencent.createInstance("101523134", getContext().getApplicationContext());
         userPresenter = new UserPresenter();
         userPresenter.attachView(this);
+
+        initView();
         return view;
+    }
+
+    private void initView() {
+        mUser = User.currentUser();
+        if (mUser.getUid() > 0) {
+            llQq.setVisibility(View.GONE);
+            llLogout.setVisibility(View.VISIBLE);
+        } else {
+            llLogout.setVisibility(View.GONE);
+            llQq.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -123,8 +154,10 @@ public class LoginDialog extends DialogFragment implements ILoginView {
     public void loginAction(String source, boolean start) {
         if (start) {
             llProgress.setVisibility(View.VISIBLE);
+            imgQq.setEnabled(false);
         } else {
             llProgress.setVisibility(View.GONE);
+            imgQq.setEnabled(true);
         }
     }
 
@@ -132,9 +165,27 @@ public class LoginDialog extends DialogFragment implements ILoginView {
     public void onLoginSuccess(User user) {
         if (user != null) {
             user.save();
-            LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(Constant.ACTION_LOGIN_INFO));
+            Intent intent = new Intent(Constant.ACTION_LOGIN_INFO);
+            intent.putExtra("user", user);
+            LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
+            if (mFinishTask != null) {
+                mFinishTask.onChanged(user);
+            }
             dismiss();
         }
         loginAction("qq", false);
+    }
+
+    @OnClick(R.id.tv_logout)
+    public void onViewClicked1() {
+        mTencent.logout(getContext());
+        mUser.deleteUser();
+        Intent intent = new Intent(Constant.ACTION_LOGIN_INFO);
+        intent.putExtra("user", User.currentUser());
+        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
+        if (mFinishTask != null) {
+            mFinishTask.onChanged(User.currentUser());
+        }
+        dismiss();
     }
 }

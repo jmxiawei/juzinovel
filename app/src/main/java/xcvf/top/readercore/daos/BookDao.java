@@ -37,6 +37,7 @@ public class BookDao extends AbstractDao<Book, Void> {
         public final static Property Keywords = new Property(10, String.class, "keywords", false, "KEYWORDS");
         public final static Property Extern_bookid = new Property(11, String.class, "extern_bookid", false, "EXTERN_BOOKID");
         public final static Property Update_time = new Property(12, String.class, "update_time", false, "UPDATE_TIME");
+        public final static Property UniqueKey = new Property(13, String.class, "uniqueKey", false, "UNIQUE_KEY");
     }
 
 
@@ -54,7 +55,7 @@ public class BookDao extends AbstractDao<Book, Void> {
         db.execSQL("CREATE TABLE " + constraint + "\"BOOK\" (" + //
                 "\"BOOKID\" INTEGER NOT NULL ," + // 0: bookid
                 "\"COVER\" TEXT," + // 1: cover
-                "\"SHELFID\" TEXT UNIQUE ," + // 2: shelfid
+                "\"SHELFID\" TEXT," + // 2: shelfid
                 "\"USERID\" TEXT," + // 3: userid
                 "\"NAME\" TEXT," + // 4: name
                 "\"AUTHOR\" TEXT," + // 5: author
@@ -64,7 +65,8 @@ public class BookDao extends AbstractDao<Book, Void> {
                 "\"LATEST_CHAPTER_URL\" TEXT," + // 9: latest_chapter_url
                 "\"KEYWORDS\" TEXT," + // 10: keywords
                 "\"EXTERN_BOOKID\" TEXT," + // 11: extern_bookid
-                "\"UPDATE_TIME\" TEXT);"); // 12: update_time
+                "\"UPDATE_TIME\" TEXT," + // 12: update_time
+                "\"UNIQUE_KEY\" TEXT UNIQUE );"); // 13: uniqueKey
     }
 
     /** Drops the underlying database table. */
@@ -137,6 +139,11 @@ public class BookDao extends AbstractDao<Book, Void> {
         if (update_time != null) {
             stmt.bindString(13, update_time);
         }
+ 
+        String uniqueKey = entity.getUniqueKey();
+        if (uniqueKey != null) {
+            stmt.bindString(14, uniqueKey);
+        }
     }
 
     @Override
@@ -203,6 +210,11 @@ public class BookDao extends AbstractDao<Book, Void> {
         if (update_time != null) {
             stmt.bindString(13, update_time);
         }
+ 
+        String uniqueKey = entity.getUniqueKey();
+        if (uniqueKey != null) {
+            stmt.bindString(14, uniqueKey);
+        }
     }
 
     @Override
@@ -225,7 +237,8 @@ public class BookDao extends AbstractDao<Book, Void> {
             cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // latest_chapter_url
             cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // keywords
             cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // extern_bookid
-            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12) // update_time
+            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // update_time
+            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13) // uniqueKey
         );
         return entity;
     }
@@ -245,6 +258,7 @@ public class BookDao extends AbstractDao<Book, Void> {
         entity.setKeywords(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
         entity.setExtern_bookid(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
         entity.setUpdate_time(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
+        entity.setUniqueKey(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
      }
     
     @Override

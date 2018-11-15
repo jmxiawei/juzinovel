@@ -96,10 +96,6 @@ public class MainActivity extends AppCompatActivity {
         tablayout.setupWithViewPager(viewpager);
         TabUtils.setIndicator(this, tablayout, 64, 64, 0, 0);
         checkUpdate();
-
-
-        LoginDialog loginDialog = new LoginDialog();
-        loginDialog.show(getSupportFragmentManager(), "LoginDialog");
     }
 
     private void checkUpdate() {

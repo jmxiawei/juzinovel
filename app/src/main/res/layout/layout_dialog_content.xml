@@ -27,12 +27,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="64dp"
-<<<<<<< HEAD
         android:gravity="left|top"
-        android:padding="@dimen/vertical_margin"
-=======
         android:padding="@dimen/horizon_margin"
->>>>>>> 70c66e2705cf3e80ca24ee59215388e696c5e2c0
         android:textColor="?attr/text_color"
         android:textSize="14sp" />
 

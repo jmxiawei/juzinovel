@@ -6,6 +6,7 @@ public enum  SettingAction {
     ACTION_CACHE,
     ACTION_FONT,
     ACTION_CHAPTER,
-    ACTION_BACK
+    ACTION_BACK,
+    ACTION_DETAIL
 
 }

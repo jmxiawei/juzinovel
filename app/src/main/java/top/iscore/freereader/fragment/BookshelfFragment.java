@@ -77,19 +77,12 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
     public void onResume() {
         super.onResume();
         updateMode();
+        loadData(true);
     }
 
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (!hidden) {
-            LogUtils.e("--------------------onHiddenChanged--------------");
-        }
-    }
 
     private void updateMode() {
-        LogUtils.e("--------------------updateMode--------------" + R.id.tv_name + "-----" + R.id.tv_chapter_name);
+        LogUtils.e("--------------------updateMode--------------");
         new Colorful.Builder(this)
                 .backgroundColor(R.id.fragment_content, R.attr.colorPrimary)
                 .setter(new ViewGroupSetter(recycler, R.attr.colorPrimary)
@@ -112,6 +105,7 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
             public void onRecyclerViewItemClick(CommonViewHolder holder, int position, Book item) {
 
                 BookShelfOptionDialog dialog = new BookShelfOptionDialog();
+                dialog.setBookShelfView(BookshelfFragment.this);
                 dialog.setBook(item);
                 dialog.show(getChildFragmentManager(), "BookShelfOptionDialog");
 
@@ -131,9 +125,6 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
         });
         refreshLayout.setEnableRefresh(true);
         refreshLayout.setEnableAutoLoadMore(true);
-        loadData(true);
-
-
     }
 
 
@@ -162,7 +153,7 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
     @Override
     public void setData(List<Book> data) {
         if (data != null) {
-            DBManager.getDaoSession().getBookDao().insertOrReplaceInTx(data);
+            Book.save(mUser.getUid() + "", data);
         }
         refreshLayout.finishRefresh();
         refreshLayout.finishLoadMore();
@@ -199,7 +190,7 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
 
     @Override
     public void onLoadBookDetail(Book book) {
-
+        showContent();
     }
 
     @Override

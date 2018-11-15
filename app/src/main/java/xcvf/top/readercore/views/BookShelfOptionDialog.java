@@ -18,6 +18,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import top.iscore.freereader.BookDetailActivity;
 import top.iscore.freereader.R;
+import top.iscore.freereader.UserInfoChangedHandler;
 import top.iscore.freereader.fragment.adapters.BaseRecyclerAdapter;
 import top.iscore.freereader.fragment.adapters.CommonViewHolder;
 import top.iscore.freereader.fragment.adapters.OnRecyclerViewItemClickListener;
@@ -36,7 +37,7 @@ import xcvf.top.readercore.styles.ModeProvider;
 /**
  * 长按
  */
-public class BookShelfOptionDialog extends DialogFragment implements BookShelfView {
+public class BookShelfOptionDialog extends DialogFragment {
 
 
     @BindView(R.id.recycler)
@@ -49,6 +50,14 @@ public class BookShelfOptionDialog extends DialogFragment implements BookShelfVi
     @BindView(R.id.tv_book_name)
     TextView tvBookName;
     User mUser;
+
+    BookShelfView bookShelfView;
+
+    public BookShelfOptionDialog setBookShelfView(BookShelfView bookShelfView) {
+        this.bookShelfView = bookShelfView;
+        return this;
+    }
+
     public void setBook(Book mBook) {
         this.mBook = mBook;
     }
@@ -59,7 +68,7 @@ public class BookShelfOptionDialog extends DialogFragment implements BookShelfVi
         View view = inflater.inflate(R.layout.layout_dialog_bookshelf, container, false);
         unbinder = ButterKnife.bind(this, view);
         mBookShelfPresenter = new BookShelfPresenter();
-        mBookShelfPresenter.attachView(this);
+        mBookShelfPresenter.attachView(this.bookShelfView);
         mUser = User.currentUser();
         initView();
         return view;
@@ -109,42 +118,6 @@ public class BookShelfOptionDialog extends DialogFragment implements BookShelfVi
         super.onDestroyView();
         unbinder.unbind();
     }
-
-    @Override
-    public void onLoadBookDetail(Book book) {
-
-    }
-
-    @Override
-    public void onLoadAllCate(List<Category> categories) {
-
-    }
-
-    @Override
-    public void showLoading(boolean pullToRefresh) {
-
-    }
-
-    @Override
-    public void showContent() {
-
-    }
-
-    @Override
-    public void showError(Throwable e, boolean pullToRefresh) {
-
-    }
-
-    @Override
-    public void setData(List<Book> data) {
-
-    }
-
-    @Override
-    public void loadData(boolean pullToRefresh) {
-
-    }
-
 
     private static class BAdapter extends BaseRecyclerAdapter<Category> {
 

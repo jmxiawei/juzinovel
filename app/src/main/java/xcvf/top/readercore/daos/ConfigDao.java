@@ -41,7 +41,7 @@ public class ConfigDao extends AbstractDao<Config, Void> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"CONFIG\" (" + //
-                "\"NAME\" TEXT," + // 0: name
+                "\"NAME\" TEXT UNIQUE ," + // 0: name
                 "\"VALUE\" TEXT);"); // 1: value
     }
 
