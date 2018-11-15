@@ -9,7 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -54,7 +53,7 @@ import xcvf.top.readercore.interfaces.OnTextConfigChangedListener;
 import xcvf.top.readercore.services.DownloadIntentService;
 import xcvf.top.readercore.styles.ModeConfig;
 import xcvf.top.readercore.styles.ModeProvider;
-import xcvf.top.readercore.views.ContentDialofg;
+import xcvf.top.readercore.views.ContentDialog;
 import xcvf.top.readercore.views.PopDownload;
 import xcvf.top.readercore.views.PopFontSetting;
 import xcvf.top.readercore.views.ReaderSettingView;
@@ -138,7 +137,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
     @Override
     public void onBackPressed() {
         if (book.shelfid != null) {
-            ContentDialofg dialog = new ContentDialofg();
+            ContentDialog dialog = new ContentDialog();
             dialog.setTitle("添书").setContent("是否将本书加入书架?").setNegativeListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -149,7 +148,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
                 public void onClick(View v) {
 
                 }
-            }).show(getSupportFragmentManager(), "ContentDialofg");
+            }).show(getSupportFragmentManager(), "ContentDialog");
         } else {
             super.onBackPressed();
         }

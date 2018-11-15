@@ -22,7 +22,7 @@ import xcvf.top.readercore.styles.ModeProvider;
 /**
  * 带确认和取消按钮的
  */
-public class ContentDialofg extends DialogFragment {
+public class ContentDialog extends DialogFragment {
 
 
     @BindView(R.id.tv_book_name)
@@ -46,7 +46,7 @@ public class ContentDialofg extends DialogFragment {
         return negativeListener;
     }
 
-    public ContentDialofg setNegativeListener(View.OnClickListener negativeListener) {
+    public ContentDialog setNegativeListener(View.OnClickListener negativeListener) {
         this.negativeListener = negativeListener;
         return this;
     }
@@ -55,7 +55,7 @@ public class ContentDialofg extends DialogFragment {
         return positiveListener;
     }
 
-    public ContentDialofg setPositiveListener(View.OnClickListener positiveListener) {
+    public ContentDialog setPositiveListener(View.OnClickListener positiveListener) {
         this.positiveListener = positiveListener;
         return this;
     }
@@ -64,7 +64,7 @@ public class ContentDialofg extends DialogFragment {
         return title;
     }
 
-    public ContentDialofg setTitle(String title) {
+    public ContentDialog setTitle(String title) {
         this.title = title;
         return this;
     }
@@ -73,7 +73,7 @@ public class ContentDialofg extends DialogFragment {
         return content;
     }
 
-    public ContentDialofg setContent(String content) {
+    public ContentDialog setContent(String content) {
         this.content = content;
         return this;
     }
@@ -114,6 +114,7 @@ public class ContentDialofg extends DialogFragment {
         new Colorful.Builder(getActivity()).setter(new ViewBackgroundColorSetter(getView(), R.attr.colorPrimary))
                 .setter(new TextColorSetter(tvBookName, R.attr.colorAccent))
                 .setter(new TextColorSetter(tvCancel, R.attr.text_second_color))
+                .setter(new TextColorSetter(tvContent,R.attr.text_color))
                 .setter(new TextColorSetter(tvOk, R.attr.colorAccent)).create().setTheme(ModeProvider.getCurrentModeTheme());
     }
 
