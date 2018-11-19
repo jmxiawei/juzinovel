@@ -9,7 +9,7 @@
         android:id="@+id/img_bg"
         android:layout_width="250dp"
         android:layout_height="375dp"
-        android:alpha="0.5"
+        android:alpha="0.7"
         android:background="@mipmap/ic_login_back"
         android:scaleType="centerCrop" />
 
