@@ -4,23 +4,24 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 
-
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Transient;
 import org.greenrobot.greendao.annotation.Unique;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.greenrobot.greendao.annotation.Generated;
 
 import xcvf.top.readercore.daos.BookDao;
 import xcvf.top.readercore.daos.DBManager;
 
-/**本地书架
+/**
+ * 本地书架
  * Created by xiaw on 2018/6/29.
  */
 @Entity
-public class Book  implements Parcelable {
+public class Book implements Parcelable {
 
     @Transient
     public List<Chapter> chapters = new ArrayList<>();
@@ -30,18 +31,21 @@ public class Book  implements Parcelable {
 
     public int bookid;
     public String cover;
-    @Unique
-    public String shelfid ;
+
+    public String shelfid;
     public String userid;
-    public String name ;
-    public String author ;
+    public String name;
+    public String author;
     public String cate_name;
-    public String desc ;
+    public String desc;
     public String latest_chapter_name;
     public String latest_chapter_url;
     public String keywords;
     public String extern_bookid;
     public String update_time;
+
+    @Unique
+    public String uniqueKey;
 
     public List<Book> getPriorities() {
         return priorities;
@@ -49,6 +53,15 @@ public class Book  implements Parcelable {
 
     public Book setPriorities(List<Book> priorities) {
         this.priorities = priorities;
+        return this;
+    }
+
+    public String getUniqueKey() {
+        return uniqueKey;
+    }
+
+    public Book setUniqueKey(String uniqueKey) {
+        this.uniqueKey = uniqueKey;
         return this;
     }
 
@@ -139,14 +152,36 @@ public class Book  implements Parcelable {
         this.latest_chapter_name = latest_chapter_name;
     }
 
-    public void save(String userid){
-      Book book =   DBManager.getDaoSession().getBookDao().queryBuilder().where(BookDao.Properties.Extern_bookid.eq(extern_bookid))
-                .where(BookDao.Properties.Userid.eq(userid)).limit(1).unique();
-      if(book==null){
-          setUserid(userid);
-          DBManager.getDaoSession().getBookDao().insert(this);
-      }
+    public void save(String userid) {
+        setUserid(userid);
+        uniqueKey = extern_bookid + "_iscore.top_" + userid;
+        DBManager.getDaoSession().getBookDao().insertOrReplace(this);
     }
+
+
+    private static String getUKey(String userid, String extern_bookid) {
+        return extern_bookid + "_iscore.top_" + userid;
+    }
+
+    /**
+     * @param userid
+     * @param extern_bookid
+     */
+    public static void delete(String userid, String extern_bookid) {
+        DBManager.getDaoSession().getBookDao().queryBuilder().where(BookDao.Properties.UniqueKey.eq(getUKey(userid, extern_bookid))
+        ).buildDelete().executeDeleteWithoutDetachingEntities();
+    }
+
+    public static void save(String userid, List<Book> list) {
+        if (list != null) {
+            for (Book book : list) {
+                book.setUserid(userid);
+                book.setUniqueKey(getUKey(userid,book.extern_bookid));
+            }
+            DBManager.getDaoSession().getBookDao().insertOrReplaceInTx(list);
+        }
+    }
+
 
     public String getLatest_chapter_url() {
         return this.latest_chapter_url;
@@ -175,25 +210,6 @@ public class Book  implements Parcelable {
     public Book() {
     }
 
-    @Generated(hash = 347487954)
-    public Book(int bookid, String cover, String shelfid, String userid,
-            String name, String author, String cate_name, String desc,
-            String latest_chapter_name, String latest_chapter_url, String keywords,
-            String extern_bookid, String update_time) {
-        this.bookid = bookid;
-        this.cover = cover;
-        this.shelfid = shelfid;
-        this.userid = userid;
-        this.name = name;
-        this.author = author;
-        this.cate_name = cate_name;
-        this.desc = desc;
-        this.latest_chapter_name = latest_chapter_name;
-        this.latest_chapter_url = latest_chapter_url;
-        this.keywords = keywords;
-        this.extern_bookid = extern_bookid;
-        this.update_time = update_time;
-    }
 
     @Override
     public int describeContents() {
@@ -231,6 +247,27 @@ public class Book  implements Parcelable {
         this.latest_chapter_url = in.readString();
         this.keywords = in.readString();
         this.extern_bookid = in.readString();
+    }
+
+    @Generated(hash = 60223962)
+    public Book(int bookid, String cover, String shelfid, String userid,
+                String name, String author, String cate_name, String desc,
+                String latest_chapter_name, String latest_chapter_url, String keywords,
+                String extern_bookid, String update_time, String uniqueKey) {
+        this.bookid = bookid;
+        this.cover = cover;
+        this.shelfid = shelfid;
+        this.userid = userid;
+        this.name = name;
+        this.author = author;
+        this.cate_name = cate_name;
+        this.desc = desc;
+        this.latest_chapter_name = latest_chapter_name;
+        this.latest_chapter_url = latest_chapter_url;
+        this.keywords = keywords;
+        this.extern_bookid = extern_bookid;
+        this.update_time = update_time;
+        this.uniqueKey = uniqueKey;
     }
 
     public static final Creator<Book> CREATOR = new Creator<Book>() {

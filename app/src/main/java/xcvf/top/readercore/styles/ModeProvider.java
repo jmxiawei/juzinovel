@@ -32,33 +32,21 @@ public class ModeProvider {
 
     /**
      * 所有的配置
+     *
      * @return
      */
     public static List<ModeConfig> getAllConfig() {
         List<ModeConfig> list = new ArrayList<>();
         list.addAll(configList.get(Mode.DayMode.toString()));
         list.addAll(configList.get(Mode.NightMode.toString()));
+
+
+        for (ModeConfig config : list) {
+            config.setChecked(false);
+        }
+        ModeConfig modeConfig = getModeConfig(ModeProvider.getCurrentMode());
+        modeConfig.setChecked(true);
         return list;
-    }
-
-    /**
-     * 获取日间模式默认显示
-     *
-     * @return
-     */
-    public static ModeConfig getDayDefault() {
-        int id = SPUtils.getInstance().getInt(getKetId(Mode.DayMode), 0);
-        return configList.get(Mode.DayMode.toString()).get(id);
-    }
-
-    /**
-     * 获取夜间模式默认显示
-     *
-     * @return
-     */
-    public static ModeConfig getNightDefault() {
-        int id = SPUtils.getInstance().getInt(getKetId(Mode.NightMode), 0);
-        return configList.get(Mode.NightMode.toString()).get(id);
     }
 
 
@@ -68,7 +56,7 @@ public class ModeProvider {
      * @param mode
      * @return
      */
-    public static String getKetId(Mode mode) {
+    private static String getKetId(Mode mode) {
         return mode.toInt() + KET_ID;
     }
 

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -37,12 +36,12 @@ import xcvf.top.readercore.bean.Category;
 import xcvf.top.readercore.bean.Mode;
 import xcvf.top.readercore.bean.User;
 import xcvf.top.readercore.styles.ModeProvider;
-import xcvf.top.readercore.views.LoadingDialog;
+import xcvf.top.readercore.views.LoginDialog;
 
 /**
  * 书籍详情
  */
-public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPresenter> implements BookShelfView {
+public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPresenter> implements BookShelfView, UserInfoChangedHandler.OnUserChanged {
 
     @BindView(R.id.iv_back)
     ImageView ivBack;
@@ -73,11 +72,14 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
     @BindView(R.id.tv_more)
     TextView tvMore;
     PriorityBookAdapter priorityBookAdapter;
+    @BindView(R.id.tv_pre_new_chapter)
+    TextView tvPreNewChapter;
 
     private String bookid;
     User mUser;
     Book mBook;
     LoadingFragment loadingFragment;
+    UserInfoChangedHandler userInfoChangedHandler;
 
     public static void toBookDetail(Activity activity, String bookid) {
         Intent intent = new Intent(activity, BookDetailActivity.class);
@@ -91,9 +93,10 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
         bookid = getIntent().getStringExtra("bookid");
         setContentView(R.layout.activity_book_detail);
         ButterKnife.bind(this);
+        userInfoChangedHandler = UserInfoChangedHandler.newInstance(this).put(this).register();
         initView();
         mUser = User.currentUser();
-        presenter.loadBookDetail(mUser.getUid(), bookid);
+
     }
 
     private void initView() {
@@ -109,10 +112,18 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
         });
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        userInfoChangedHandler.unregister();
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         changeMode();
+        presenter.loadBookDetail(mUser.getUid(), bookid);
     }
 
     @NonNull
@@ -126,7 +137,11 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
         new Colorful.Builder(this)
                 .setter(new TextColorSetter(tvCate, R.attr.text_second_color))
                 .setter(new TextColorSetter(tvLatest, R.attr.text_second_color))
+                .setter(new TextColorSetter(tvPreNewChapter, R.attr.text_second_color))
                 .setter(new TextColorSetter(tvDesc, R.attr.text_second_color))
+                .setter(new TextColorSetter(tvBookName, R.attr.text_color))
+                .setter(new TextColorSetter(tvAdd, R.attr.text_color))
+                .setter(new TextColorSetter(tvStart, R.attr.text_color))
                 .setter(new TextColorSetter(tvInterest, R.attr.text_second_color))
                 .setter(new TextColorSetter(tvMore, R.attr.text_second_color))
                 .setter(new ViewBackgroundColorSetter(llSettingTop, R.attr.colorAccent))
@@ -147,12 +162,13 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
             if (mBook != null) {
                 if (mBook.shelfid != null) {
                     tvAdd.setBackgroundResource(R.color.reader_light_notify_clor);
-                    tvAdd.setText("-不追了");
+                    tvAdd.setText("- 不追了");
                 } else {
-                    tvAdd.setText("-追更新");
+                    tvAdd.setText("- 追更新");
                     tvAdd.setBackgroundResource(R.color.colorPrimaryDark);
                 }
             } else {
+                tvAdd.setText("- 追更新");
                 tvAdd.setBackgroundResource(R.color.colorPrimaryDark);
             }
         } else {
@@ -160,12 +176,13 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
             if (mBook != null) {
                 if (mBook.shelfid != null) {
                     tvAdd.setBackgroundResource(R.color.reader_light_notify_clor);
-                    tvAdd.setText("-不追了");
+                    tvAdd.setText("- 不追了");
                 } else {
-                    tvAdd.setText("-追更新");
+                    tvAdd.setText("- 追更新");
                     tvAdd.setBackgroundResource(R.color.colorAccent);
                 }
             } else {
+                tvAdd.setText("- 追更新");
                 tvAdd.setBackgroundResource(R.color.colorAccent);
             }
         }
@@ -183,12 +200,22 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
                 }
                 break;
             case R.id.tv_add:
-                if (mUser != null && mBook != null) {
+                if (mUser.getUid() > 0) {
                     if (mBook.shelfid == null) {
-                        presenter.addBookShelf(mUser.getUid(), mBook.getExtern_bookid());
+                        presenter.addBookShelf(mUser.getUid(), mBook.getExtern_bookid(), mBook);
                     } else {
-                        presenter.deleteBookShelf(mUser.getUid(), mBook.shelfid,mBook.extern_bookid);
+                        presenter.deleteBookShelf(mUser.getUid(), mBook.shelfid, mBook.extern_bookid);
                     }
+                } else {
+                    //没登录
+                    LoginDialog loginDialog = new LoginDialog();
+                    loginDialog.setFinishTask(new UserInfoChangedHandler.OnUserChanged() {
+                        @Override
+                        public void onChanged(User user) {
+                            presenter.addBookShelf(mUser.getUid(), mBook.getExtern_bookid(), mBook);
+                        }
+                    }).show(getSupportFragmentManager(), "LoginDialog");
+
                 }
                 break;
             case R.id.tv_start:
@@ -218,6 +245,7 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
     public void onLoadAllCate(List<Category> categories) {
 
     }
+
 
     @Override
     public void showLoading(boolean pullToRefresh) {
@@ -259,5 +287,10 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
     @Override
     public void loadData(boolean pullToRefresh) {
 
+    }
+
+    @Override
+    public void onChanged(User user) {
+        mUser = user;
     }
 }

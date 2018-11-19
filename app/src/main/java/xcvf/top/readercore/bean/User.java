@@ -102,6 +102,10 @@ public class User implements Parcelable {
         return user;
     }
 
+    public void deleteUser(){
+        DBManager.getDaoSession().getUserDao().delete(this);
+    }
+
     public void save() {
         update_time = String.valueOf(System.currentTimeMillis());
         DBManager.getDaoSession().getUserDao().insertOrReplace(this);

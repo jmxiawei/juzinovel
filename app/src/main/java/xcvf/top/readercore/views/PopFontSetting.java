@@ -143,6 +143,7 @@ public class PopFontSetting extends PopupWindow {
                 modelColorAdapter.notifyDataSetChanged();
                 TextConfig.getConfig().setBackgroundColor(item.getBgResId());
                 TextConfig.getConfig().setTextColor(item.getTextColorResId());
+                ModeProvider.save(item.getId(), item.getMode());
                 if (onTextConfigChangedListener != null) {
                     onTextConfigChangedListener.onChanged(TextConfig.TYPE_FONT_COLOR);
                 }

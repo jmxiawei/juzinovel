@@ -21,6 +21,7 @@ import com.blankj.utilcode.util.LogUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import top.iscore.freereader.BookDetailActivity;
 import top.iscore.freereader.R;
 import xcvf.top.readercore.bean.Book;
 import xcvf.top.readercore.bean.Mode;
@@ -73,6 +74,8 @@ public class ReaderSettingView extends FrameLayout {
     ISettingListener settingListener;
     @BindView(R.id.tv_download)
     TextView tvDownload;
+    @BindView(R.id.tv_detail)
+    TextView tvDetail;
 
     public void setSettingListener(ISettingListener settingListener) {
         this.settingListener = settingListener;
@@ -114,7 +117,7 @@ public class ReaderSettingView extends FrameLayout {
             String bookid = intent.getStringExtra("bookid");
             final String info = intent.getStringExtra("info");
             final int finish = intent.getIntExtra("finish", 0);
-            LogUtils.e("bookid="+bookid+",info="+info+",finish="+finish+",mybook="+mBook.extern_bookid);
+            LogUtils.e("bookid=" + bookid + ",info=" + info + ",finish=" + finish + ",mybook=" + mBook.extern_bookid);
             if (mBook.extern_bookid.equals(bookid)) {
                 post(new Runnable() {
                     @Override
@@ -159,7 +162,7 @@ public class ReaderSettingView extends FrameLayout {
         }
     }
 
-    @OnClick({R.id.iv_back, R.id.ll_mode, R.id.ll_font, R.id.ll_cache, R.id.ll_chapter_list})
+    @OnClick({R.id.iv_back, R.id.ll_mode, R.id.ll_font, R.id.ll_cache, R.id.ll_chapter_list, R.id.tv_detail})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
@@ -185,6 +188,11 @@ public class ReaderSettingView extends FrameLayout {
             case R.id.ll_chapter_list:
                 if (settingListener != null) {
                     settingListener.onSettingChanged(SettingAction.ACTION_CHAPTER);
+                }
+                break;
+            case R.id.tv_detail:
+                if (settingListener != null) {
+                    settingListener.onSettingChanged(SettingAction.ACTION_DETAIL);
                 }
                 break;
             default:

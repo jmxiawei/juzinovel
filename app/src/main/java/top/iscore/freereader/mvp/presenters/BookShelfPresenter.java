@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -99,8 +100,7 @@ public class BookShelfPresenter extends MvpBasePresenter<BookShelfView> {
      *
      * @param userid
      */
-    public void addBookShelf(int userid, String bookid) {
-
+    public void addBookShelf(int userid, String bookid, Book book) {
 
         ifViewAttached(new ViewAction<BookShelfView>() {
             @Override
@@ -108,7 +108,7 @@ public class BookShelfPresenter extends MvpBasePresenter<BookShelfView> {
                 view.showLoading(true);
             }
         });
-
+        book.save(userid + "");
         Call<BaseModel<Book>> resCall = BaseHttpHandler.create().getProxy(BookService.class).addBookShelf("Book.addShelf", String.valueOf(userid), bookid);
         resCall.enqueue(new Callback<BaseModel<Book>>() {
             @Override
@@ -141,15 +141,15 @@ public class BookShelfPresenter extends MvpBasePresenter<BookShelfView> {
      *
      * @param shelfid
      */
-    public void deleteBookShelf(int userid,String shelfid,String bookid) {
+    public void deleteBookShelf(int userid, String shelfid, String bookid) {
         ifViewAttached(new ViewAction<BookShelfView>() {
             @Override
             public void run(@NonNull BookShelfView view) {
                 view.showLoading(true);
             }
         });
-
-        Call<BaseModel<Book>> resCall = BaseHttpHandler.create().getProxy(BookService.class).deleteBookShelf("Book.deleteShelf",String.valueOf(userid), shelfid,bookid);
+        Book.delete(userid + "", bookid);
+        Call<BaseModel<Book>> resCall = BaseHttpHandler.create().getProxy(BookService.class).deleteBookShelf("Book.deleteShelf", String.valueOf(userid), shelfid, bookid);
         resCall.enqueue(new Callback<BaseModel<Book>>() {
             @Override
             public void onResponse(Call<BaseModel<Book>> call, final Response<BaseModel<Book>> response) {
@@ -174,6 +174,7 @@ public class BookShelfPresenter extends MvpBasePresenter<BookShelfView> {
                 });
             }
         });
+
 
     }
 

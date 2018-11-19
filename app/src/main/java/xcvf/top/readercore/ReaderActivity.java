@@ -9,7 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -23,6 +23,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import top.iscore.freereader.BookDetailActivity;
 import top.iscore.freereader.R;
 import top.iscore.freereader.fragment.ChapterFragment;
 import top.iscore.freereader.fragment.LoadingFragment;
@@ -54,7 +55,7 @@ import xcvf.top.readercore.interfaces.OnTextConfigChangedListener;
 import xcvf.top.readercore.services.DownloadIntentService;
 import xcvf.top.readercore.styles.ModeConfig;
 import xcvf.top.readercore.styles.ModeProvider;
-import xcvf.top.readercore.views.ContentDialofg;
+import xcvf.top.readercore.views.ContentDialog;
 import xcvf.top.readercore.views.PopDownload;
 import xcvf.top.readercore.views.PopFontSetting;
 import xcvf.top.readercore.views.ReaderSettingView;
@@ -117,6 +118,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
         setContentView(R.layout.activity_reader);
         ButterKnife.bind(this);
         presenter.attachView(this);
+        mBookShelfPresenter = new BookShelfPresenter();
         book = getIntent().getParcelableExtra("book");
         mUser = User.currentUser();
         settingView.setBook(book);
@@ -137,24 +139,20 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
 
     @Override
     public void onBackPressed() {
-        if (book.shelfid != null) {
-            ContentDialofg dialog = new ContentDialofg();
+        if (TextUtils.isEmpty(book.shelfid)) {
+            ContentDialog dialog = new ContentDialog();
             dialog.setTitle("添书").setContent("是否将本书加入书架?").setNegativeListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                        finish();
+                    finish();
                 }
             }).setPositiveListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                     if(mUser!=null){
-                         mBookShelfPresenter.addBookShelf(mUser.getUid(),book.extern_bookid);
-                     }else {
-                         book.save(null);
-                     }
-                     finish();
+                    mBookShelfPresenter.addBookShelf(mUser.getUid(), book.extern_bookid, book);
+                    finish();
                 }
-            }).show(getSupportFragmentManager(), "ContentDialofg");
+            }).show(getSupportFragmentManager(), "ContentDialog");
         } else {
             super.onBackPressed();
         }
@@ -188,10 +186,14 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
     private ILoadChapter mLoadChapter = new ILoadChapter() {
         @Override
         public void load(int type, Chapter chapter) {
-
+            mLoadingFragment = LoadingFragment.newOne("waiting...", 1000);
+            mLoadingFragment.show(getSupportFragmentManager(), "LoadingFragment");
             ChapterProviderImpl.newInstance().getChapter(type, book.extern_bookid, String.valueOf(chapter.chapterid), chapter, new IChapterListener() {
                 @Override
                 public void onChapter(int code, Chapter srcChapter, Chapter chapter, HashMap<String, Object> params) {
+                    if (mLoadingFragment != null) {
+                        mLoadingFragment.dismiss();
+                    }
                     mChapterDisplayedImpl.showChapter(false, readerView, 0, IPage.LOADING_PAGE, chapter);
                 }
             });
@@ -240,6 +242,8 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
                 popDownload.setOnDownloadCmdListener(onDownloadCmdListener);
                 popDownload.showAsDropDown(getWindow().getDecorView());
 
+            } else if (action == SettingAction.ACTION_DETAIL) {
+                BookDetailActivity.toBookDetail(ReaderActivity.this, book.extern_bookid);
             }
         }
     };
@@ -340,22 +344,25 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
         if (nextOrPre == IPageScrollListener.PRE_CHAPTER) {
             //上一章节
             Chapter chapter = readerView.getCurrentChapter();
-            ChapterProviderImpl.newInstance().getChapter(ChapterProviderImpl.TYPE_PRE, book.extern_bookid, String.valueOf(chapter.chapterid), chapter, new IChapterListener() {
-                @Override
-                public void onChapter(int code, Chapter srcChapter, Chapter chapter, HashMap<String, Object> params) {
-                    mChapterDisplayedImpl.showChapter(false, readerView, 0, IPage.LOADING_PAGE, chapter);
-                }
-            });
-
+            if (chapter != null) {
+                ChapterProviderImpl.newInstance().getChapter(ChapterProviderImpl.TYPE_PRE, book.extern_bookid, String.valueOf(chapter.chapterid), chapter, new IChapterListener() {
+                    @Override
+                    public void onChapter(int code, Chapter srcChapter, Chapter chapter, HashMap<String, Object> params) {
+                        mChapterDisplayedImpl.showChapter(false, readerView, 0, IPage.LOADING_PAGE, chapter);
+                    }
+                });
+            }
         } else if (nextOrPre == IPageScrollListener.NEXT_CHAPTER) {
             //下一章节
             Chapter chapter = readerView.getCurrentChapter();
-            ChapterProviderImpl.newInstance().getChapter(ChapterProviderImpl.TYPE_NEXT, book.extern_bookid, String.valueOf(chapter.chapterid), chapter, new IChapterListener() {
-                @Override
-                public void onChapter(int code, Chapter srcChapter, Chapter chapter, HashMap<String, Object> params) {
-                    mChapterDisplayedImpl.showChapter(false, readerView, 0, IPage.LOADING_PAGE, chapter);
-                }
-            });
+            if (chapter != null) {
+                ChapterProviderImpl.newInstance().getChapter(ChapterProviderImpl.TYPE_NEXT, book.extern_bookid, String.valueOf(chapter.chapterid), chapter, new IChapterListener() {
+                    @Override
+                    public void onChapter(int code, Chapter srcChapter, Chapter chapter, HashMap<String, Object> params) {
+                        mChapterDisplayedImpl.showChapter(false, readerView, 0, IPage.LOADING_PAGE, chapter);
+                    }
+                });
+            }
         }
 
         saveBookMark();

@@ -11,8 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.LogUtils;
-
 import java.util.List;
 
 import butterknife.BindView;
@@ -23,14 +21,14 @@ import top.iscore.freereader.adapter.ChapterListAdapter;
 import top.iscore.freereader.fragment.adapters.CommonViewHolder;
 import top.iscore.freereader.fragment.adapters.OnRecyclerViewItemClickListener;
 import top.iscore.freereader.mode.Colorful;
+import top.iscore.freereader.mode.setter.FastScrollBarSetter;
 import top.iscore.freereader.mode.setter.TextColorSetter;
 import top.iscore.freereader.mode.setter.ViewBackgroundColorSetter;
-import top.iscore.freereader.mode.setter.ViewGroupSetter;
 import top.iscore.freereader.mode.setter.ViewSetter;
 import xcvf.top.readercore.bean.Book;
 import xcvf.top.readercore.bean.Chapter;
-import xcvf.top.readercore.bean.Mode;
 import xcvf.top.readercore.styles.ModeProvider;
+import xyz.danoz.recyclerviewfastscroller.vertical.VerticalRecyclerViewFastScroller;
 
 /**
  * 章节列表
@@ -43,13 +41,15 @@ public class ChapterFragment extends DialogFragment {
     Unbinder unbinder;
     ChapterListAdapter mChapterListAdapter;
     switchChapterListener switchChapterListener;
-
+    LinearLayoutManager mLayout;
     Book mbook;
     Chapter chapter;
     @BindView(R.id.tv_book)
     TextView tvBook;
 
     List<Chapter> allList;
+    @BindView(R.id.fast_scroller)
+    VerticalRecyclerViewFastScroller fastScroller;
 
     public void setBook(Book mbook) {
         this.mbook = mbook;
@@ -71,16 +71,6 @@ public class ChapterFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_chapter_list, container, false);
         unbinder = ButterKnife.bind(this, view);
         initViews();
-        mChapterListAdapter.setCurrentChapter(chapter);
-        mChapterListAdapter.setDataList(this.allList);
-        int index = this.allList.indexOf(chapter);
-        if (index >= 0) {
-            if (index > 5) {
-                //让当前页显示在中间
-                index = index - 5;
-            }
-            recycler.scrollToPosition(index);
-        }
 
         return view;
     }
@@ -97,7 +87,8 @@ public class ChapterFragment extends DialogFragment {
                 .Builder(getActivity())
                 .setter(new ViewBackgroundColorSetter(getView(), R.attr.colorPrimary))
                 .setter(new TextColorSetter(tvBook, R.attr.text_color))
-                .setter(new ViewBackgroundColorSetter(recycler,R.attr.colorPrimary))
+                .setter(new ViewBackgroundColorSetter(recycler, R.attr.colorPrimary))
+                .setter(new FastScrollBarSetter(fastScroller, 0))
                 .create()
                 .setTheme(ModeProvider.getCurrentModeTheme());
 
@@ -113,7 +104,8 @@ public class ChapterFragment extends DialogFragment {
 
     private void initViews() {
         tvBook.setText(mbook.name);
-        recycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        mLayout = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        recycler.setLayoutManager(mLayout);
         mChapterListAdapter = new ChapterListAdapter();
         recycler.setAdapter(mChapterListAdapter);
         mChapterListAdapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener<Chapter>() {
@@ -125,6 +117,23 @@ public class ChapterFragment extends DialogFragment {
                 dismiss();
             }
         });
+
+        // Connect the recycler to the scroller (to let the scroller scroll the list)
+        fastScroller.setRecyclerView(recycler);
+        // Connect the scroller to the recycler (to let the recycler scroll the scroller's handle)
+        recycler.addOnScrollListener(fastScroller.getOnScrollListener());
+        mChapterListAdapter.setCurrentChapter(chapter);
+        mChapterListAdapter.setDataList(this.allList);
+        int index = this.allList.indexOf(chapter);
+        if (index >= 0) {
+            if (index > 5) {
+                //让当前页显示在中间
+                index = index - 5;
+            }
+            recycler.scrollToPosition(index);
+
+        }
+
     }
 
 

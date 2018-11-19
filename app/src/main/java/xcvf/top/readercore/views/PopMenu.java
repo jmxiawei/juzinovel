@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -45,7 +47,7 @@ public class PopMenu extends PopupWindow {
     RecyclerView recycler;
     MenuAdapter adapter;
     SwitchModeListener switchModeListener;
-
+    FragmentActivity fragmentActivity;
     public void setSwitchModeListener(SwitchModeListener switchModeListener) {
         this.switchModeListener = switchModeListener;
     }
@@ -53,7 +55,7 @@ public class PopMenu extends PopupWindow {
     public PopMenu(Context context) {
         super(context);
 
-
+        fragmentActivity = (FragmentActivity) context;
         Mode mode = ModeProvider.getCurrentMode();
         View view = LayoutInflater.from(context).inflate(R.layout.layout_pop_menu, null);
         setContentView(view);
@@ -92,6 +94,9 @@ public class PopMenu extends PopupWindow {
                     ModeProvider.save(-1, dest);
                     LocalBroadcastManager.getInstance(getContentView().getContext())
                             .sendBroadcast(new Intent().setAction(Constant.ACTION_SWITCH_MODE));
+                }else if(item.getId() == 0){
+                    LoginDialog loginDialog = new LoginDialog();
+                    loginDialog.show(fragmentActivity.getSupportFragmentManager(),"LoginDialog");
                 }
                 dismiss();
             }
@@ -107,7 +112,7 @@ public class PopMenu extends PopupWindow {
         Category category = new Category();
         category.setId(0);
         User user = User.currentUser();
-        if (user != null) {
+        if (user.getUid() > 0) {
             category.setName(user.getNickname());
             category.setResUrl(user.getAvatar());
             category.setResid(R.mipmap.ic_user);

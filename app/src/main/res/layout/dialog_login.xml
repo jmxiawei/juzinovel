@@ -9,7 +9,11 @@
         android:id="@+id/img_bg"
         android:layout_width="250dp"
         android:layout_height="375dp"
+<<<<<<< HEAD
         android:alpha="0.7"
+=======
+        android:alpha="0.8"
+>>>>>>> 6d1640038008b2a555317fbb37b623979e9e9603
         android:background="@mipmap/ic_login_back"
         android:scaleType="centerCrop" />
 
@@ -21,45 +25,72 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="80dp"
-        android:alpha="0.8"
         android:scaleType="centerCrop"
         android:src="@mipmap/ic_launcher_round" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_alignBottom="@id/img_bg"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="48dp"
         android:gravity="center"
         android:orientation="vertical">
 
-
-        <TextView
+        <LinearLayout
+            android:id="@+id/ll_qq"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/vertical_margin"
-            android:text="选择登录方式:"
-            android:textColor="@color/colorAccent"
-            android:textSize="10sp" />
+            android:orientation="vertical"
+            android:visibility="gone">
 
-        <LinearLayout
-            android:id="@+id/img_qq"
-            android:layout_width="160dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_login_item"
-            android:gravity="center_vertical|left"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/vertical_margin">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/vertical_margin"
+                android:text="选择登录方式:"
+                android:textColor="@color/colorAccent"
+                android:textSize="10sp" />
 
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="40dp"
-                android:alpha="0.8"
-                android:src="@mipmap/ic_qq_logo389" />
+            <LinearLayout
+                android:id="@+id/img_qq"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_login_item"
+                android:gravity="center_vertical|left"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/vertical_margin">
+
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="40dp"
+                    android:alpha="0.8"
+                    android:src="@mipmap/ic_qq_logo389" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/ll_logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/tv_logout"
+                android:layout_width="160dp"
+                android:layout_height="40dp"
+                android:background="@drawable/bg_login_item"
+                android:gravity="center"
+                android:text="退 出 登 录"
+                android:textStyle="bold"
+                android:textColor="@color/colorAccent"
+                android:textSize="17sp" />
+
+
+        </LinearLayout>
 
         <ProgressBar
             android:id="@+id/ll_progress"

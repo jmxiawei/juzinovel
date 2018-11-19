@@ -15,18 +15,28 @@
         <ImageView
             android:id="@+id/iv_back"
             android:layout_width="48dp"
-            android:padding="16dp"
             android:layout_height="48dp"
+            android:padding="16dp"
             android:scaleType="centerInside"
             android:src="@mipmap/icon_back" />
 
         <TextView
             android:id="@+id/tv_book"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/text_gray_light"
+            android:layout_weight="1"
             android:text="斗破苍穹"
+            android:textColor="@color/color_light_white"
             android:textSize="16sp" />
+
+
+        <TextView
+            android:id="@+id/tv_detail"
+            android:layout_width="64dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="详情"
+            android:textColor="@color/color_light_white" />
 
 
     </LinearLayout>
@@ -147,16 +157,17 @@
         </LinearLayout>
 
     </LinearLayout>
+
     <TextView
         android:id="@+id/tv_download"
         android:layout_width="match_parent"
         android:layout_height="20dp"
-        android:gravity="center_vertical"
-        android:paddingLeft="@dimen/horizon_margin"
-        android:visibility="gone"
-        android:textColor="@color/bg_light_color"
         android:layout_above="@id/ll_setting_bottom"
         android:background="@color/text_gray_light"
-        android:text="正在下载。.."/>
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/horizon_margin"
+        android:text="正在下载。.."
+        android:textColor="@color/bg_light_color"
+        android:visibility="gone" />
 
 </RelativeLayout>

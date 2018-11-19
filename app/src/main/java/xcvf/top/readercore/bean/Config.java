@@ -3,12 +3,15 @@ package xcvf.top.readercore.bean;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Unique;
 
 @Entity
 public class Config {
 
+    @Unique
     String name;
     String value;
+
     @Generated(hash = 364718396)
     public Config(String name, String value) {
         this.name = name;
@@ -17,6 +20,7 @@ public class Config {
     @Generated(hash = 589037648)
     public Config() {
     }
+   
     public String getName() {
         return this.name;
     }

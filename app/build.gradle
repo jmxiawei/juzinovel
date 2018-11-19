@@ -28,7 +28,7 @@ android {
 
 
     greendao {
-        schemaVersion 1 //数据库版本号
+        schemaVersion 2 //数据库版本号
         daoPackage 'xcvf.top.readercore.daos'// 设置DaoMaster、DaoSession、Dao 包名
         targetGenDir 'src/main/java'//设置DaoMaster、DaoSession、Dao目录
     }
@@ -62,11 +62,11 @@ dependencies {
     api rootProject.ext.stetho
     api rootProject.ext.bolts
     api rootProject.ext.greendao
+    api 'xyz.danoz:recyclerviewfastscroller:0.1.3'
     api 'jp.wasabeef:glide-transformations:2.0.0'
     annotationProcessor butterknifeAnnotationProcessor
     api 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-14'
     api 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-14'
-    //版本 23以上（必须）
     api rootProject.ext.mosby3Lce
     api rootProject.ext.mosby3queuing
     api project(':update-app')

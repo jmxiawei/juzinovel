@@ -64,7 +64,7 @@ public class ChapterDisplayedImpl implements IDisplayer {
                     pages.add(errorPage);
                     chapter.setPages(pages);
                     chapter.setStatus(Chapter.STATUS_ERROR);
-                    readerView.setChapter(false, chapter, jumpCharPosition, page);
+                    readerView.setChapter(reset, chapter, jumpCharPosition, page);
                 }
             }
         });

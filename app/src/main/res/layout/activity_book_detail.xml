@@ -109,7 +109,7 @@
 
 
                     <TextView
-
+                        android:id="@+id/tv_pre_new_chapter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/horizon_margin"
@@ -203,11 +203,11 @@
             <TextView
                 android:id="@+id/tv_more"
                 android:layout_width="64dp"
-                android:layout_height="wrap_content"
-                android:gravity="bottom|right"
+                android:layout_height="30dp"
+                android:gravity="center_vertical|right"
                 android:text="更多"
                 android:textColor="?attr/text_second_color"
-                android:textSize="12sp" />
+                android:textSize="14sp" />
 
 
         </LinearLayout>
