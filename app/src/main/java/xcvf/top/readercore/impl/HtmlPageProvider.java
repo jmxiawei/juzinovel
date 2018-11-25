@@ -41,7 +41,7 @@ public class HtmlPageProvider implements IPageProvider {
         ArrayList<IPage> pageList = new ArrayList<>();
 
         try {
-            document = Jsoup.parse(new File(path), "utf-8");
+            document = Jsoup.parse(new File(path), "gbk");
             Element element = document.getElementById("content");
             int size = element.childNodeSize();
             StringBuilder textBuff = new StringBuilder();

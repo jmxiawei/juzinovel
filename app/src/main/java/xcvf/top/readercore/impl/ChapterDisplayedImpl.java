@@ -35,7 +35,9 @@ public class ChapterDisplayedImpl implements IDisplayer {
     public void showChapter(final boolean reset, final ReaderView readerView, final int jumpCharPosition, final int page, final Chapter chapter) {
         //重新加载
         //下载文件
-        FileDownloader.download(App.oss_domain + chapter.self_page, Constant.getCachePath(readerView.getContext(), chapter.self_page), new DownloadListener() {
+
+        String url = "http://www.biquge.com.tw/11_11850/7656752.html";
+        FileDownloader.download(url, Constant.getCachePath(readerView.getContext(), chapter.self_page), new DownloadListener() {
             @Override
             public void onDownload(int status, final String path) {
                 if (status == 0) {

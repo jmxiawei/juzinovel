@@ -33,7 +33,8 @@ public class Chapter implements Parcelable {
 
 
     public String extern_bookid;
-
+    public int is_fetch;
+    public String engine_domain;
     public boolean is_download;
     public String self_page;
 
@@ -203,10 +204,13 @@ public class Chapter implements Parcelable {
     public Chapter() {
     }
 
-    @Generated(hash = 1812299664)
-    public Chapter(String chapter_name, String extern_bookid, boolean is_download, String self_page, int chapterid) {
+    @Generated(hash = 688822552)
+    public Chapter(String chapter_name, String extern_bookid, int is_fetch, String engine_domain, boolean is_download,
+            String self_page, int chapterid) {
         this.chapter_name = chapter_name;
         this.extern_bookid = extern_bookid;
+        this.is_fetch = is_fetch;
+        this.engine_domain = engine_domain;
         this.is_download = is_download;
         this.self_page = self_page;
         this.chapterid = chapterid;
@@ -232,6 +236,22 @@ public class Chapter implements Parcelable {
 
     public void setIs_download(boolean is_download) {
         this.is_download = is_download;
+    }
+
+    public int getIs_fetch() {
+        return this.is_fetch;
+    }
+
+    public void setIs_fetch(int is_fetch) {
+        this.is_fetch = is_fetch;
+    }
+
+    public String getEngine_domain() {
+        return this.engine_domain;
+    }
+
+    public void setEngine_domain(String engine_domain) {
+        this.engine_domain = engine_domain;
     }
 
     protected Chapter(Parcel in) {
