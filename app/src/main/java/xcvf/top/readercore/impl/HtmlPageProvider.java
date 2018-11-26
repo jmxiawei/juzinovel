@@ -58,7 +58,7 @@ public class HtmlPageProvider implements IPageProvider {
                 }
             }
 
-            String content = textBuff.toString();
+            String content = textBuff.toString().replace("\r\n", "");
             int chapter_total_length = content.length();
             Page page = new Page();
             page.setChapterid(String.valueOf(chapter.chapterid));

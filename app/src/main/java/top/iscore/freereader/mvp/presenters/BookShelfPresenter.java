@@ -109,6 +109,16 @@ public class BookShelfPresenter extends MvpBasePresenter<BookShelfView> {
             }
         });
         book.save(userid + "");
+        if(userid==0){
+            ifViewAttached(new ViewAction<BookShelfView>() {
+                @Override
+                public void run(@NonNull BookShelfView view) {
+                    view.onLoadBookDetail(null);
+                    view.showLoading(false);
+                }
+            });
+            return;
+        }
         Call<BaseModel<Book>> resCall = BaseHttpHandler.create().getProxy(BookService.class).addBookShelf("Book.addShelf", String.valueOf(userid), bookid);
         resCall.enqueue(new Callback<BaseModel<Book>>() {
             @Override

@@ -36,7 +36,7 @@ public class ChapterDisplayedImpl implements IDisplayer {
         //重新加载
         //下载文件
 
-        String url = "http://www.biquge.com.tw/11_11850/7656752.html";
+        String url = chapter.engine_domain + chapter.self_page;
         FileDownloader.download(url, Constant.getCachePath(readerView.getContext(), chapter.self_page), new DownloadListener() {
             @Override
             public void onDownload(int status, final String path) {

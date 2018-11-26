@@ -35,14 +35,14 @@ public class TextConfig {
 
 
     public static final int MAX_TEXT_SIZE = 100;
-    public static final int MIN_TEXT_SIZE = 46;
+    public static final int MIN_TEXT_SIZE = 48;
     public int textSize = MIN_TEXT_SIZE;
     public int textColor = R.color.text_black;
     public int backgroundColor = R.color.reader_styleclor1;
     public Boolean Bold = false;
     public int pageWidth;
     public int pageHeight;
-    public int lineSpace = 8;
+    public int lineSpace = 20;
 
     public int paddingTop;
     public static int verticalSpaceDB = 0;
