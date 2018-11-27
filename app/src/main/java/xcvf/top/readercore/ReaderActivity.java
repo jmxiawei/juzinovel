@@ -446,6 +446,6 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
         }
         loadedChapter = true;
         LogUtils.e("start load chapters");
-        presenter.loadChapters(book, SPUtils.getInstance().getInt(book.extern_bookid, 0));
+        presenter.loadChapters(this,book, SPUtils.getInstance().getInt(book.extern_bookid, 0));
     }
 }

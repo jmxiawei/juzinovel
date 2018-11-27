@@ -24,11 +24,12 @@ public class ChapterListAdapter extends BaseRecyclerAdapter<Chapter> {
     Chapter mCurrentChapter = null;
 
     int colorSecondText = 0;
+
     public void setCurrentChapter(Chapter mCurrentChapter) {
         this.mCurrentChapter = mCurrentChapter;
     }
 
-    public void setColorSecond(int color){
+    public void setColorSecond(int color) {
         this.colorSecondText = color;
         notifyDataSetChanged();
     }
@@ -53,7 +54,7 @@ public class ChapterListAdapter extends BaseRecyclerAdapter<Chapter> {
                             tv_download_status.setVisibility(View.VISIBLE);
                         }
 
-                        if (mCurrentChapter != null && mCurrentChapter.chapterid == cpt.chapterid) {
+                        if (cpt.equals(mCurrentChapter)) {
                             //当前章节
                             iv_current.setVisibility(View.VISIBLE);
                             img.setVisibility(View.GONE);

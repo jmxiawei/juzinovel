@@ -37,27 +37,11 @@ public class ChapterProviderImpl implements IChapterProvider {
             @Override
             public Chapter call() throws Exception {
                 if (type == IChapterProvider.TYPE_NEXT) {
-                    Chapter next = Chapter.getNextChapter(bookid, chapterid);
-                    if (next == null) {
-                        //接口请求  0本章节,1上一章节，2下一章节
-                        LogUtils.e("本地没有，从服务器获取");
-                        next = getChapterFromNet(bookid,chapterid, 2);
-                    }
-                    return next;
+                    return Chapter.getNextChapter(bookid, chapterid);
                 } else if (type == IChapterProvider.TYPE_PRE) {
-                    Chapter pre = Chapter.getPreChapter(bookid, chapterid);
-                    if (pre == null) {
-                        LogUtils.e("本地没有，从服务器获取");
-                        pre = getChapterFromNet(bookid,chapterid, 1);
-                    }
-                    return pre;
+                    return Chapter.getPreChapter(bookid, chapterid);
                 } else if (type == IChapterProvider.TYPE_DETAIL) {
-                    Chapter chp = Chapter.getChapter(bookid, chapterid);
-                    if (chp == null) {
-                        LogUtils.e("本地没有，从服务器获取");
-                        chp = getChapterFromNet(bookid,chapterid, 0);
-                    }
-                    return chp;
+                    return Chapter.getChapter(bookid, chapterid);
                 }
                 return null;
             }
@@ -81,9 +65,9 @@ public class ChapterProviderImpl implements IChapterProvider {
      * @return
      * @throws Exception
      */
-    private Chapter getChapterFromNet(String bookid,String chapterid, int type) throws Exception {
+    private Chapter getChapterFromNet(String bookid, String chapterid, int type) throws Exception {
         try {
-            Response<BaseModel<Chapter>> chapter = BaseHttpHandler.create().getProxy(BookService.class).getOneChapter("Chapter.getSingleChapter",bookid, chapterid, type).execute();
+            Response<BaseModel<Chapter>> chapter = BaseHttpHandler.create().getProxy(BookService.class).getOneChapter("Chapter.getSingleChapter", bookid, chapterid, type).execute();
             if (chapter != null && chapter.isSuccessful()) {
                 return chapter.body().getData();
             }
@@ -101,31 +85,20 @@ public class ChapterProviderImpl implements IChapterProvider {
                 // 第一次 直接使用原始列表
                 // 第二次 先查所有的，再插入
                 LogUtils.e("start read chapter " + System.currentTimeMillis());
-                List<Chapter> chapters = null;
                 ChapterDao chapterDao = DBManager.
                         getDaoMaster().
                         newSession().
                         getChapterDao();
-                chapters = chapterDao.
-                        queryBuilder().
-                        where(ChapterDao.Properties.Extern_bookid.eq(booid)).
-                        orderAsc(ChapterDao.Properties.Chapterid).
-                        build().list();
-                LogUtils.e("finish read chapter " + System.currentTimeMillis());
-                if (chapters == null || chapters.size() == 0) {
-                    //没有数据
-                    chapters = chapterList;
+                List<Chapter> chapters = chapterList;
+                if (chapterList != null) {
+                    chapterDao.insertOrReplaceInTx(chapterList);
                 } else {
-                    if(chapterList!=null){
-                        chapters.addAll(chapterList);
-                    }
-                }
-                LogUtils.e("start save chapter " + System.currentTimeMillis());
-                if(chapterList!=null){
-                    chapterDao.saveInTx(chapterList);
+                    chapters = chapterDao.queryBuilder()
+                            .where(ChapterDao.Properties.Extern_bookid.eq(booid))
+                            .orderAsc(ChapterDao.Properties.Chapterid).list();
                 }
                 LogUtils.e("finish save chapter " + System.currentTimeMillis());
-                if (chapterList != null && chapterList.size() > 0) {
+                if (chapters != null && chapters.size() > 0) {
                     //保存最大的章节id
                     Chapter chapter = chapterList.get(chapterList.size() - 1);
                     SPUtils.getInstance().put(chapter.extern_bookid, chapter.chapterid);

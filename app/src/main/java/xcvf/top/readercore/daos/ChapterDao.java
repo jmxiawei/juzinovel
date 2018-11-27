@@ -51,8 +51,8 @@ public class ChapterDao extends AbstractDao<Chapter, Void> {
                 "\"IS_FETCH\" INTEGER NOT NULL ," + // 2: is_fetch
                 "\"ENGINE_DOMAIN\" TEXT," + // 3: engine_domain
                 "\"IS_DOWNLOAD\" INTEGER NOT NULL ," + // 4: is_download
-                "\"SELF_PAGE\" TEXT," + // 5: self_page
-                "\"CHAPTERID\" INTEGER NOT NULL UNIQUE );"); // 6: chapterid
+                "\"SELF_PAGE\" TEXT UNIQUE ," + // 5: self_page
+                "\"CHAPTERID\" INTEGER NOT NULL );"); // 6: chapterid
     }
 
     /** Drops the underlying database table. */

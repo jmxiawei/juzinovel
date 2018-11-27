@@ -124,13 +124,16 @@ public class ChapterFragment extends DialogFragment {
         recycler.addOnScrollListener(fastScroller.getOnScrollListener());
         mChapterListAdapter.setCurrentChapter(chapter);
         mChapterListAdapter.setDataList(this.allList);
-        int index = this.allList.indexOf(chapter);
-        if (index >= 0) {
-            if (index > 5) {
-                //让当前页显示在中间
-                index = index - 5;
+        if(this.allList!=null){
+            int index = this.allList.indexOf(chapter);
+            if (index >= 0) {
+                if (index > 5) {
+                    //让当前页显示在中间
+                    index = index - 5;
+                }
+                recycler.scrollToPosition(index);
+
             }
-            recycler.scrollToPosition(index);
 
         }
 

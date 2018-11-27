@@ -16,7 +16,8 @@ import okhttp3.Response;
 import xcvf.top.readercore.interfaces.DownloadListener;
 import xcvf.top.readercore.utils.Constant;
 
-/** 文件下载
+/**
+ * 文件下载
  * Created by xiaw on 2018/9/28.
  */
 
@@ -57,6 +58,7 @@ public class FileDownloader {
 
     /**
      * 下载文件
+     *
      * @param url
      * @param destPath
      * @return
@@ -75,12 +77,13 @@ public class FileDownloader {
                 FileOutputStream fileOutputStream = new FileOutputStream(file);
                 InputStream inputStream = response.body().byteStream();
                 int len;
-                byte[] buff = new byte[8 * 1024];
+                byte[] buff = new byte[16 * 1024];
                 while ((len = inputStream.read(buff)) != -1) {
                     fileOutputStream.write(buff, 0, len);
                 }
                 fileOutputStream.close();
                 inputStream.close();
+                file.setLastModified(System.currentTimeMillis());
                 return true;
             }
 
@@ -89,8 +92,6 @@ public class FileDownloader {
         }
         return false;
     }
-
-
 
 
 }

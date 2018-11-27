@@ -1,14 +1,11 @@
 package xcvf.top.readercore.impl;
 
-import com.blankj.utilcode.util.LogUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
 import bolts.Continuation;
 import bolts.Task;
-import top.iscore.freereader.App;
 import xcvf.top.readercore.bean.Chapter;
 import xcvf.top.readercore.bean.Page;
 import xcvf.top.readercore.bean.TextConfig;

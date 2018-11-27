@@ -30,6 +30,7 @@ public class Constant {
         File file = new File(context.getCacheDir(), sub);
         return file.getAbsolutePath();
     }
+
     /**
      * 章节文章
      * @param self_page
