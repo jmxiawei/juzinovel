@@ -82,8 +82,8 @@ public class DownloadIntentService extends IntentService {
         mCount = chapterList == null ? 0 : chapterList.size();
         for (int i = 0; i < mCount; i++) {
             final Chapter chapter = chapterList.get(i);
-            String dest = Constant.getCachePath(getBaseContext(), chapter.self_page);
-            boolean result = FileDownloader.downloadUrl(Constant.buildChapterFilePath(chapter.self_page), dest);
+            String dest = Constant.getCachePath(getBaseContext(), chapter.getSelf_page());
+            boolean result = FileDownloader.downloadUrl(Constant.buildChapterFilePath(chapter.getSelf_page()), dest);
             if (result) {
                 chapter.setIs_download(true);
                 session.getChapterDao().insertOrReplace(chapter);

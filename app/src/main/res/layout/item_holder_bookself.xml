@@ -52,9 +52,9 @@
             android:id="@+id/img_cover"
             android:layout_width="44dp"
             android:layout_height="56dp"
-            android:layout_marginBottom="8dp"
             android:layout_marginLeft="@dimen/horizon_margin"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:scaleType="fitXY" />
 
         <LinearLayout
@@ -94,12 +94,23 @@
             android:id="@+id/ll_new"
             android:layout_width="48dp"
             android:layout_height="wrap_content"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical">
 
             <View
                 android:layout_width="8dp"
                 android:layout_height="8dp"
                 android:background="@drawable/bg_round" />
+
+            <TextView
+                android:id="@+id/tv_engine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="B"
+                android:textSize="10sp"
+                android:textColor="@color/text_gray_light" />
+
         </LinearLayout>
 
     </LinearLayout>

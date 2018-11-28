@@ -1,6 +1,7 @@
 package xcvf.top.readercore.impl;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.SparseArray;
 
 import org.jsoup.Jsoup;
@@ -39,9 +40,18 @@ public class ChapterParserBiquge extends BaseChapterParser {
                 Chapter chapter = new Chapter();
                 Element element1 = chapterlist.get(i);
                 String c_url = element1.childNode(0).attributes().get("href");
+                if (TextUtils.isEmpty(c_url)) {
+                    continue;
+                }
                 String name = element1.wholeText();
                 chapter.setSelf_page(c_url);
                 chapter.setChapter_name(name);
+                int chapterid = getChapterId(c_url);
+                if (chapterid > 0) {
+                    chapter.setChapterid(chapterid);
+                } else {
+                    continue;
+                }
                 chapter.setEngine_domain(book.engine_domain);
                 chapter.setExtern_bookid(book.extern_bookid);
                 pageList.add(chapter);

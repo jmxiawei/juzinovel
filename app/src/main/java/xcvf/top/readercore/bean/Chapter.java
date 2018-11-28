@@ -3,6 +3,9 @@ package xcvf.top.readercore.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
+import android.util.Base64;
+
+import com.blankj.utilcode.util.LogUtils;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Transient;
@@ -17,6 +20,8 @@ import xcvf.top.readercore.daos.DBManager;
 import xcvf.top.readercore.interfaces.IPage;
 
 import org.greenrobot.greendao.annotation.Generated;
+
+import static android.util.Base64.DEFAULT;
 
 /**
  * 章节
@@ -40,7 +45,7 @@ public class Chapter implements Parcelable {
 
 
     @Unique
-    public String self_page;
+    private String self_page;
 
     @Transient
     int status = STATUS_OK;
@@ -49,11 +54,19 @@ public class Chapter implements Parcelable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Chapter chapter = (Chapter) o;
         return Objects.equals(extern_bookid, chapter.extern_bookid) &&
                 Objects.equals(self_page, chapter.self_page);
+    }
+
+    public String getDecodedSelfPage() {
+        return new String(Base64.decode(self_page, Base64.DEFAULT));
     }
 
     @Override
@@ -68,6 +81,16 @@ public class Chapter implements Parcelable {
     public Chapter setStatus(int status) {
         this.status = status;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Chapter{" +
+                "chapter_name='" + chapter_name + '\'' +
+                ", extern_bookid='" + extern_bookid + '\'' +
+                ", self_page='" + self_page + '\'' +
+                ", chapterid=" + chapterid +
+                '}';
     }
 
     @Transient
@@ -94,7 +117,8 @@ public class Chapter implements Parcelable {
     }
 
     public void setSelf_page(String self_page) {
-        this.self_page = self_page;
+        this.self_page = new String(Base64.encode(self_page.getBytes(), Base64.DEFAULT));
+        LogUtils.e("self_page=",self_page);
     }
 
 
@@ -116,12 +140,15 @@ public class Chapter implements Parcelable {
      * @return
      */
     public static Chapter getNextChapter(String bookid, String chapterid) {
-        return DBManager.getDaoSession().
+        Chapter chapter = DBManager.getDaoSession().
                 getChapterDao().
                 queryBuilder().
                 where(ChapterDao.Properties.Chapterid.gt(String.valueOf(chapterid))).
                 where(ChapterDao.Properties.Extern_bookid.eq(bookid)).
                 orderAsc(ChapterDao.Properties.Chapterid).limit(1).build().unique();
+        //chapter.self_page = new String(Base64.decode(chapter.self_page, Base64.DEFAULT));
+        LogUtils.e(chapter);
+        return chapter;
     }
 
 
@@ -133,13 +160,15 @@ public class Chapter implements Parcelable {
      */
     public static Chapter getChapter(String bookid, String chapterid) {
 
-        return DBManager.getDaoSession().
+        Chapter chapter = DBManager.getDaoSession().
                 getChapterDao().
                 queryBuilder().
                 where(ChapterDao.Properties.Chapterid.eq(String.valueOf(chapterid))).
                 where(ChapterDao.Properties.Extern_bookid.eq(bookid)).
                 orderAsc(ChapterDao.Properties.Chapterid).limit(1).build().unique();
 
+        //chapter.self_page = new String(Base64.decode(chapter.self_page, Base64.DEFAULT));
+        return chapter;
     }
 
     /**
@@ -149,12 +178,16 @@ public class Chapter implements Parcelable {
      * @return
      */
     public static Chapter getPreChapter(String bookid, String chapterid) {
-        return DBManager.getDaoSession().
+        Chapter chapter = DBManager.getDaoSession().
                 getChapterDao().
                 queryBuilder().
                 where(ChapterDao.Properties.Chapterid.lt(String.valueOf(chapterid))).
                 where(ChapterDao.Properties.Extern_bookid.eq(bookid)).
                 orderAsc(ChapterDao.Properties.Chapterid).limit(1).build().unique();
+
+        //chapter.self_page = new String(Base64.decode(chapter.self_page, Base64.DEFAULT));
+
+        return chapter;
     }
 
     /**
@@ -200,7 +233,7 @@ public class Chapter implements Parcelable {
 
     @Generated(hash = 688822552)
     public Chapter(String chapter_name, String extern_bookid, int is_fetch, String engine_domain, boolean is_download,
-            String self_page, int chapterid) {
+                   String self_page, int chapterid) {
         this.chapter_name = chapter_name;
         this.extern_bookid = extern_bookid;
         this.is_fetch = is_fetch;

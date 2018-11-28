@@ -1,5 +1,10 @@
 package xcvf.top.readercore.impl;
 
+import android.util.Base64;
+
+import com.blankj.utilcode.util.LogUtils;
+import com.vector.update_app.utils.Md5Util;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -32,9 +37,13 @@ public class ChapterDisplayedImpl implements IDisplayer {
     public void showChapter(final boolean reset, final ReaderView readerView, final int jumpCharPosition, final int page, final Chapter chapter) {
         //重新加载
         //下载文件
-
-        String url = chapter.engine_domain + chapter.self_page;
-        FileDownloader.download(url, Constant.getCachePath(readerView.getContext(), chapter.self_page), new DownloadListener() {
+        String self_page = new String(Base64.decode(chapter.getSelf_page(), Base64.DEFAULT));
+        String url = chapter.engine_domain + self_page;
+        if (self_page.startsWith("http")) {
+            url = self_page;
+        }
+        LogUtils.e(url);
+        FileDownloader.download(url, Constant.getCachePath(readerView.getContext(), Md5Util.bytes2Hex(self_page.getBytes())), new DownloadListener() {
             @Override
             public void onDownload(int status, final String path) {
                 if (status == 0) {
@@ -44,7 +53,6 @@ public class ChapterDisplayedImpl implements IDisplayer {
                         @Override
                         public List<IPage> call() throws Exception {
                             return HtmlPageProvider.newInstance().providerPages(chapter, path, config.pageWidth, config.maxLine(), config.getSamplePaint());
-
                         }
                     }).continueWith(new Continuation<List<IPage>, Object>() {
                         @Override

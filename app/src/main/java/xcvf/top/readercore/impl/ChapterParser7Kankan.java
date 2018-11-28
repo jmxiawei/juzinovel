@@ -22,22 +22,6 @@ import xcvf.top.readercore.bean.Chapter;
 public class ChapterParser7Kankan extends BaseChapterParser {
 
 
-    private int getChapterId(String url) {
-        if (TextUtils.isEmpty(url)) {
-            return 0;
-        } else {
-            String[] strings = url.split("/");
-            if (strings.length > 0) {
-                try {
-                    return Integer.parseInt(strings[strings.length - 1]);
-                } catch (Exception e) {
-                    return 0;
-                }
-            }
-        }
-        return 0;
-    }
-
     @Override
     public List<Chapter> parser(Context context, Book book, String url) {
 
@@ -55,11 +39,15 @@ public class ChapterParser7Kankan extends BaseChapterParser {
             for (int i = 0; i < l; i++) {
                 Chapter chapter = new Chapter();
                 Element element1 = chapterlist.get(i);
-                String c_url = element1.childNode(0).attributes().get("href");
+                String self_page = element1.childNode(0).attributes().get("href");
+                if (TextUtils.isEmpty(self_page)) {
+                    continue;
+                }
+                self_page = url.replace("index.html", self_page).split(ChapterParserFactory.ENGINE.KANKAN)[1];
                 String name = element1.wholeText();
-                chapter.setSelf_page(c_url);
+                chapter.setSelf_page(self_page);
                 chapter.setChapter_name(name);
-                int chapterid = getChapterId(c_url);
+                int chapterid = getChapterId(self_page);
                 if (chapterid > 0) {
                     chapter.setChapterid(chapterid);
                 } else {

@@ -17,6 +17,7 @@
         android:alpha="0.6"
         android:gravity="center_vertical"
         android:text="第二章 三千里金"
+        android:singleLine="true"
         android:textColor="@color/text_gray_light"
         android:textSize="12sp" />
 

@@ -285,6 +285,9 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
     private ChapterFragment.switchChapterListener switchChapterListener = new ChapterFragment.switchChapterListener() {
         @Override
         public void onChapter(Chapter chapter) {
+
+            mLoadingFragment = LoadingFragment.newOne("正在加载..." + chapter.chapter_name);
+            mLoadingFragment.show(getSupportFragmentManager(),"LoadingFragment");
             mChapterDisplayedImpl.showChapter(true, readerView, 0, Page.LOADING_PAGE, chapter);
         }
     };
@@ -446,6 +449,6 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
         }
         loadedChapter = true;
         LogUtils.e("start load chapters");
-        presenter.loadChapters(this,book, SPUtils.getInstance().getInt(book.extern_bookid, 0));
+        presenter.loadChapters(this, book, SPUtils.getInstance().getInt(book.extern_bookid, 0));
     }
 }

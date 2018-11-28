@@ -36,6 +36,8 @@ public class BookShelfHolder extends CommonViewHolder<Book> {
     LinearLayout llEmpty;
     @BindView(R.id.ll_content)
     LinearLayout llContent;
+    @BindView(R.id.tv_engine)
+    TextView tvEngine;
 
     public BookShelfHolder(Context context, ViewGroup root) {
         super(context, root, R.layout.item_holder_bookself);
@@ -58,6 +60,8 @@ public class BookShelfHolder extends CommonViewHolder<Book> {
             tvChapter.setText(book.latest_chapter_name);
             llNew.setVisibility(View.INVISIBLE);
         }
+
+        //tvEngine.setText(book.engine_domain.substring(12,13));
 
     }
 }

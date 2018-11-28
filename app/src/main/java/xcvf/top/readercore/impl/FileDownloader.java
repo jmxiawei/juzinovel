@@ -6,10 +6,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 import bolts.Continuation;
 import bolts.Task;
+import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -63,10 +66,25 @@ public class FileDownloader {
      * @param destPath
      * @return
      */
-    public static boolean downloadUrl(String url, String destPath) {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        Request request = new Request.Builder().url(url).build();
+    public static boolean downloadUrl(String url, String destPath, HashMap<String, String> headers) {
+
         try {
+            Headers.Builder builder1 = null;
+            OkHttpClient.Builder builder = new OkHttpClient.Builder();
+            if (headers != null) {
+                builder1 = new Headers.Builder();
+                for (Map.Entry<String, String> p :
+                        headers.entrySet()) {
+                    builder1.add(p.getKey(), p.getValue());
+                }
+            }
+            Request request;
+            if (builder1 != null) {
+                request = new Request.Builder().url(url).headers(builder1.build()).build();
+            } else {
+                request = new Request.Builder().url(url).build();
+            }
+
             FileUtils.createOrExistsDir(Constant.getDir(destPath));
             File file = new File(destPath);
             if (file.exists()) {
@@ -91,6 +109,11 @@ public class FileDownloader {
             e.printStackTrace();
         }
         return false;
+    }
+
+
+    public static boolean downloadUrl(String url, String destPath) {
+        return downloadUrl(url, destPath, null);
     }
 
 

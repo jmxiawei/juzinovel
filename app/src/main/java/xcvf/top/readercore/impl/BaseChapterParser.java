@@ -1,6 +1,7 @@
 package xcvf.top.readercore.impl;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.blankj.utilcode.util.EncodeUtils;
 import com.blankj.utilcode.util.EncryptUtils;
@@ -8,6 +9,7 @@ import com.blankj.utilcode.util.LogUtils;
 import com.vector.update_app.utils.Md5Util;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 
 import xcvf.top.readercore.bean.Book;
@@ -22,6 +24,37 @@ public class BaseChapterParser implements IChapterParser {
      * 文件过期时间，3小时
      */
     public static final long EXPIRES_MILS = 10800000L;
+
+    protected int getChapterId(String url) {
+        if (TextUtils.isEmpty(url)) {
+            return 0;
+        } else {
+            String[] strings = url.split("/");
+            if (strings.length > 0) {
+                try {
+                    String filename = strings[strings.length - 1];
+                    String fileid = filename.split("\\.")[0];
+                    return Integer.parseInt(fileid);
+                } catch (Exception e) {
+                    return 0;
+                }
+            }
+        }
+        return 0;
+    }
+
+
+    /**
+     *
+     * @param engine
+     * @return
+     */
+    protected HashMap<String,String> getHeaders(String engine){
+
+
+        return null;
+
+    }
 
     /**
      * 下载章节文件
