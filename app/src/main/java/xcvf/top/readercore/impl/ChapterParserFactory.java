@@ -27,7 +27,7 @@ public class ChapterParserFactory {
     public static class ENGINE {
         public static final String BIQUGE = "http://www.biquge.com.tw";
         public static final String KANKAN = "http://www.7kankan.com";
-        public static final String QINGKAN9 = "http://www.qingkan9.com";
+        public static final String QINGKAN9 = "https://www.qingkan9.com";
 
     }
 
