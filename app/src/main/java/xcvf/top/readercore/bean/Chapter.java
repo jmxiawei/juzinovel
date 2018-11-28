@@ -112,75 +112,75 @@ public class Chapter implements Parcelable {
     /**
      * 获取下一个章节
      *
-     * @param self_page
+     * @param chapterid
      * @return
      */
-    public static Chapter getNextChapter(String bookid, String self_page) {
+    public static Chapter getNextChapter(String bookid, String chapterid) {
         return DBManager.getDaoSession().
                 getChapterDao().
                 queryBuilder().
-                where(ChapterDao.Properties.Self_page.gt(String.valueOf(self_page))).
+                where(ChapterDao.Properties.Chapterid.gt(String.valueOf(chapterid))).
                 where(ChapterDao.Properties.Extern_bookid.eq(bookid)).
-                orderAsc(ChapterDao.Properties.Self_page).limit(1).build().unique();
+                orderAsc(ChapterDao.Properties.Chapterid).limit(1).build().unique();
     }
 
 
     /**
      * 根绝id获取章节
      *
-     * @param self_page
+     * @param chapterid
      * @return
      */
-    public static Chapter getChapter(String bookid, String self_page) {
+    public static Chapter getChapter(String bookid, String chapterid) {
 
         return DBManager.getDaoSession().
                 getChapterDao().
                 queryBuilder().
-                where(ChapterDao.Properties.Self_page.eq(String.valueOf(self_page))).
+                where(ChapterDao.Properties.Chapterid.eq(String.valueOf(chapterid))).
                 where(ChapterDao.Properties.Extern_bookid.eq(bookid)).
-                orderAsc(ChapterDao.Properties.Self_page).limit(1).build().unique();
+                orderAsc(ChapterDao.Properties.Chapterid).limit(1).build().unique();
 
     }
 
     /**
      * 获取上一个章节
      *
-     * @param self_page
+     * @param chapterid
      * @return
      */
-    public static Chapter getPreChapter(String bookid, String self_page) {
+    public static Chapter getPreChapter(String bookid, String chapterid) {
         return DBManager.getDaoSession().
                 getChapterDao().
                 queryBuilder().
-                where(ChapterDao.Properties.Self_page.lt(String.valueOf(self_page))).
+                where(ChapterDao.Properties.Chapterid.lt(String.valueOf(chapterid))).
                 where(ChapterDao.Properties.Extern_bookid.eq(bookid)).
-                orderAsc(ChapterDao.Properties.Self_page).limit(1).build().unique();
+                orderAsc(ChapterDao.Properties.Chapterid).limit(1).build().unique();
     }
 
     /**
      * 后面还有多少章节
      *
      * @param extern_bookid
-     * @param self_page
+     * @param chapterid
      * @return
      */
-    public static int getLeftChapter(String extern_bookid, String self_page) {
+    public static int getLeftChapter(String extern_bookid, String chapterid) {
         return (int) DBManager.getDaoSession().getChapterDao().queryBuilder()
                 .where(ChapterDao.Properties.Extern_bookid.eq(extern_bookid))
-                .where(ChapterDao.Properties.Self_page.gt(self_page)).count();
+                .where(ChapterDao.Properties.Chapterid.gt(chapterid)).count();
     }
 
     /**
      * 查询后面的章节
      *
      * @param extern_bookid
-     * @param self_page
+     * @param chapterid
      * @return
      */
-    public static List<Chapter> getLeftChapter(String extern_bookid, String self_page, int count) {
+    public static List<Chapter> getLeftChapter(String extern_bookid, String chapterid, int count) {
         return DBManager.getDaoSession().getChapterDao().queryBuilder()
                 .where(ChapterDao.Properties.Extern_bookid.eq(extern_bookid))
-                .where(ChapterDao.Properties.Self_page.gt(self_page))
+                .where(ChapterDao.Properties.Chapterid.gt(chapterid))
                 .limit(count)
                 .build()
                 .list();

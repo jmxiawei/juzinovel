@@ -91,6 +91,8 @@ public class ChapterProviderImpl implements IChapterProvider {
                         getChapterDao();
                 List<Chapter> chapters = chapterList;
                 if (chapterList != null) {
+                    chapterDao.queryBuilder().where(ChapterDao.Properties.Extern_bookid.eq(booid))
+                            .buildDelete().executeDeleteWithoutDetachingEntities();
                     chapterDao.insertOrReplaceInTx(chapterList);
                 } else {
                     chapters = chapterDao.queryBuilder()
@@ -98,11 +100,6 @@ public class ChapterProviderImpl implements IChapterProvider {
                             .orderAsc(ChapterDao.Properties.Chapterid).list();
                 }
                 LogUtils.e("finish save chapter " + System.currentTimeMillis());
-                if (chapters != null && chapters.size() > 0) {
-                    //保存最大的章节id
-                    Chapter chapter = chapterList.get(chapterList.size() - 1);
-                    SPUtils.getInstance().put(chapter.extern_bookid, chapter.chapterid);
-                }
                 return chapters;
             }
         }).continueWith(new Continuation<List<Chapter>, Object>() {
