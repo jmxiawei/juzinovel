@@ -186,7 +186,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
     private ILoadChapter mLoadChapter = new ILoadChapter() {
         @Override
         public void load(int type, Chapter chapter) {
-            mLoadingFragment = LoadingFragment.newOne("waiting...", 1000);
+            mLoadingFragment = LoadingFragment.newOne(chapter.chapter_name, 1000);
             mLoadingFragment.show(getSupportFragmentManager(), "LoadingFragment");
             ChapterProviderImpl.newInstance().getChapter(type, book.extern_bookid, String.valueOf(chapter.chapterid), chapter, new IChapterListener() {
                 @Override
@@ -459,7 +459,6 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
             mLoadingFragment.show(getSupportFragmentManager(), "LoadingFragment");
         }
         loadedChapter = true;
-        LogUtils.e("start load chapters");
-        presenter.loadChapters(this, book, SPUtils.getInstance().getInt(book.extern_bookid, 0));
+        presenter.loadChapters(this, book,0);
     }
 }

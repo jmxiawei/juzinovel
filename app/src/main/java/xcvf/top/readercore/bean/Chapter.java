@@ -118,7 +118,7 @@ public class Chapter implements Parcelable {
 
     public void setSelf_page(String self_page) {
         this.self_page = new String(Base64.encode(self_page.getBytes(), Base64.DEFAULT));
-        LogUtils.e("self_page=",self_page);
+        //LogUtils.e("self_page=",self_page);
     }
 
 

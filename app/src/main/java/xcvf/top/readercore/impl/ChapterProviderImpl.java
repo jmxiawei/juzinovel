@@ -1,5 +1,7 @@
 package xcvf.top.readercore.impl;
 
+import android.os.SystemClock;
+
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.SPUtils;
 
@@ -84,7 +86,7 @@ public class ChapterProviderImpl implements IChapterProvider {
             public List<Chapter> call() throws Exception {
                 // 第一次 直接使用原始列表
                 // 第二次 先查所有的，再插入
-                LogUtils.e("start read chapter " + System.currentTimeMillis());
+                long start = SystemClock.elapsedRealtime();
                 ChapterDao chapterDao = DBManager.
                         getDaoMaster().
                         newSession().
@@ -99,7 +101,7 @@ public class ChapterProviderImpl implements IChapterProvider {
                             .where(ChapterDao.Properties.Extern_bookid.eq(booid))
                             .orderAsc(ChapterDao.Properties.Chapterid).list();
                 }
-                LogUtils.e("finish save chapter " + System.currentTimeMillis());
+                LogUtils.e("finish save chapter =" + ((SystemClock.elapsedRealtime() - start)/1000.f));
                 return chapters;
             }
         }).continueWith(new Continuation<List<Chapter>, Object>() {
@@ -109,7 +111,7 @@ public class ChapterProviderImpl implements IChapterProvider {
                     if (task.getError() != null) {
                         LogUtils.e(task.getError());
                     }
-                    HashMap<String, Object> params = new HashMap<>();
+                    HashMap<String, Object> params = new HashMap<>(1);
                     params.put(KEY_CHAPTER_LIST, task.getResult());
                     chapterListener.onChapter(IChapterListener.CODE_OK, null, null, params);
                 }

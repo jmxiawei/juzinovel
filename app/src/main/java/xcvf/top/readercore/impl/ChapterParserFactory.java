@@ -29,7 +29,7 @@ public class ChapterParserFactory {
     public static ChapterFileDownloader getDownloader(String engine) {
         switch (engine) {
             case ENGINE.BIQUGE:
-                return null;
+                return ChapterDownloaderBiquge.newOne(engine);
             case ENGINE.KANKAN:
                 return ChapterDownloader7KanKan.newOne(engine);
             case ENGINE.QINGKAN9:
@@ -52,7 +52,7 @@ public class ChapterParserFactory {
     public static final String getSourceName(String domain){
         if(ENGINE.BIQUGE.equals(domain)){
             return "笔趣阁";
-        }else  if(ENGINE.BIQUGE.equals(domain)){
+        }else  if(ENGINE.KANKAN.equals(domain)){
             return "7看看";
         }else {
             return "请看网";
