@@ -107,7 +107,7 @@ public class FullScreenHandler {
             showSetting();
         } else {
             //更新隐藏的时间
-            delayHide(DELAY_HIDE);
+            hide();
         }
     }
 

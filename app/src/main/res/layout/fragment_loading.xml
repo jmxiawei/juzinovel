@@ -21,6 +21,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/vertical_margin"
+            android:ellipsize="start"
+            android:singleLine="true"
             android:text="waiting"
             android:textColor="?attr/text_second_color"
             android:textSize="14sp" />

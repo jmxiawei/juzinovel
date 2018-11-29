@@ -3,10 +3,8 @@ package xcvf.top.readercore.impl;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.blankj.utilcode.util.EncodeUtils;
 import com.blankj.utilcode.util.EncryptUtils;
 import com.blankj.utilcode.util.LogUtils;
-import com.vector.update_app.utils.Md5Util;
 
 import java.io.File;
 import java.util.HashMap;
@@ -23,7 +21,7 @@ public class BaseChapterParser implements IChapterParser {
     /**
      * 文件过期时间，3小时
      */
-    public static final long EXPIRES_MILS = 10800000L;
+    public static final long EXPIRES_MILS = 1000 * 60 * 60 * 12L;
 
     protected int getChapterId(String url) {
         if (TextUtils.isEmpty(url)) {

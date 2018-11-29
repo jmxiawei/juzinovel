@@ -35,29 +35,32 @@ public class HtmlPageProvider implements IPageProvider {
     }
 
     @Override
-    public List<IPage> providerPages(Chapter chapter, String path, int maxWidth, int maxLinesPerPage, Paint paint) {
+    public List<IPage> providerPages(Chapter chapter, ArrayList<String> filelist, int maxWidth, int maxLinesPerPage, Paint paint) {
 
-        Document document = null;
+
         ArrayList<IPage> pageList = new ArrayList<>();
 
         try {
-            document = Jsoup.parse(new File(path), "gbk");
-            Element element = document.getElementById("content");
-            int size = element.childNodeSize();
             StringBuilder textBuff = new StringBuilder();
-            for (int i = 0; i < size; i++) {
-                Node node = element.childNode(i);
-                if (node instanceof TextNode) {
-                    TextNode textNode = (TextNode) node;
-                    textBuff.append(textNode.getWholeText());
-                } else if (node instanceof Element) {
-                    Element element1 = (Element) node;
-                    if ("br".equals(element1.tagName())) {
-                        textBuff.append("\n");
+            int filesize = filelist == null ? 0:filelist.size();
+            for (int l = 0; l < filesize ; l++) {
+                Document document = Jsoup.parse(new File(filelist.get(l)), "gbk");
+                Element element = document.getElementById("content");
+                int size = element.childNodeSize();
+                for (int i = 0; i < size; i++) {
+                    Node node = element.childNode(i);
+                    if (node instanceof TextNode) {
+                        TextNode textNode = (TextNode) node;
+                        textBuff.append(textNode.getWholeText());
+                    } else if (node instanceof Element) {
+                        Element element1 = (Element) node;
+                        if ("br".equals(element1.tagName())) {
+                            textBuff.append("\n");
+                        }
                     }
                 }
-            }
 
+            }
             String content = textBuff.toString().replace("\r\n", "");
             int chapter_total_length = content.length();
             Page page = new Page();
@@ -97,6 +100,14 @@ public class HtmlPageProvider implements IPageProvider {
             page.setTotalPage(size);
         }
         return pageList;
+    }
+
+    /**
+     * 删除最后面的换行符
+     * @param textBuff
+     */
+    private void deleteEndBr(StringBuilder textBuff) {
+
     }
 
 }

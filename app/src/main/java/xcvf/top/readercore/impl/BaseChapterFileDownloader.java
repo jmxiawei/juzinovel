@@ -1,65 +1,51 @@
 package xcvf.top.readercore.impl;
 
+import android.content.Context;
+
 import com.blankj.utilcode.util.FileUtils;
+
+import org.jsoup.Jsoup;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
-import bolts.Continuation;
-import bolts.Task;
 import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import xcvf.top.readercore.interfaces.DownloadListener;
+import xcvf.top.readercore.interfaces.ChapterFileDownloader;
 import xcvf.top.readercore.utils.Constant;
 
-/**
- * 文件下载
- * Created by xiaw on 2018/9/28.
- */
+public class BaseChapterFileDownloader implements ChapterFileDownloader {
 
-public class FileDownloader {
 
-    /**
-     * @param url
-     * @param destPath
-     */
-    public static void download(final String url, final String destPath, final DownloadListener downloadListener) {
+    String engine;
 
-        Task.callInBackground(new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                if (downloadUrl(url, destPath)) return destPath;
-                return null;
-            }
-        }).continueWith(new Continuation<String, Object>() {
-            @Override
-            public Object then(Task<String> task) throws Exception {
-
-                String result = task.getResult();
-                if (result != null) {
-                    if (downloadListener != null) {
-                        downloadListener.onDownload(0, result);
-                    }
-                } else {
-                    if (downloadListener != null) {
-                        downloadListener.onDownload(1, null);
-                    }
-                }
-
-                return null;
-            }
-        }, Task.UI_THREAD_EXECUTOR);
-
+    protected BaseChapterFileDownloader(String engine) {
+        this.engine = engine;
     }
 
 
+    public static BaseChapterFileDownloader newOne(String engine) {
+        return new BaseChapterFileDownloader(engine);
+    }
+
+
+    /**
+     * 构造请求头部
+     *
+     * @param
+     * @return
+     */
+    protected HashMap<String, String> buildHeader() {
+        return null;
+    }
 
 
     /**
@@ -115,9 +101,8 @@ public class FileDownloader {
     }
 
 
-    public static boolean downloadUrl(String url, String destPath) {
-        return downloadUrl(url, destPath, null);
+    @Override
+    public ArrayList<String> download(Context context,String chapter_url) {
+        return null;
     }
-
-
 }
