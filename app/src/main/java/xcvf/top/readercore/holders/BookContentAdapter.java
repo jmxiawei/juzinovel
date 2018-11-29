@@ -42,6 +42,20 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
         return this;
     }
 
+
+    private void checkChaptetList(Chapter chapter) {
+        if (mCacheChapterList.contains(chapter)) {
+            int total = 0;
+            int size = mCacheChapterList.size();
+            for (int i = 0; i < size; i++) {
+                total += mCacheChapterList.get(i).getPages().size();
+            }
+            if (total != getItemCount()) {
+                mCacheChapterList.remove(chapter);
+            }
+        }
+    }
+
     /**
      * 设置需要显示的章节，放到后面
      *
@@ -54,6 +68,7 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
             pageList.clear();
             notifyDataSetChanged();
         }
+        checkChaptetList(mChapter);
         if (!mCacheChapterList.contains(mChapter)) {
             int size = mCacheChapterList.size();
             int index = -1;

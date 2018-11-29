@@ -2,6 +2,7 @@ package xcvf.top.readercore.interfaces;
 
 import android.graphics.Paint;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import xcvf.top.readercore.bean.Chapter;
@@ -13,9 +14,8 @@ public interface IPageProvider {
 
     /**
      * 将一个章节的内容分割成多页
-     * @param chapterContent
      * @return
      */
-    List<IPage> providerPages(Chapter chapter,String chapterContent, int maxWidth, int maxLines, Paint paint);
+    List<IPage> providerPages(Chapter chapter, ArrayList<String> filelist, int maxWidth, int maxLines, Paint paint);
 
 }

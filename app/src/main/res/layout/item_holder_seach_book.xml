@@ -59,6 +59,16 @@
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/tv_source"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:gravity="center"
+            android:text="笔趣阁"
+            android:layout_marginRight="@dimen/horizon_margin"
+            android:textColor="@color/text_gray_light"/>
+
     </LinearLayout>
 
     <View

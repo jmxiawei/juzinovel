@@ -27,8 +27,8 @@
     <color name="reader_styletxtclor1">#060606</color>
     <color name="reader_styletxtclor2">#1f201f</color>
     <color name="reader_styletxtclor3">#0b0b0a</color>
-    <color name="reader_styletxtclor4">#cfcdcb</color>
-    <color name="reader_styletxtclor5">#eef0f1</color>
+    <color name="reader_styletxtclor4">#b3b3b3</color>
+    <color name="reader_styletxtclor5">#8a9296</color>
 
     <color name="reader_dark_notify_clor">#b3b3b3</color>
     <color name="reader_light_notify_clor">#4d4d4d</color>

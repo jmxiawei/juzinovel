@@ -14,6 +14,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import top.iscore.freereader.R;
 import top.iscore.freereader.fragment.adapters.CommonViewHolder;
 import xcvf.top.readercore.bean.Book;
+import xcvf.top.readercore.impl.ChapterParserFactory;
 
 /**
  * 搜索列表--书籍
@@ -29,18 +30,21 @@ public class SearchBookHolder extends CommonViewHolder<Book> {
     LinearLayout llContent;
     @BindView(R.id.book_content)
     LinearLayout bookContent;
+    @BindView(R.id.tv_source)
+    TextView tvSource;
 
     public SearchBookHolder(Context context, ViewGroup root) {
         super(context, root, R.layout.item_holder_seach_book);
-        ButterKnife.bind(this,itemView);
+        ButterKnife.bind(this, itemView);
     }
 
     @Override
     public void bindData(Book book, int position) {
         tvName.setText(book.name);
-        tvLatest.setText("作者："+book.author);
+        tvLatest.setText("作者：" + book.author);
         RoundedCornersTransformation roundedCornersTransformation
                 = new RoundedCornersTransformation(itemView.getContext(), 10, 0);
         Glide.with(itemView.getContext()).load(book.cover).placeholder(R.color.text_gray_light).bitmapTransform(roundedCornersTransformation).into(imgCover);
+        tvSource.setText(ChapterParserFactory.getSourceName(book.engine_domain));
     }
 }

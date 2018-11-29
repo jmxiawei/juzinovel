@@ -45,7 +45,19 @@ public class ReaderView extends FrameLayout {
      * 加载失败的张杰
      */
     ILoadChapter mLoadChapter;
-    public void onTextConfigChanged(){
+
+    ILoadChapter mShowChapterSuccess;
+
+    public ILoadChapter getmShowChapterSuccess() {
+        return mShowChapterSuccess;
+    }
+
+    public ReaderView setShowChapterSuccess(ILoadChapter mShowChapterSuccess) {
+        this.mShowChapterSuccess = mShowChapterSuccess;
+        return this;
+    }
+
+    public void onTextConfigChanged() {
         mBookContentAdapter.notifyDataSetChanged();
     }
 
@@ -108,12 +120,15 @@ public class ReaderView extends FrameLayout {
     /**
      * 初始设置章节
      *
-     * @param mChapter   章节
+     * @param mChapter         章节
      * @param jumpCharPosition 是否直接跳转某个位置
-     * @param page       直接跳转到哪一页
+     * @param page             直接跳转到哪一页
      */
     public void setChapter(boolean reset, Chapter mChapter, int jumpCharPosition, int page) {
-        mBookContentAdapter.setChapter(mBookContentView,reset, mChapter, page,jumpCharPosition);
+        mBookContentAdapter.setChapter(mBookContentView, reset, mChapter, page, jumpCharPosition);
+        if (mShowChapterSuccess != null) {
+            mShowChapterSuccess.load(0, mChapter);
+        }
     }
 
 }

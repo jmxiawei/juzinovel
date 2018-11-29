@@ -285,9 +285,8 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
     private ChapterFragment.switchChapterListener switchChapterListener = new ChapterFragment.switchChapterListener() {
         @Override
         public void onChapter(Chapter chapter) {
-
-            mLoadingFragment = LoadingFragment.newOne("正在加载..." + chapter.chapter_name);
-            mLoadingFragment.show(getSupportFragmentManager(),"LoadingFragment");
+            mLoadingFragment = LoadingFragment.newOne(chapter.chapter_name);
+            mLoadingFragment.show(getSupportFragmentManager(), "LoadingFragment");
             mChapterDisplayedImpl.showChapter(true, readerView, 0, Page.LOADING_PAGE, chapter);
         }
     };
@@ -333,8 +332,21 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
         readerView.setAreaClickListener(this);
         readerView.setPageScrollListener(this);
         readerView.setLoadChapter(mLoadChapter);
+        readerView.setShowChapterSuccess(mshowChapter);
 
     }
+
+    /**
+     * 显示章节成功，隐藏loading
+     */
+    private ILoadChapter mshowChapter = new ILoadChapter() {
+        @Override
+        public void load(int type, Chapter chapter) {
+            if (mLoadingFragment != null) {
+                mLoadingFragment.dismiss();
+            }
+        }
+    };
 
     @Override
     public void clickArea(Area area) {
@@ -367,9 +379,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
                 });
             }
         }
-
         saveBookMark();
-
     }
 
 
@@ -405,6 +415,8 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
                 mChapterList = (ArrayList<Chapter>) params.get(ChapterProviderImpl.KEY_CHAPTER_LIST);
                 LogUtils.e("[读取章节完成..." + mChapterList.size() + "章]");
                 if (!isShowSuccess) {
+                    mLoadingFragment = LoadingFragment.newOne("读取章节内容...");
+                    mLoadingFragment.show(getSupportFragmentManager(), "LoadingFragment");
                     checkChapters(loadedChapter);
                 }
 
@@ -440,7 +452,6 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
         if (loadedChapter) {
             return;
         }
-
         //章节
         if (pullToRefresh) {
             //显示loading
