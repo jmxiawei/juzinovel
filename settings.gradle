@@ -1,1 +1,1 @@
-include ':app', ':update-app'
+include ':app', ':update-app', ':bookparser'

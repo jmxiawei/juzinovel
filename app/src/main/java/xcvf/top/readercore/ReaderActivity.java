@@ -345,6 +345,9 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
             if (mLoadingFragment != null) {
                 mLoadingFragment.dismiss();
             }
+            LogUtils.e("mshowChapter");
+            //onScroll(0,0,IPageScrollListener.PRE_CHAPTER);
+            //onScroll(0,0,IPageScrollListener.NEXT_CHAPTER);
         }
     };
 
@@ -352,6 +355,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
     public void clickArea(Area area) {
         fullScreenHandler.check();
     }
+
 
     @Override
     public void onScroll(int current, int total, int nextOrPre) {

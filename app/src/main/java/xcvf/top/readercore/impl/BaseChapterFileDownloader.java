@@ -44,6 +44,11 @@ public class BaseChapterFileDownloader implements ChapterFileDownloader {
      * @return
      */
     protected HashMap<String, String> buildHeader() {
+
+        if(engine.equals(ChapterParserFactory.ENGINE.KANKAN)){
+
+        }
+
         return null;
     }
 

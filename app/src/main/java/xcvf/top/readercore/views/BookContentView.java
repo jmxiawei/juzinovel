@@ -156,11 +156,18 @@ public class BookContentView extends RecyclerView {
 
                     if (mPageScrollListener != null) {
                         mPageScrollListener.onScroll(p, l, IPageScrollListener.CURRENT_CHAPTER);
+                        LogUtils.e("CURRENT_CHAPTER");
                     }
                 }
                 break;
             case SCROLL_STATE_DRAGGING:
+
+
+
+
+
                 break;
+
             default:
                 break;
         }
