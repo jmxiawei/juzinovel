@@ -1,6 +1,7 @@
 package xcvf.top.readercore.impl;
 
 import android.graphics.Paint;
+import android.text.TextUtils;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.LogUtils;
@@ -34,6 +35,16 @@ public class HtmlPageProvider implements IPageProvider {
         return new HtmlPageProvider();
     }
 
+
+    private String filterNode(String text) {
+        if (TextUtils.isEmpty(text)) {
+            return "";
+        } else {
+            return text.replace("&lt;", "").replace("&amp;", "")
+                    .replace("nsp;", "").replace("&gt;", "");
+        }
+    }
+
     @Override
     public List<IPage> providerPages(Chapter chapter, ArrayList<String> filelist, int maxWidth, int maxLinesPerPage, Paint paint) {
 
@@ -42,8 +53,8 @@ public class HtmlPageProvider implements IPageProvider {
 
         try {
             StringBuilder textBuff = new StringBuilder();
-            int filesize = filelist == null ? 0:filelist.size();
-            for (int l = 0; l < filesize ; l++) {
+            int filesize = filelist == null ? 0 : filelist.size();
+            for (int l = 0; l < filesize; l++) {
                 Document document = Jsoup.parse(new File(filelist.get(l)), "gbk");
                 Element element = document.getElementById("content");
                 int size = element.childNodeSize();
@@ -51,7 +62,7 @@ public class HtmlPageProvider implements IPageProvider {
                     Node node = element.childNode(i);
                     if (node instanceof TextNode) {
                         TextNode textNode = (TextNode) node;
-                        textBuff.append(textNode.getWholeText());
+                        textBuff.append(filterNode(textNode.getWholeText()));
                     } else if (node instanceof Element) {
                         Element element1 = (Element) node;
                         if ("br".equals(element1.tagName())) {
@@ -59,7 +70,7 @@ public class HtmlPageProvider implements IPageProvider {
                         }
                     }
                 }
-
+                deleteEndBr(textBuff);
             }
             String content = textBuff.toString().replace("\r\n", "");
             int chapter_total_length = content.length();
@@ -104,10 +115,19 @@ public class HtmlPageProvider implements IPageProvider {
 
     /**
      * 删除最后面的换行符
+     *
      * @param textBuff
      */
     private void deleteEndBr(StringBuilder textBuff) {
-
+        if (textBuff.length() > 0) {
+            char end_char = textBuff.charAt(textBuff.length() - 1);
+            if (end_char == '\n' ||
+                    end_char == '\r' ||
+                    end_char == '\t' ||
+                    end_char == ' ') {
+                textBuff.deleteCharAt(textBuff.length() - 1);
+                deleteEndBr(textBuff);
+            }
+        }
     }
-
 }

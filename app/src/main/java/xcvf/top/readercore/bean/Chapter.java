@@ -165,7 +165,7 @@ public class Chapter implements Parcelable {
                 queryBuilder().
                 where(ChapterDao.Properties.Chapterid.eq(String.valueOf(chapterid))).
                 where(ChapterDao.Properties.Extern_bookid.eq(bookid)).
-                orderAsc(ChapterDao.Properties.Chapterid).limit(1).build().unique();
+                limit(1).build().unique();
 
         //chapter.self_page = new String(Base64.decode(chapter.self_page, Base64.DEFAULT));
         return chapter;
@@ -183,7 +183,7 @@ public class Chapter implements Parcelable {
                 queryBuilder().
                 where(ChapterDao.Properties.Chapterid.lt(String.valueOf(chapterid))).
                 where(ChapterDao.Properties.Extern_bookid.eq(bookid)).
-                orderAsc(ChapterDao.Properties.Chapterid).limit(1).build().unique();
+                orderDesc(ChapterDao.Properties.Chapterid).limit(1).build().unique();
 
         //chapter.self_page = new String(Base64.decode(chapter.self_page, Base64.DEFAULT));
 
