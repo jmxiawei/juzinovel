@@ -345,9 +345,6 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
             if (mLoadingFragment != null) {
                 mLoadingFragment.dismiss();
             }
-<<<<<<< HEAD
-
-
            int index = readerView.indexOfCurrentChapter();
             if(index ==  0){
                 LogUtils.e("PRE_CHAPTER");
@@ -360,11 +357,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
                 onScroll(0,0,IPageScrollListener.PRE_CHAPTER);
                 onScroll(0,0,IPageScrollListener.NEXT_CHAPTER);
             }
-=======
-            LogUtils.e("mshowChapter");
-            //onScroll(0,0,IPageScrollListener.PRE_CHAPTER);
-            //onScroll(0,0,IPageScrollListener.NEXT_CHAPTER);
->>>>>>> bd6a9848c0fffecdae530b2c092409bc1723c530
+
         }
     };
 
