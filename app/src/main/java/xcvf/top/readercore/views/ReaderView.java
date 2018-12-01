@@ -54,6 +54,7 @@ public class ReaderView extends FrameLayout {
 
     public ReaderView setShowChapterSuccess(ILoadChapter mShowChapterSuccess) {
         this.mShowChapterSuccess = mShowChapterSuccess;
+        mBookContentAdapter.setShowChapterListener(this.mShowChapterSuccess);
         return this;
     }
 
@@ -107,6 +108,18 @@ public class ReaderView extends FrameLayout {
         return (Page) mBookContentAdapter.getCurrentPage(page);
     }
 
+
+    /**
+     * 获取当前的章节
+     *
+     * @return  0 位于最开始一章 1位于中间，2位于最后一章
+     */
+    public int  indexOfCurrentChapter() {
+        int page = mBookContentView.getCurrentPage();
+        return mBookContentAdapter.indexOfCurrentChapter(page);
+    }
+
+
     /**
      * 获取当前的章节
      *
@@ -117,6 +130,9 @@ public class ReaderView extends FrameLayout {
         return mBookContentAdapter.getCurrentChapter(page);
     }
 
+
+
+
     /**
      * 初始设置章节
      *
@@ -126,9 +142,6 @@ public class ReaderView extends FrameLayout {
      */
     public void setChapter(boolean reset, Chapter mChapter, int jumpCharPosition, int page) {
         mBookContentAdapter.setChapter(mBookContentView, reset, mChapter, page, jumpCharPosition);
-        if (mShowChapterSuccess != null) {
-            mShowChapterSuccess.load(0, mChapter);
-        }
     }
 
 }

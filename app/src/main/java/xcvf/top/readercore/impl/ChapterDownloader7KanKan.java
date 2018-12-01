@@ -6,6 +6,7 @@ import com.vector.update_app.utils.Md5Util;
 
 import java.util.ArrayList;
 
+import xcvf.top.readercore.impl.path.PathGeneratorFactory;
 import xcvf.top.readercore.utils.Constant;
 
 
@@ -28,7 +29,7 @@ public class ChapterDownloader7KanKan extends BaseChapterFileDownloader {
 
     @Override
     public ArrayList<String> download(Context context, String chapter_url) {
-        String path = Constant.getCachePath(context, Md5Util.bytes2Hex(chapter_url.getBytes()));
+        String path = PathGeneratorFactory.get().generate(context,chapter_url);
         boolean ok = downloadUrl(chapter_url, path, buildHeader());
         if (ok) {
             ArrayList<String> list = new ArrayList<>();

@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import xcvf.top.readercore.impl.path.PathGeneratorFactory;
 import xcvf.top.readercore.utils.Constant;
 
 
@@ -68,14 +69,14 @@ public class ChapterDownloaderQingkan9 extends BaseChapterFileDownloader {
 
     @Override
     public ArrayList<String> download(Context context, String chapter_url) {
-        String path = Constant.getCachePath(context, Md5Util.bytes2Hex(chapter_url.getBytes()));
+        String path = PathGeneratorFactory.get().generate(context,chapter_url);
         boolean ok = downloadUrl(chapter_url, path, buildHeader());
         if (ok) {
             ArrayList<String> list = new ArrayList<>();
             list.add(path);
             ArrayList<String> chapter_urls = getTotalPage(path);
             for (String url : chapter_urls) {
-                String local = Constant.getCachePath(context, Md5Util.bytes2Hex(url.getBytes()));
+                String local = PathGeneratorFactory.get().generate(context,url);
                 boolean ok1 = downloadUrl(url, local, buildHeader());
                 if (ok1) {
                     list.add(local);

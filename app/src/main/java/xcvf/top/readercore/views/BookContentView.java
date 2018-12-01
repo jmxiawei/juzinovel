@@ -62,7 +62,11 @@ public class BookContentView extends RecyclerView {
 
     public int getCurrentPage() {
         LinearLayoutManager ll = (LinearLayoutManager) getLayoutManager();
-        return ll.findFirstVisibleItemPosition();
+        if(ll !=null){
+            return ll.findFirstVisibleItemPosition();
+        }else {
+            return 0;
+        }
     }
 
     public BookContentView setCurrentPage(int currentPage) {

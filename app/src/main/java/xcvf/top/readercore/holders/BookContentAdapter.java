@@ -30,6 +30,11 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
     LinkedList<Chapter> mCacheChapterList = new LinkedList<>();
     IPageScrollListener pageScrollListener;
     ILoadChapter mLoadChapter;
+    ILoadChapter mShowChapterListener;
+
+    public void setShowChapterListener(ILoadChapter mShowChapterListener) {
+        this.mShowChapterListener = mShowChapterListener;
+    }
 
     public BookContentAdapter setPageScrollListener(IPageScrollListener pageScrollListener) {
         this.pageScrollListener = pageScrollListener;
@@ -133,6 +138,11 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
                 }
             }
         }
+
+        if(mShowChapterListener!=null){
+            mShowChapterListener.load(0,mChapter);
+        }
+
     }
 
 
@@ -251,6 +261,33 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
         return null;
     }
 
+    /**
+     *
+     * @param page
+     * @return 0 位于最开始一章 1位于中间，2位于最后一章 3 只有一章
+     */
+    public int indexOfCurrentChapter(int page){
+        if (page >= pageList.size() || page < 0) {
+            return -1;
+        }
+        IPage page1 = pageList.get(page);
+        for (int i = 0; i < mCacheChapterList.size(); i++) {
+            List<IPage> pageList = mCacheChapterList.get(i).getPages();
+            if (pageList.contains(page1)) {
+                if(i==0){
+                    if(mCacheChapterList.size()==1){
+                        return  3;
+                    }
+                    return  0;
+                }else if(i == mCacheChapterList.size() -1){
+                    return 2;
+                }else {
+                    return 1;
+                }
+            }
+        }
+        return -1;
+    }
 
     public Chapter getCurrentChapter(int page) {
         if (page >= pageList.size() || page < 0) {

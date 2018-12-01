@@ -65,53 +65,8 @@ public class BookReadPresenter extends MvpBasePresenter<BookReadView> {
     }
 
 
-    public void loadChapters(Context context, Book book, int startId) {
-
-
+    public void loadChapters(Context context, Book book) {
         loadChapterByUrl(context, book);
-
-
-//        ifViewAttached(new ViewAction<BookReadView>() {
-//            @Override
-//            public void run(@NonNull BookReadView view) {
-//                view.showLoading(false);
-//            }
-//        });
-//        Call<BaseModel<ArrayList<Chapter>>> baseModelCall = BaseHttpHandler.create().getProxy(BookService.class).getChapterList("Book.GetChapters", book.extern_bookid,startId);
-//        baseModelCall.enqueue(new Callback<BaseModel<ArrayList<Chapter>>>() {
-//            @Override
-//            public void onResponse(Call<BaseModel<ArrayList<Chapter>>> call, final Response<BaseModel<ArrayList<Chapter>>> response) {
-//
-//                if (response != null && response.isSuccessful()) {
-//                    final BaseModel<ArrayList<Chapter>> baseModel = response.body();
-//                    if (baseModel.getCode() == 0) {
-//                        ifViewAttached(new ViewAction<BookReadView>() {
-//                            @Override
-//                            public void run(@NonNull BookReadView view) {
-//                                view.onLoadChapterList(baseModel.getData());
-//                            }
-//                        });
-//                    } else {
-//                        ifViewAttached(new ViewAction<BookReadView>() {
-//                            @Override
-//                            public void run(@NonNull BookReadView view) {
-//                                view.onLoadChapterList(null);
-//                            }
-//                        });
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<BaseModel<ArrayList<Chapter>>> call, Throwable t) {
-//                ifViewAttached(new ViewAction<BookReadView>() {
-//                    @Override
-//                    public void run(@NonNull BookReadView view) {
-//                        view.onLoadChapterList(null);
-//                    }
-//                });
-//            }
-//        });
     }
 
     public ArrayList<Chapter> loadChaptersSync(Book book, int startId) {
