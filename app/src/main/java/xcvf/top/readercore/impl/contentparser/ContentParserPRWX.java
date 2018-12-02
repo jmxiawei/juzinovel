@@ -3,11 +3,16 @@ package xcvf.top.readercore.impl.contentparser;
 import com.blankj.utilcode.util.LogUtils;
 
 import org.jsoup.Jsoup;
+import org.jsoup.helper.DataUtil;
+import org.jsoup.internal.ConstrainableInputStream;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
+import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.List;
 
 import xcvf.top.readercore.bean.Chapter;
@@ -22,17 +27,13 @@ public class ContentParserPRWX extends DefaulContentParser {
         try {
             int filesize = filelist == null ? 0 : filelist.size();
             for (int l = 0; l < filesize; l++) {
-                Document document = Jsoup.parse(new File(filelist.get(l)), "gbk");
-                Elements element = document.getAllElements();
-                int size = element.size();
-                boolean start = false;
-                for (int i = 0; i < size ; i++) {
-                    Element element1 = element.get(i);
-                    if(element1.tagName().equals("table")){
-                        start = true;
-                    }
-                    LogUtils.e(element1.wholeText());
-                }
+                StringBuffer stringBuffer = new StringBuffer();
+                stringBuff
+                Jsoup.clean(new String(DataUtil.readToByteBuffer(, Whitelist.basic());
+
+                Document document = Jsoup.parse(), "gbk");
+                document.cl
+
 //                int size = element.childNodeSize();
 //                for (int i = 0; i < size; i++) {
 //                    Node node = element.childNode(i);

@@ -83,7 +83,6 @@ public class HtmlPageProvider implements IPageProvider {
             pageList.add(page);
         }
 
-
         int size = pageList.size();
 
         for (IPage subpage : pageList) {
