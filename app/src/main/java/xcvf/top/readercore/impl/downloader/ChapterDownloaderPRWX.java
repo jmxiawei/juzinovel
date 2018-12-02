@@ -1,32 +1,30 @@
-package xcvf.top.readercore.impl;
+package xcvf.top.readercore.impl.downloader;
 
 import android.content.Context;
 
-import com.vector.update_app.utils.Md5Util;
-
 import java.util.ArrayList;
 
-import xcvf.top.readercore.utils.Constant;
+import xcvf.top.readercore.impl.path.PathGeneratorFactory;
 
 
 /**
- * 下载文件
+ * 下载文件 PRWX
  */
-public class ChapterDownloaderBiquge extends BaseChapterFileDownloader {
+public class ChapterDownloaderPRWX extends BaseChapterFileDownloader {
 
 
-    private ChapterDownloaderBiquge(String engine) {
+    private ChapterDownloaderPRWX(String engine) {
         super(engine);
     }
 
 
     public static BaseChapterFileDownloader newOne(String engine) {
-        return new ChapterDownloaderBiquge(engine);
+        return new ChapterDownloaderPRWX(engine);
     }
 
     @Override
     public ArrayList<String> download(Context context, String chapter_url) {
-        String path = Constant.getCachePath(context, Md5Util.bytes2Hex(chapter_url.getBytes()));
+        String path = PathGeneratorFactory.get().generate(context,chapter_url);
         boolean ok = downloadUrl(chapter_url, path, buildHeader());
         if (ok) {
             ArrayList<String> list = new ArrayList<>();

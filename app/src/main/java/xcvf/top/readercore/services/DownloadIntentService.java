@@ -18,7 +18,10 @@ import xcvf.top.readercore.bean.Book;
 import xcvf.top.readercore.bean.Chapter;
 import xcvf.top.readercore.daos.DBManager;
 import xcvf.top.readercore.daos.DaoSession;
+import xcvf.top.readercore.impl.ChapterParserFactory;
 import xcvf.top.readercore.impl.FileDownloader;
+import xcvf.top.readercore.impl.path.PathGeneratorFactory;
+import xcvf.top.readercore.interfaces.ChapterFileDownloader;
 import xcvf.top.readercore.utils.Constant;
 
 /**
@@ -82,18 +85,24 @@ public class DownloadIntentService extends IntentService {
         mCount = chapterList == null ? 0 : chapterList.size();
         for (int i = 0; i < mCount; i++) {
             final Chapter chapter = chapterList.get(i);
-            String dest = Constant.getCachePath(getBaseContext(), chapter.getSelf_page());
-            boolean result = FileDownloader.downloadUrl(Constant.buildChapterFilePath(chapter.getSelf_page()), dest);
-            if (result) {
+
+            List<String> files = null;
+            ChapterFileDownloader downloader =  ChapterParserFactory.getDownloader(chapter.engine_domain);
+            if(downloader !=null){
+                files = downloader.download(getApplicationContext(),chapter.getFullPath());
+            }
+
+            if (files!=null&& files.size()>0) {
                 chapter.setIs_download(true);
                 session.getChapterDao().insertOrReplace(chapter);
+                Intent itn = new Intent(PROGRESS);
+                finishCount++;
+                itn.putExtra("info", "正在下载: " + finishCount + "/" + mCount);
+                itn.putExtra("bookid", chapter.extern_bookid);
+                itn.putExtra("finish", finishCount == mCount ? 1 : 0);
+                LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(itn);
             }
-            Intent itn = new Intent(PROGRESS);
-            finishCount++;
-            itn.putExtra("info", "正在下载: " + finishCount + "/" + mCount);
-            itn.putExtra("bookid", chapter.extern_bookid);
-            itn.putExtra("finish", finishCount == mCount ? 1 : 0);
-            LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(itn);
+
         }
     }
 }

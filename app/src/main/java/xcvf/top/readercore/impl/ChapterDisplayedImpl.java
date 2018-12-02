@@ -35,13 +35,8 @@ public class ChapterDisplayedImpl implements IDisplayer {
     public void showChapter(final boolean reset, final ReaderView readerView, final int jumpCharPosition, final int page, final Chapter chapter) {
         //重新加载
         //下载文件
-        final String self_page = new String(Base64.decode(chapter.getSelf_page(), Base64.DEFAULT));
-        final String url;
-        if (self_page.startsWith("http")) {
-            url = self_page;
-        } else {
-            url = chapter.engine_domain + self_page;
-        }
+
+        final String url = chapter.getFullPath();
         LogUtils.e(url);
         Task.callInBackground(new Callable<ArrayList<String>>() {
             @Override

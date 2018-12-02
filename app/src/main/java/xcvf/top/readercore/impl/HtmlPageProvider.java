@@ -50,65 +50,44 @@ public class HtmlPageProvider implements IPageProvider {
 
 
         ArrayList<IPage> pageList = new ArrayList<>();
-
-        try {
-            StringBuilder textBuff = new StringBuilder();
-            int filesize = filelist == null ? 0 : filelist.size();
-            for (int l = 0; l < filesize; l++) {
-                Document document = Jsoup.parse(new File(filelist.get(l)), "gbk");
-                Element element = document.getElementById("content");
-                int size = element.childNodeSize();
-                for (int i = 0; i < size; i++) {
-                    Node node = element.childNode(i);
-                    if (node instanceof TextNode) {
-                        TextNode textNode = (TextNode) node;
-                        textBuff.append(filterNode(textNode.getWholeText()));
-                    } else if (node instanceof Element) {
-                        Element element1 = (Element) node;
-                        if ("br".equals(element1.tagName())) {
-                            textBuff.append("\n");
-                        }
-                    }
-                }
-                deleteEndBr(textBuff);
-            }
-            String content = textBuff.toString().replace("\r\n", "");
-            int chapter_total_length = content.length();
-            Page page = new Page();
-            page.setChapterid(String.valueOf(chapter.chapterid));
-            int pageTotalChars = 0;
-            while (content.length() > 0) {
-                if (page.getLines().size() >= maxLinesPerPage) {
-                    //这页已经满了
-                    page.setStartPositionInChapter(chapter_total_length - content.length() - pageTotalChars);
-                    page.setPageTotalChars(pageTotalChars);
-                    page.setIndex(pageList.size() + 1);
-                    pageList.add(page);
-                    page = new Page();
-                    page.setChapterid(String.valueOf(chapter.chapterid));
-                    pageTotalChars = 0;
-                }
-                Line line = (Line) TextBreakUtil.getLine(content, maxWidth, paint);
-                pageTotalChars += line.getChars().size();
-                page.addLines(line);
-                content = content.substring(line.getChars().size());
-            }
-
-            if (page.getLines().size() > 0) {
-                page.setStartPositionInChapter(chapter_total_length - pageTotalChars);
+        IChapterContentParser parser =  ChapterParserFactory.getContentParser(chapter.engine_domain);
+        if(parser== null){
+            return  pageList;
+        }
+        String content =parser.parser(chapter,filelist);
+        int chapter_total_length = content.length();
+        Page page = new Page();
+        page.setChapterid(String.valueOf(chapter.chapterid));
+        int pageTotalChars = 0;
+        while (content.length() > 0) {
+            if (page.getLines().size() >= maxLinesPerPage) {
+                //这页已经满了
+                page.setStartPositionInChapter(chapter_total_length - content.length() - pageTotalChars);
                 page.setPageTotalChars(pageTotalChars);
                 page.setIndex(pageList.size() + 1);
                 pageList.add(page);
+                page = new Page();
+                page.setChapterid(String.valueOf(chapter.chapterid));
+                pageTotalChars = 0;
             }
-
-        } catch (IOException e) {
-            e.printStackTrace();
+            Line line = (Line) TextBreakUtil.getLine(content, maxWidth, paint);
+            pageTotalChars += line.getChars().size();
+            page.addLines(line);
+            content = content.substring(line.getChars().size());
         }
+
+        if (page.getLines().size() > 0) {
+            page.setStartPositionInChapter(chapter_total_length - pageTotalChars);
+            page.setPageTotalChars(pageTotalChars);
+            page.setIndex(pageList.size() + 1);
+            pageList.add(page);
+        }
+
 
         int size = pageList.size();
 
-        for (IPage page : pageList) {
-            page.setTotalPage(size);
+        for (IPage subpage : pageList) {
+            subpage.setTotalPage(size);
         }
         return pageList;
     }

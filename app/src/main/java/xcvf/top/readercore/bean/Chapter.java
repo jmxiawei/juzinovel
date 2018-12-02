@@ -300,4 +300,17 @@ public class Chapter implements Parcelable {
             return new Chapter[size];
         }
     };
+
+
+
+    public String getFullPath(){
+        final String self_page = new String(Base64.decode(getSelf_page(), Base64.DEFAULT));
+        final String url;
+        if (self_page.startsWith("http")) {
+            url = self_page;
+        } else {
+            url = engine_domain + self_page;
+        }
+        return url;
+    }
 }
