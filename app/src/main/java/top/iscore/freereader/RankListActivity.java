@@ -62,7 +62,9 @@ public class RankListActivity extends MvpActivity<RankListView, RankListPresente
         mAdapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener<Rank>() {
             @Override
             public void onRecyclerViewItemClick(CommonViewHolder holder, int position, Rank item) {
-                BookListActivity.toBookList(RankListActivity.this, item.listname, 2, item.rankid + "");
+                if(item.getRankid() > 0){
+                    BookListActivity.toBookList(RankListActivity.this, item.listname, 2, item.rankid + "");
+                }
             }
         });
     }
@@ -107,7 +109,7 @@ public class RankListActivity extends MvpActivity<RankListView, RankListPresente
         @Override
         public int getItemViewType(int position) {
             Rank rank = getItem(position);
-            if (rank.rankid == 0) {
+            if (rank.rankid <= 0) {
                 return TYPE_HEADER;
             }
             return TYPE_ITEM;
@@ -133,6 +135,8 @@ public class RankListActivity extends MvpActivity<RankListView, RankListPresente
                             public void bindData(Rank o, int position) {
 
                                 TextView tv = itemView.findViewById(R.id.tv_name);
+                                TextView tv_source = itemView.findViewById(R.id.tv_source);
+                                tv_source.setText(o.source);
                                 ImageView img = itemView.findViewById(R.id.img);
                                 Glide.with(itemView.getContext()).load(o.icon).placeholder(R.color.text_gray_light).into(img);
                                 tv.setText(o.listname);

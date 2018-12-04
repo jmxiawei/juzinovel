@@ -41,7 +41,7 @@ public class RankListPresenter extends MvpBasePresenter<RankListView> {
 
                     ArrayList<Rank> gg_rank = new ArrayList<>();
                     ArrayList<Rank> mm_rank = new ArrayList<>();
-                    ArrayList<Rank> new_rank = new ArrayList<>();
+                    final ArrayList<Rank> new_rank = new ArrayList<>();
 
                     for (int i = 0; i < size; i++) {
                         if ("mm".equals(ranks.get(i).getGender())) {
@@ -54,7 +54,7 @@ public class RankListPresenter extends MvpBasePresenter<RankListView> {
 
                     if (gg_rank.size() > 0) {
                         Rank rank = new Rank();
-                        rank.setRankid(0);
+                        rank.setRankid(-1);
                         rank.setListname("男生");
                         new_rank.add(rank);
                         new_rank.addAll(gg_rank);
@@ -62,7 +62,7 @@ public class RankListPresenter extends MvpBasePresenter<RankListView> {
 
                     if (mm_rank.size() > 0) {
                         Rank rank = new Rank();
-                        rank.setRankid(0);
+                        rank.setRankid(-2);
                         rank.setListname("女生");
                         new_rank.add(rank);
                         new_rank.addAll(mm_rank);

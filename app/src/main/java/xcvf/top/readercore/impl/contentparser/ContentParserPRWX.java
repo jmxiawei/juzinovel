@@ -1,9 +1,8 @@
 package xcvf.top.readercore.impl.contentparser;
 
-import com.blankj.utilcode.util.LogUtils;
 
 import org.jsoup.Jsoup;
-import org.jsoup.helper.DataUtil;
+
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
@@ -11,7 +10,7 @@ import org.jsoup.nodes.TextNode;
 import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
 
-import java.io.ByteArrayOutputStream;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.List;
@@ -30,28 +29,7 @@ public class ContentParserPRWX extends DefaulContentParser {
         try {
             int filesize = filelist == null ? 0 : filelist.size();
             for (int l = 0; l < filesize; l++) {
-<<<<<<< HEAD
-                StringBuffer stringBuffer = new StringBuffer();
-                ByteArrayOutputStream 
-                Jsoup.clean(new String(DataUtil.readToByteBuffer(, Whitelist.basic());
 
-                Document document = Jsoup.parse(), "gbk");
-                document.cl
-
-//                int size = element.childNodeSize();
-//                for (int i = 0; i < size; i++) {
-//                    Node node = element.childNode(i);
-//                    if (node instanceof TextNode) {
-//                        TextNode textNode = (TextNode) node;
-//                        textBuff.append(filterNode(textNode.getWholeText()));
-//                    } else if (node instanceof Element) {
-//                        Element element1 = (Element) node;
-//                        if ("br".equals(element1.tagName())) {
-//                            textBuff.append("\n");
-//                        }
-//                    }
-//                }
-=======
                 String clean = Jsoup.clean(
                         new String(ConstrainableInputStream.wrap(
                                 new FileInputStream(new File(filelist.get(l))),
@@ -83,7 +61,6 @@ public class ContentParserPRWX extends DefaulContentParser {
                         }
                     }
                 }
->>>>>>> d0de6f7478117c08b46c987d0495c0542911f4d9
                 deleteEndBr(textBuff);
             }
         } catch (Exception e) {
