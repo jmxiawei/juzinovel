@@ -126,9 +126,12 @@ public class BookListActivity extends MvpActivity<SearchView, SearchPresenter> i
 
         if (type == 0) {
             //根绝类别搜索
-            presenter.searchBook(null, params, page);
+            presenter.searchBook(null, params, null, page);
         } else if (type == 1) {
-            presenter.searchBook(params, null, page);
+            presenter.searchBook(params, null, null, page);
+        } else if (type == 2) {
+            //排行榜
+            presenter.searchBook(null, null, params, page);
         }
 
     }

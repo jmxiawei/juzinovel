@@ -47,6 +47,9 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
         return this;
     }
 
+    public LinkedList<Chapter> getCacheChapterList() {
+        return mCacheChapterList;
+    }
 
     private void checkChaptetList(Chapter chapter) {
         if (mCacheChapterList.contains(chapter)) {

@@ -13,6 +13,7 @@ import bolts.Task;
 import xcvf.top.readercore.bean.Chapter;
 import xcvf.top.readercore.bean.Page;
 import xcvf.top.readercore.bean.TextConfig;
+import xcvf.top.readercore.impl.downloader.BaseChapterFileDownloader;
 import xcvf.top.readercore.interfaces.ChapterFileDownloader;
 import xcvf.top.readercore.interfaces.IDisplayer;
 import xcvf.top.readercore.interfaces.IPage;
@@ -36,11 +37,22 @@ public class ChapterDisplayedImpl implements IDisplayer {
         //重新加载
         //下载文件
 
+        boolean needReload = readerView.needReload(chapter);
+        if (!needReload && !reset) {
+            LogUtils.e("加载成功.无需加载");
+            return;
+        }
+
         final String url = chapter.getFullPath();
         LogUtils.e(url);
         Task.callInBackground(new Callable<ArrayList<String>>() {
             @Override
             public ArrayList<String> call() throws Exception {
+
+                if (BaseChapterFileDownloader.isInTask(url)) {
+                    throw new Exception("pass");
+                }
+
                 ChapterFileDownloader downloader = ChapterParserFactory.getDownloader(chapter.engine_domain);
                 if (downloader != null) {
                     return downloader.download(readerView.getContext(), url);
@@ -50,7 +62,11 @@ public class ChapterDisplayedImpl implements IDisplayer {
         }).continueWith(new Continuation<ArrayList<String>, Object>() {
             @Override
             public Object then(Task<ArrayList<String>> task) throws Exception {
-
+                if (task.getError() != null &&
+                        "pass".equals(task.getError().getMessage())) {
+                    //异常表示pass，忽略
+                    return null;
+                }
                 final ArrayList<String> list = task.getResult();
                 if (list != null && list.size() > 0) {
                     //下载成功

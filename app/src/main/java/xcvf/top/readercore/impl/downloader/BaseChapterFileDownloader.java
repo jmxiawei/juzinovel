@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import okhttp3.Headers;
 import okhttp3.OkHttpClient;
@@ -25,10 +26,33 @@ public class BaseChapterFileDownloader implements ChapterFileDownloader {
 
     String engine;
 
+
+    public static final int STATUS_DOWNLOAD_DOING = 99;
+
+    /**
+     * 下载任务记录map
+     */
+    private static final ConcurrentHashMap<String, Integer> downloadTaskStatusMap = new ConcurrentHashMap<>();
+
+
+    /**
+     * 是否正在下载中
+     *
+     * @param url
+     * @return
+     */
+    public static boolean isInTask(String url) {
+        Integer integer = downloadTaskStatusMap.get(url);
+        if (integer != null && integer == STATUS_DOWNLOAD_DOING) {
+            return true;
+        }
+        return false;
+    }
+
+
     protected BaseChapterFileDownloader(String engine) {
         this.engine = engine;
     }
-
 
     public static BaseChapterFileDownloader newOne(String engine) {
         return new BaseChapterFileDownloader(engine);
@@ -43,7 +67,7 @@ public class BaseChapterFileDownloader implements ChapterFileDownloader {
      */
     protected HashMap<String, String> buildHeader() {
 
-        if(engine.equals(ChapterParserFactory.ENGINE.KANKAN)){
+        if (engine.equals(ChapterParserFactory.ENGINE.KANKAN)) {
 
         }
 
@@ -61,6 +85,7 @@ public class BaseChapterFileDownloader implements ChapterFileDownloader {
     public static boolean downloadUrl(String url, String destPath, HashMap<String, String> headers) {
 
         try {
+            downloadTaskStatusMap.put(url, STATUS_DOWNLOAD_DOING);
             Headers.Builder builder1 = null;
             OkHttpClient.Builder builder = new OkHttpClient.Builder();
             if (headers != null) {
@@ -80,6 +105,7 @@ public class BaseChapterFileDownloader implements ChapterFileDownloader {
             FileUtils.createOrExistsDir(Constant.getDir(destPath));
             File file = new File(destPath);
             if (file.exists()) {
+                downloadTaskStatusMap.remove(url);
                 return true;
             }
             Response response = builder.build().newCall(request).execute();
@@ -94,18 +120,21 @@ public class BaseChapterFileDownloader implements ChapterFileDownloader {
                 fileOutputStream.close();
                 inputStream.close();
                 file.setLastModified(System.currentTimeMillis());
+                downloadTaskStatusMap.remove(url);
                 return true;
             }
 
         } catch (IOException e) {
             e.printStackTrace();
+
         }
+        downloadTaskStatusMap.remove(url);
         return false;
     }
 
 
     @Override
-    public ArrayList<String> download(Context context,String chapter_url) {
+    public ArrayList<String> download(Context context, String chapter_url) {
         return null;
     }
 }

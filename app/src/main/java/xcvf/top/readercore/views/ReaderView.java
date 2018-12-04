@@ -7,6 +7,8 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 
+import java.util.List;
+
 import top.iscore.freereader.R;
 import xcvf.top.readercore.bean.Book;
 import xcvf.top.readercore.bean.Chapter;
@@ -112,9 +114,9 @@ public class ReaderView extends FrameLayout {
     /**
      * 获取当前的章节
      *
-     * @return  0 位于最开始一章 1位于中间，2位于最后一章
+     * @return 0 位于最开始一章 1位于中间，2位于最后一章
      */
-    public int  indexOfCurrentChapter() {
+    public int indexOfCurrentChapter() {
         int page = mBookContentView.getCurrentPage();
         return mBookContentAdapter.indexOfCurrentChapter(page);
     }
@@ -131,7 +133,23 @@ public class ReaderView extends FrameLayout {
     }
 
 
-
+    /**
+     * @param chapter
+     * @return
+     */
+    public boolean needReload(Chapter chapter) {
+        List<Chapter> mCacheList = mBookContentAdapter.getCacheChapterList();
+        if (mCacheList != null && mCacheList.size() > 0) {
+            for (Chapter chapter1 : mCacheList) {
+                if (chapter1.equals(chapter)) {
+                    if (chapter1.getStatus() == Chapter.STATUS_OK) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
 
     /**
      * 初始设置章节
