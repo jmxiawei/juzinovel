@@ -60,8 +60,6 @@ public class BookReadPresenter extends MvpBasePresenter<BookReadView> {
                 return null;
             }
         }, Task.UI_THREAD_EXECUTOR);
-
-
     }
 
 

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import top.iscore.freereader.CateListActivity;
 import top.iscore.freereader.R;
+import top.iscore.freereader.RankListActivity;
 import top.iscore.freereader.SwitchModeHandler;
 import top.iscore.freereader.fragment.adapters.CommonViewHolder;
 import top.iscore.freereader.mode.Colorful;
@@ -58,6 +59,7 @@ public class FinderFragment extends BaseListFragment<Category> implements Switch
     private void initCateogry() {
         categories.clear();
         categories.add(new Category(0,"分类",R.mipmap.ic_category));
+        categories.add(new Category(1,"排行榜",R.mipmap.ic_category));
         getAdapter().setDataList(categories);
 
     }
@@ -65,8 +67,16 @@ public class FinderFragment extends BaseListFragment<Category> implements Switch
 
     @Override
     public void onItemClick(CommonViewHolder holder, int position, Category item) {
-        Intent intent = new Intent(getActivity(), CateListActivity.class);
-        startActivity(intent);
+
+        if(item.getId() == 0){
+            Intent intent = new Intent(getActivity(), CateListActivity.class);
+            startActivity(intent);
+        }else{
+            Intent intent = new Intent(getActivity(), RankListActivity.class);
+            startActivity(intent);
+        }
+
+
     }
 
     @Override

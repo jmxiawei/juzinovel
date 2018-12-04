@@ -138,7 +138,7 @@ public class SearchActivity extends MvpActivity<SearchView, SearchPresenter> imp
         }
         String text = viewSearch.getQuery().toString();
         if (!TextUtils.isEmpty(text)) {
-            presenter.searchBook(viewSearch.getQuery().toString(), null, page);
+            presenter.searchBook(viewSearch.getQuery().toString(), null,null, page);
         }
     }
 

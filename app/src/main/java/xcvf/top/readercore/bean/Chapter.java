@@ -54,24 +54,23 @@ public class Chapter implements Parcelable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Chapter chapter = (Chapter) o;
-        return Objects.equals(extern_bookid, chapter.extern_bookid) &&
+        return chapterid == chapter.chapterid &&
+                Objects.equals(extern_bookid, chapter.extern_bookid) &&
+                Objects.equals(engine_domain, chapter.engine_domain) &&
                 Objects.equals(self_page, chapter.self_page);
-    }
-
-    public String getDecodedSelfPage() {
-        return new String(Base64.decode(self_page, Base64.DEFAULT));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(extern_bookid, self_page);
+
+        return Objects.hash(extern_bookid, engine_domain, self_page, chapterid);
+    }
+
+    public String getDecodedSelfPage() {
+        return new String(Base64.decode(self_page, Base64.DEFAULT));
     }
 
     public int getStatus() {

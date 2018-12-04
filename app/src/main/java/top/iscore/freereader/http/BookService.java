@@ -9,6 +9,7 @@ import retrofit2.http.POST;
 import xcvf.top.readercore.bean.Book;
 import xcvf.top.readercore.bean.Category;
 import xcvf.top.readercore.bean.Chapter;
+import xcvf.top.readercore.bean.Rank;
 import xcvf.top.readercore.bean.User;
 
 /**
@@ -106,6 +107,7 @@ public interface BookService {
     @POST("reader/public/v1/")
     Call<BaseModel<ArrayList<Book>>> search(@Field("service") String service
             , @Field("keyword") String keyword, @Field("catename") String catename,
+                                            @Field("ranklistid") String ranklistid,
                                             @Field("page") int page);
 
     /**
@@ -117,6 +119,20 @@ public interface BookService {
     @FormUrlEncoded
     @POST("reader/public/v1/")
     Call<BaseModel<ArrayList<Category>>> allcate(@Field("service") String service);
+
+
+
+    /**
+     * 排行榜 Book.ranklist
+     *
+     * @param service
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("reader/public/v1/")
+    Call<BaseModel<ArrayList<Rank>>> rankList(@Field("service") String service);
+
+
 
     /**
      * 书籍详情
