@@ -11,6 +11,7 @@ import org.jsoup.nodes.Node;
 import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.List;
@@ -28,7 +29,7 @@ public class ContentParserPRWX extends DefaulContentParser {
             int filesize = filelist == null ? 0 : filelist.size();
             for (int l = 0; l < filesize; l++) {
                 StringBuffer stringBuffer = new StringBuffer();
-                stringBuff
+                ByteArrayOutputStream 
                 Jsoup.clean(new String(DataUtil.readToByteBuffer(, Whitelist.basic());
 
                 Document document = Jsoup.parse(), "gbk");
