@@ -414,6 +414,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
             Page page = readerView.getCurrentPage();
             mBookMark.setPage(page.getIndex());
             mBookMark.save();
+
         }
     }
 

@@ -23,10 +23,14 @@ import top.iscore.freereader.fragment.adapters.BaseRecyclerAdapter;
 import top.iscore.freereader.fragment.adapters.CommonViewHolder;
 import top.iscore.freereader.fragment.adapters.OnRecyclerViewItemClickListener;
 import top.iscore.freereader.fragment.adapters.ViewHolderCreator;
+import top.iscore.freereader.mode.Colorful;
+import top.iscore.freereader.mode.setter.ViewBackgroundColorSetter;
+import top.iscore.freereader.mode.setter.ViewGroupSetter;
 import top.iscore.freereader.mvp.presenters.RankListPresenter;
 import top.iscore.freereader.mvp.view.RankListView;
 import xcvf.top.readercore.bean.Category;
 import xcvf.top.readercore.bean.Rank;
+import xcvf.top.readercore.styles.ModeProvider;
 
 /**
  * 排行榜
@@ -65,6 +69,23 @@ public class RankListActivity extends MvpActivity<RankListView, RankListPresente
                 BookListActivity.toBookList(RankListActivity.this, item.listname, 2, item.rankid + "");
             }
         });
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        changeMode();
+    }
+
+    private void changeMode() {
+
+        new Colorful.Builder(this).setter(new ViewBackgroundColorSetter(llTitle, R.attr.colorAccent))
+                .setter(new ViewGroupSetter(recycler, R.attr.colorPrimary)
+                        .childViewTextColor(R.id.tv_name, R.attr.text_color)
+                )
+                .create()
+                .setTheme(ModeProvider.getCurrentModeTheme());
     }
 
     @OnClick(R.id.img_back)

@@ -53,7 +53,7 @@ public interface BookService {
      * 检查更新
      *
      * @param service
-     * @param vcode 版本号
+     * @param vcode   版本号
      * @return
      */
     @FormUrlEncoded
@@ -93,7 +93,7 @@ public interface BookService {
     @FormUrlEncoded
     @POST("reader/public/v1/")
     Call<BaseModel<Book>> deleteBookShelf(@Field("service") String service
-            , @Field("userid") String userid, @Field("shelfid") String shelfid,@Field("extern_bookid") String extern_bookid);
+            , @Field("userid") String userid, @Field("shelfid") String shelfid, @Field("extern_bookid") String extern_bookid);
 
 
     /**
@@ -121,7 +121,6 @@ public interface BookService {
     Call<BaseModel<ArrayList<Category>>> allcate(@Field("service") String service);
 
 
-
     /**
      * 排行榜 Book.ranklist
      *
@@ -133,7 +132,6 @@ public interface BookService {
     Call<BaseModel<ArrayList<Rank>>> rankList(@Field("service") String service);
 
 
-
     /**
      * 书籍详情
      *
@@ -143,7 +141,7 @@ public interface BookService {
     @FormUrlEncoded
     @POST("reader/public/v1/")
     Call<BaseModel<Book>> detail(@Field("service") String service
-            , @Field("extern_bookid") String extern_bookid,@Field("userid") String userid);
+            , @Field("extern_bookid") String extern_bookid, @Field("userid") String userid);
 
     /**
      * 新增阅读记录
@@ -159,6 +157,22 @@ public interface BookService {
                                      @Field("userid") String userid);
 
 
+    /**
+     * 新增阅读记录
+     *
+     * @param service
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("reader/public/v1/")
+    Call<BaseModel<Book>> addBookMarker(@Field("service") String service
+                    , @Field("extern_bookid") String extern_bookid
+            , @Field("bookid") String bookid,
+                                        @Field("chapterid") String chapterid,
+                                        @Field("chapter_name") String chapter_name,
+                                        @Field("page") String page,
+                                        @Field("userid") String userid);
+
 
     /**
      * 登录
@@ -169,11 +183,11 @@ public interface BookService {
     @FormUrlEncoded
     @POST("reader/public/v1/")
     Call<BaseModel<User>> login(@Field("service") String service,
-                                    @Field("account") String account,
-                                    @Field("pwd") String pwd,
-                                    @Field("avatar") String avatar,
-                                    @Field("nickname") String nickname,
-                                    @Field("gender") String gender);
+                                @Field("account") String account,
+                                @Field("pwd") String pwd,
+                                @Field("avatar") String avatar,
+                                @Field("nickname") String nickname,
+                                @Field("gender") String gender);
 
 
 }

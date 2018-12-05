@@ -226,5 +226,43 @@ public class BookShelfPresenter extends MvpBasePresenter<BookShelfView> {
         });
     }
 
+    /**
+     * 书籍
+     *
+     * @param userid
+     * @param bookid
+     */
+    public void addBookMarker(int userid, String bookid) {
+        final Call<BaseModel<Book>> resCall = BaseHttpHandler.create().getProxy(BookService.class).detail("Book.Detail", bookid, String.valueOf(userid));
+        resCall.enqueue(new Callback<BaseModel<Book>>() {
+            @Override
+            public void onResponse(Call<BaseModel<Book>> call, final Response<BaseModel<Book>> response) {
+
+                ifViewAttached(new ViewAction<BookShelfView>() {
+                    @Override
+                    public void run(@NonNull BookShelfView view) {
+                        if (response != null && response.isSuccessful()) {
+                            view.onLoadBookDetail(response.body().getData());
+                        } else {
+                            view.onLoadBookDetail(null);
+                        }
+                    }
+                });
+
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<Book>> call, Throwable t) {
+                ifViewAttached(new ViewAction<BookShelfView>() {
+                    @Override
+                    public void run(@NonNull BookShelfView view) {
+                        view.onLoadBookDetail(null);
+                    }
+                });
+
+            }
+        });
+    }
+
 
 }
