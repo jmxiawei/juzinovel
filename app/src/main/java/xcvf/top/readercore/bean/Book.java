@@ -41,8 +41,9 @@ public class Book implements Parcelable {
     public String desc;
     public String info_url;
     public String read_url;
-    public String latest_chapter_name;
-    public String latest_chapter_url;
+    public String chapter_name;
+    public String chapterid;
+    public int page;
     public String keywords;
     public String extern_bookid;
     public String update_time;
@@ -147,12 +148,29 @@ public class Book implements Parcelable {
         this.desc = desc;
     }
 
-    public String getLatest_chapter_name() {
-        return this.latest_chapter_name;
+
+    public String getChapter_name() {
+        return chapter_name;
     }
 
-    public void setLatest_chapter_name(String latest_chapter_name) {
-        this.latest_chapter_name = latest_chapter_name;
+    public void setChapter_name(String chapter_name) {
+        this.chapter_name = chapter_name;
+    }
+
+    public String getChapterid() {
+        return chapterid;
+    }
+
+    public void setChapterid(String chapterid) {
+        this.chapterid = chapterid;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
     }
 
     public void save(String userid) {
@@ -185,14 +203,6 @@ public class Book implements Parcelable {
         }
     }
 
-
-    public String getLatest_chapter_url() {
-        return this.latest_chapter_url;
-    }
-
-    public void setLatest_chapter_url(String latest_chapter_url) {
-        this.latest_chapter_url = latest_chapter_url;
-    }
 
     public String getKeywords() {
         return this.keywords;
@@ -238,28 +248,7 @@ public class Book implements Parcelable {
         this.read_url = read_url;
     }
 
-    @Generated(hash = 923203810)
-    public Book(int bookid, String cover, String shelfid, String userid, String name, String author, String engine_domain,
-            String cate_name, String desc, String info_url, String read_url, String latest_chapter_name, String latest_chapter_url,
-            String keywords, String extern_bookid, String update_time, String uniqueKey) {
-        this.bookid = bookid;
-        this.cover = cover;
-        this.shelfid = shelfid;
-        this.userid = userid;
-        this.name = name;
-        this.author = author;
-        this.engine_domain = engine_domain;
-        this.cate_name = cate_name;
-        this.desc = desc;
-        this.info_url = info_url;
-        this.read_url = read_url;
-        this.latest_chapter_name = latest_chapter_name;
-        this.latest_chapter_url = latest_chapter_url;
-        this.keywords = keywords;
-        this.extern_bookid = extern_bookid;
-        this.update_time = update_time;
-        this.uniqueKey = uniqueKey;
-    }
+    
 
     @Override
     public int describeContents() {
@@ -268,8 +257,8 @@ public class Book implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeTypedList(this.chapters);
-        dest.writeTypedList(this.priorities);
+        dest.writeTypedList(chapters);
+        dest.writeTypedList(priorities);
         dest.writeInt(this.bookid);
         dest.writeString(this.cover);
         dest.writeString(this.shelfid);
@@ -281,8 +270,9 @@ public class Book implements Parcelable {
         dest.writeString(this.desc);
         dest.writeString(this.info_url);
         dest.writeString(this.read_url);
-        dest.writeString(this.latest_chapter_name);
-        dest.writeString(this.latest_chapter_url);
+        dest.writeString(this.chapter_name);
+        dest.writeString(this.chapterid);
+        dest.writeInt(this.page);
         dest.writeString(this.keywords);
         dest.writeString(this.extern_bookid);
         dest.writeString(this.update_time);
@@ -303,21 +293,44 @@ public class Book implements Parcelable {
         this.desc = in.readString();
         this.info_url = in.readString();
         this.read_url = in.readString();
-        this.latest_chapter_name = in.readString();
-        this.latest_chapter_url = in.readString();
+        this.chapter_name = in.readString();
+        this.chapterid = in.readString();
+        this.page = in.readInt();
         this.keywords = in.readString();
         this.extern_bookid = in.readString();
         this.update_time = in.readString();
         this.uniqueKey = in.readString();
     }
 
+    @Generated(hash = 332585091)
+    public Book(int bookid, String cover, String shelfid, String userid, String name, String author, String engine_domain,
+            String cate_name, String desc, String info_url, String read_url, String chapter_name, String chapterid,
+            int page, String keywords, String extern_bookid, String update_time, String uniqueKey) {
+        this.bookid = bookid;
+        this.cover = cover;
+        this.shelfid = shelfid;
+        this.userid = userid;
+        this.name = name;
+        this.author = author;
+        this.engine_domain = engine_domain;
+        this.cate_name = cate_name;
+        this.desc = desc;
+        this.info_url = info_url;
+        this.read_url = read_url;
+        this.chapter_name = chapter_name;
+        this.chapterid = chapterid;
+        this.page = page;
+        this.keywords = keywords;
+        this.extern_bookid = extern_bookid;
+        this.update_time = update_time;
+        this.uniqueKey = uniqueKey;
+    }
+
     public static final Creator<Book> CREATOR = new Creator<Book>() {
-        @Override
         public Book createFromParcel(Parcel source) {
             return new Book(source);
         }
 
-        @Override
         public Book[] newArray(int size) {
             return new Book[size];
         }

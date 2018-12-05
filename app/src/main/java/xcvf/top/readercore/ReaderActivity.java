@@ -296,6 +296,8 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
         String chapterid = "0";
         if (mBookMark != null) {
             chapterid = mBookMark.getChapterid();
+        }else {
+
         }
         int type = IChapterProvider.TYPE_DETAIL;
         if ("0".equals(chapterid)) {
@@ -414,7 +416,12 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
             Page page = readerView.getCurrentPage();
             mBookMark.setPage(page.getIndex());
             mBookMark.save();
-
+            mBookShelfPresenter.addBookMarker(mUser.getUid(),
+                    book.bookid,
+                    book.extern_bookid,
+                    chapter.chapter_name,
+                    ""+chapter.chapterid,
+                    page.getIndex(),book.engine_domain,book.read_url);
         }
     }
 

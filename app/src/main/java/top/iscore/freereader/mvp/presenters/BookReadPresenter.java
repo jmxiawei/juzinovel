@@ -75,5 +75,9 @@ public class BookReadPresenter extends MvpBasePresenter<BookReadView> {
     }
 
 
+    public void saveBookMarker(String chapter_name,String chapterid,String bookid,String extern_bookid,int page){
+
+    }
+
 
 }

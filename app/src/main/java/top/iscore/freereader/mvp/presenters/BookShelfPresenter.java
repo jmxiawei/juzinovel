@@ -233,34 +233,17 @@ public class BookShelfPresenter extends MvpBasePresenter<BookShelfView> {
      * @param userid
      * @param bookid
      */
-    public void addBookMarker(int userid, int bookid) {
-        final Call<BaseModel<Book>> resCall = BaseHttpHandler.create().getProxy(BookService.class).detail("Book.Detail", bookid, String.valueOf(userid));
+    public void addBookMarker(int userid, int bookid,String extern_bookid,
+                              String chapter_name,String chapterid,int page,String engine_domain,String read_url) {
+        final Call<BaseModel<Book>> resCall = BaseHttpHandler.create().getProxy(BookService.class).addBookMarker("Book.addBookMarker", extern_bookid,bookid,chapterid,chapter_name,page,userid,engine_domain,read_url);
         resCall.enqueue(new Callback<BaseModel<Book>>() {
             @Override
             public void onResponse(Call<BaseModel<Book>> call, final Response<BaseModel<Book>> response) {
-
-                ifViewAttached(new ViewAction<BookShelfView>() {
-                    @Override
-                    public void run(@NonNull BookShelfView view) {
-                        if (response != null && response.isSuccessful()) {
-                            view.onLoadBookDetail(response.body().getData());
-                        } else {
-                            view.onLoadBookDetail(null);
-                        }
-                    }
-                });
 
             }
 
             @Override
             public void onFailure(Call<BaseModel<Book>> call, Throwable t) {
-                ifViewAttached(new ViewAction<BookShelfView>() {
-                    @Override
-                    public void run(@NonNull BookShelfView view) {
-                        view.onLoadBookDetail(null);
-                    }
-                });
-
             }
         });
     }

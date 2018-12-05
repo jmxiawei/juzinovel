@@ -27,9 +27,10 @@ public class BookMarkDao extends AbstractDao<BookMark, Void> {
         public final static Property Time_stamp = new Property(0, long.class, "time_stamp", false, "TIME_STAMP");
         public final static Property Unique_key = new Property(1, String.class, "unique_key", false, "UNIQUE_KEY");
         public final static Property Userid = new Property(2, int.class, "userid", false, "USERID");
-        public final static Property Extern_bookid = new Property(3, String.class, "extern_bookid", false, "EXTERN_BOOKID");
-        public final static Property Chapterid = new Property(4, String.class, "chapterid", false, "CHAPTERID");
-        public final static Property Page = new Property(5, int.class, "page", false, "PAGE");
+        public final static Property Bookid = new Property(3, int.class, "bookid", false, "BOOKID");
+        public final static Property Extern_bookid = new Property(4, String.class, "extern_bookid", false, "EXTERN_BOOKID");
+        public final static Property Chapterid = new Property(5, String.class, "chapterid", false, "CHAPTERID");
+        public final static Property Page = new Property(6, int.class, "page", false, "PAGE");
     }
 
 
@@ -48,9 +49,10 @@ public class BookMarkDao extends AbstractDao<BookMark, Void> {
                 "\"TIME_STAMP\" INTEGER NOT NULL ," + // 0: time_stamp
                 "\"UNIQUE_KEY\" TEXT UNIQUE ," + // 1: unique_key
                 "\"USERID\" INTEGER NOT NULL ," + // 2: userid
-                "\"EXTERN_BOOKID\" TEXT," + // 3: extern_bookid
-                "\"CHAPTERID\" TEXT," + // 4: chapterid
-                "\"PAGE\" INTEGER NOT NULL );"); // 5: page
+                "\"BOOKID\" INTEGER NOT NULL ," + // 3: bookid
+                "\"EXTERN_BOOKID\" TEXT," + // 4: extern_bookid
+                "\"CHAPTERID\" TEXT," + // 5: chapterid
+                "\"PAGE\" INTEGER NOT NULL );"); // 6: page
     }
 
     /** Drops the underlying database table. */
@@ -69,17 +71,18 @@ public class BookMarkDao extends AbstractDao<BookMark, Void> {
             stmt.bindString(2, unique_key);
         }
         stmt.bindLong(3, entity.getUserid());
+        stmt.bindLong(4, entity.getBookid());
  
         String extern_bookid = entity.getExtern_bookid();
         if (extern_bookid != null) {
-            stmt.bindString(4, extern_bookid);
+            stmt.bindString(5, extern_bookid);
         }
  
         String chapterid = entity.getChapterid();
         if (chapterid != null) {
-            stmt.bindString(5, chapterid);
+            stmt.bindString(6, chapterid);
         }
-        stmt.bindLong(6, entity.getPage());
+        stmt.bindLong(7, entity.getPage());
     }
 
     @Override
@@ -92,17 +95,18 @@ public class BookMarkDao extends AbstractDao<BookMark, Void> {
             stmt.bindString(2, unique_key);
         }
         stmt.bindLong(3, entity.getUserid());
+        stmt.bindLong(4, entity.getBookid());
  
         String extern_bookid = entity.getExtern_bookid();
         if (extern_bookid != null) {
-            stmt.bindString(4, extern_bookid);
+            stmt.bindString(5, extern_bookid);
         }
  
         String chapterid = entity.getChapterid();
         if (chapterid != null) {
-            stmt.bindString(5, chapterid);
+            stmt.bindString(6, chapterid);
         }
-        stmt.bindLong(6, entity.getPage());
+        stmt.bindLong(7, entity.getPage());
     }
 
     @Override
@@ -116,9 +120,10 @@ public class BookMarkDao extends AbstractDao<BookMark, Void> {
             cursor.getLong(offset + 0), // time_stamp
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // unique_key
             cursor.getInt(offset + 2), // userid
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // extern_bookid
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // chapterid
-            cursor.getInt(offset + 5) // page
+            cursor.getInt(offset + 3), // bookid
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // extern_bookid
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // chapterid
+            cursor.getInt(offset + 6) // page
         );
         return entity;
     }
@@ -128,9 +133,10 @@ public class BookMarkDao extends AbstractDao<BookMark, Void> {
         entity.setTime_stamp(cursor.getLong(offset + 0));
         entity.setUnique_key(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setUserid(cursor.getInt(offset + 2));
-        entity.setExtern_bookid(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setChapterid(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setPage(cursor.getInt(offset + 5));
+        entity.setBookid(cursor.getInt(offset + 3));
+        entity.setExtern_bookid(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setChapterid(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setPage(cursor.getInt(offset + 6));
      }
     
     @Override
