@@ -59,7 +59,7 @@ public class FinderFragment extends BaseListFragment<Category> implements Switch
     private void initCateogry() {
         categories.clear();
         categories.add(new Category(0,"分类",R.mipmap.ic_category));
-        categories.add(new Category(1,"排行榜",R.mipmap.ic_category));
+        categories.add(new Category(1,"排行榜",R.mipmap.ic_rank));
         getAdapter().setDataList(categories);
 
     }

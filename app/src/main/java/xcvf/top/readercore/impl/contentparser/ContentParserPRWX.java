@@ -1,15 +1,15 @@
 package xcvf.top.readercore.impl.contentparser;
 
-import com.blankj.utilcode.util.LogUtils;
 
 import org.jsoup.Jsoup;
-import org.jsoup.helper.DataUtil;
+
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
+
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,6 +29,7 @@ public class ContentParserPRWX extends DefaulContentParser {
         try {
             int filesize = filelist == null ? 0 : filelist.size();
             for (int l = 0; l < filesize; l++) {
+
                 String clean = Jsoup.clean(
                         new String(ConstrainableInputStream.wrap(
                                 new FileInputStream(new File(filelist.get(l))),
