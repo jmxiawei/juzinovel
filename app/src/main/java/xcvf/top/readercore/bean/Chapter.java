@@ -42,7 +42,7 @@ public class Chapter implements Parcelable {
     public int is_fetch;
     public String engine_domain;
     public boolean is_download;
-
+    public int bookid;
 
     @Unique
     private String self_page;
@@ -170,6 +170,22 @@ public class Chapter implements Parcelable {
         return chapter;
     }
 
+
+    /**
+     * 根绝id获取章节
+     *
+     * @param bookid
+     * @return
+     */
+    public static List<Chapter> getAllChapter(int bookid,String extern_bookid) {
+        return DBManager.getDaoSession().
+                getChapterDao().
+                queryBuilder().
+                where(ChapterDao.Properties.Bookid.eq(bookid)).
+                where(ChapterDao.Properties.Extern_bookid.eq(extern_bookid)).build().list();
+    }
+
+
     /**
      * 获取上一个章节
      *
@@ -230,14 +246,15 @@ public class Chapter implements Parcelable {
     public Chapter() {
     }
 
-    @Generated(hash = 688822552)
+    @Generated(hash = 709787008)
     public Chapter(String chapter_name, String extern_bookid, int is_fetch, String engine_domain, boolean is_download,
-                   String self_page, int chapterid) {
+            int bookid, String self_page, int chapterid) {
         this.chapter_name = chapter_name;
         this.extern_bookid = extern_bookid;
         this.is_fetch = is_fetch;
         this.engine_domain = engine_domain;
         this.is_download = is_download;
+        this.bookid = bookid;
         this.self_page = self_page;
         this.chapterid = chapterid;
     }
@@ -311,5 +328,13 @@ public class Chapter implements Parcelable {
             url = engine_domain + self_page;
         }
         return url;
+    }
+
+    public int getBookid() {
+        return this.bookid;
+    }
+
+    public void setBookid(int bookid) {
+        this.bookid = bookid;
     }
 }

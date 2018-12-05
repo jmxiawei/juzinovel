@@ -27,6 +27,7 @@ import top.iscore.freereader.mode.setter.ViewGroupSetter;
 import top.iscore.freereader.mvp.presenters.BookShelfPresenter;
 import top.iscore.freereader.mvp.view.BookShelfView;
 import xcvf.top.readercore.bean.Book;
+import xcvf.top.readercore.bean.BookCate;
 import xcvf.top.readercore.bean.Category;
 import xcvf.top.readercore.styles.ModeProvider;
 
@@ -44,6 +45,7 @@ public class CateListActivity extends MvpActivity<BookShelfView, BookShelfPresen
     @BindView(R.id.recycler)
     RecyclerView recycler;
     MAdapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,32 +74,32 @@ public class CateListActivity extends MvpActivity<BookShelfView, BookShelfPresen
     private void initView() {
         tvTitle.setText("分类");
         recycler.addItemDecoration(new SpaceItemDivider());
-        recycler.setLayoutManager(new GridLayoutManager(this,3));
+        recycler.setLayoutManager(new GridLayoutManager(this, 3));
         mAdapter = new MAdapter();
         recycler.setAdapter(mAdapter);
-        mAdapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener<Category>() {
+        mAdapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener<BookCate>() {
             @Override
-            public void onRecyclerViewItemClick(CommonViewHolder holder, int position, Category item) {
-                 BookListActivity.toBookList(CateListActivity.this,item.getName(),0,item.getName());
+            public void onRecyclerViewItemClick(CommonViewHolder holder, int position, BookCate item) {
+                BookListActivity.toBookList(CateListActivity.this, item.getName(), 0, item.getName());
             }
         });
     }
 
-    private static class  MAdapter extends BaseRecyclerAdapter<Category>{
+    private static class MAdapter extends BaseRecyclerAdapter<BookCate> {
 
 
         @Override
         public ViewHolderCreator createViewHolderCreator() {
             return new ViewHolderCreator() {
                 @Override
-                public CommonViewHolder<Category> createByViewGroupAndType(ViewGroup parent, int viewType, Object... p) {
-                    return new CommonViewHolder<Category>(parent.getContext(),parent,R.layout.item_holder_cate) {
+                public CommonViewHolder<BookCate> createByViewGroupAndType(ViewGroup parent, int viewType, Object... p) {
+                    return new CommonViewHolder<BookCate>(parent.getContext(), parent, R.layout.item_holder_cate) {
                         @Override
-                        public void bindData(Category category, int position) {
+                        public void bindData(BookCate category, int position) {
                             TextView tv_name = itemView.findViewById(R.id.tv_name);
                             TextView tv_num = itemView.findViewById(R.id.tv_num);
                             tv_name.setText(category.getName());
-                            tv_num.setText(category.getIntValue()+"本");
+                            tv_num.setText(category.getBooknum() + "本");
                         }
                     };
                 }
@@ -117,7 +119,7 @@ public class CateListActivity extends MvpActivity<BookShelfView, BookShelfPresen
     }
 
     @Override
-    public void onLoadAllCate(List<Category> categories) {
+    public void onLoadAllCate(List<BookCate> categories) {
         mAdapter.setDataList(categories);
     }
 

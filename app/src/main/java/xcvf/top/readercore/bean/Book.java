@@ -162,16 +162,16 @@ public class Book implements Parcelable {
     }
 
 
-    private static String getUKey(String userid, String extern_bookid) {
-        return extern_bookid + "_iscore.top_" + userid;
+    private static String getUKey(String userid, int bookid) {
+        return bookid + "_iscore.top_" + userid;
     }
 
     /**
      * @param userid
-     * @param extern_bookid
+     * @param bookid
      */
-    public static void delete(String userid, String extern_bookid) {
-        DBManager.getDaoSession().getBookDao().queryBuilder().where(BookDao.Properties.UniqueKey.eq(getUKey(userid, extern_bookid))
+    public static void delete(String userid, int bookid) {
+        DBManager.getDaoSession().getBookDao().queryBuilder().where(BookDao.Properties.UniqueKey.eq(getUKey(userid, bookid))
         ).buildDelete().executeDeleteWithoutDetachingEntities();
     }
 
@@ -179,7 +179,7 @@ public class Book implements Parcelable {
         if (list != null) {
             for (Book book : list) {
                 book.setUserid(userid);
-                book.setUniqueKey(getUKey(userid,book.extern_bookid));
+                book.setUniqueKey(getUKey(userid,book.bookid));
             }
             DBManager.getDaoSession().getBookDao().insertOrReplaceInTx(list);
         }

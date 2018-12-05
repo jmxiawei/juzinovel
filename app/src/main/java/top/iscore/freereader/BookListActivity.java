@@ -91,7 +91,7 @@ public class BookListActivity extends MvpActivity<SearchView, SearchPresenter> i
         mBookAdapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener<Book>() {
             @Override
             public void onRecyclerViewItemClick(CommonViewHolder holder, int position, Book item) {
-                BookDetailActivity.toBookDetail(BookListActivity.this, item.extern_bookid);
+                BookDetailActivity.toBookDetail(BookListActivity.this, item.bookid);
             }
         });
         switchModeListener = new SwitchModeHandler(this, this);

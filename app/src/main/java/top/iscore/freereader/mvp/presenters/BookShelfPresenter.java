@@ -15,6 +15,7 @@ import top.iscore.freereader.http.BaseModel;
 import top.iscore.freereader.http.BookService;
 import top.iscore.freereader.mvp.view.BookShelfView;
 import xcvf.top.readercore.bean.Book;
+import xcvf.top.readercore.bean.BookCate;
 import xcvf.top.readercore.bean.Category;
 
 /**
@@ -31,10 +32,10 @@ public class BookShelfPresenter extends MvpBasePresenter<BookShelfView> {
      */
     public void loadAllCate() {
 
-        Call<BaseModel<ArrayList<Category>>> resCall = BaseHttpHandler.create().getProxy(BookService.class).allcate("Book.Allcate");
-        resCall.enqueue(new Callback<BaseModel<ArrayList<Category>>>() {
+        Call<BaseModel<ArrayList<BookCate>>> resCall = BaseHttpHandler.create().getProxy(BookService.class).allcate("Book.Allcate");
+        resCall.enqueue(new Callback<BaseModel<ArrayList<BookCate>>>() {
             @Override
-            public void onResponse(Call<BaseModel<ArrayList<Category>>> call, final Response<BaseModel<ArrayList<Category>>> response) {
+            public void onResponse(Call<BaseModel<ArrayList<BookCate>>> call, final Response<BaseModel<ArrayList<BookCate>>> response) {
 
                 ifViewAttached(new ViewAction<BookShelfView>() {
                     @Override
@@ -50,7 +51,7 @@ public class BookShelfPresenter extends MvpBasePresenter<BookShelfView> {
             }
 
             @Override
-            public void onFailure(Call<BaseModel<ArrayList<Category>>> call, Throwable t) {
+            public void onFailure(Call<BaseModel<ArrayList<BookCate>>> call, Throwable t) {
                 ifViewAttached(new ViewAction<BookShelfView>() {
                     @Override
                     public void run(@NonNull BookShelfView view) {
@@ -100,7 +101,7 @@ public class BookShelfPresenter extends MvpBasePresenter<BookShelfView> {
      *
      * @param userid
      */
-    public void addBookShelf(int userid, String bookid, Book book) {
+    public void addBookShelf(int userid, int bookid, Book book) {
 
         ifViewAttached(new ViewAction<BookShelfView>() {
             @Override
@@ -151,7 +152,7 @@ public class BookShelfPresenter extends MvpBasePresenter<BookShelfView> {
      *
      * @param shelfid
      */
-    public void deleteBookShelf(int userid, String shelfid, String bookid) {
+    public void deleteBookShelf(int userid, String shelfid, int bookid) {
         ifViewAttached(new ViewAction<BookShelfView>() {
             @Override
             public void run(@NonNull BookShelfView view) {
@@ -194,7 +195,7 @@ public class BookShelfPresenter extends MvpBasePresenter<BookShelfView> {
      * @param userid
      * @param bookid
      */
-    public void loadBookDetail(int userid, String bookid) {
+    public void loadBookDetail(int userid, int bookid) {
         final Call<BaseModel<Book>> resCall = BaseHttpHandler.create().getProxy(BookService.class).detail("Book.Detail", bookid, String.valueOf(userid));
         resCall.enqueue(new Callback<BaseModel<Book>>() {
             @Override
@@ -232,7 +233,7 @@ public class BookShelfPresenter extends MvpBasePresenter<BookShelfView> {
      * @param userid
      * @param bookid
      */
-    public void addBookMarker(int userid, String bookid) {
+    public void addBookMarker(int userid, int bookid) {
         final Call<BaseModel<Book>> resCall = BaseHttpHandler.create().getProxy(BookService.class).detail("Book.Detail", bookid, String.valueOf(userid));
         resCall.enqueue(new Callback<BaseModel<Book>>() {
             @Override

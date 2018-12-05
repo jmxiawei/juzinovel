@@ -149,7 +149,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
             }).setPositiveListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mBookShelfPresenter.addBookShelf(mUser.getUid(), book.extern_bookid, book);
+                    mBookShelfPresenter.addBookShelf(mUser.getUid(), book.bookid, book);
                     finish();
                 }
             }).show(getSupportFragmentManager(), "ContentDialog");
@@ -243,7 +243,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
                 popDownload.showAsDropDown(getWindow().getDecorView());
 
             } else if (action == SettingAction.ACTION_DETAIL) {
-                BookDetailActivity.toBookDetail(ReaderActivity.this, book.extern_bookid);
+                BookDetailActivity.toBookDetail(ReaderActivity.this, book.bookid);
             }
         }
     };
@@ -345,17 +345,17 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
             if (mLoadingFragment != null) {
                 mLoadingFragment.dismiss();
             }
-           int index = readerView.indexOfCurrentChapter();
-            if(index ==  0){
+            int index = readerView.indexOfCurrentChapter();
+            if (index == 0) {
                 LogUtils.e("PRE_CHAPTER");
-                onScroll(0,0,IPageScrollListener.PRE_CHAPTER);
-            }else if(index == 2){
+                onScroll(0, 0, IPageScrollListener.PRE_CHAPTER);
+            } else if (index == 2) {
                 LogUtils.e("NEXT_CHAPTER");
-                onScroll(0,0,IPageScrollListener.NEXT_CHAPTER);
-            }else if(index != 1){
+                onScroll(0, 0, IPageScrollListener.NEXT_CHAPTER);
+            } else if (index != 1) {
                 LogUtils.e("PRE_CHAPTER NEXT_CHAPTER");
-                onScroll(0,0,IPageScrollListener.PRE_CHAPTER);
-                onScroll(0,0,IPageScrollListener.NEXT_CHAPTER);
+                onScroll(0, 0, IPageScrollListener.PRE_CHAPTER);
+                onScroll(0, 0, IPageScrollListener.NEXT_CHAPTER);
             }
 
         }

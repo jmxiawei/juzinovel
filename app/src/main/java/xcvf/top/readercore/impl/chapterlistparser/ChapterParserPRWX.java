@@ -21,6 +21,8 @@ import xcvf.top.readercore.bean.Chapter;
 public class ChapterParserPRWX extends BaseChapterParser {
 
 
+
+
     @Override
     public List<Chapter> parser(Context context, Book book, String url) {
 
@@ -36,7 +38,7 @@ public class ChapterParserPRWX extends BaseChapterParser {
             Elements chapterlist = element.getElementsByTag("li");
             int l = chapterlist.size();
             for (int i = 0; i < l; i++) {
-                Chapter chapter = new Chapter();
+                Chapter chapter = getEmptyChapter(book);
                 Element element1 = chapterlist.get(i);
                 String self_page  = null;
                 try {
@@ -54,14 +56,13 @@ public class ChapterParserPRWX extends BaseChapterParser {
                 String name = element1.wholeText();
                 chapter.setSelf_page(self_page);
                 chapter.setChapter_name(name);
+
                 int chapterid = getChapterId(self_page);
                 if (chapterid > 0) {
                     chapter.setChapterid(chapterid);
                 } else {
                     continue;
                 }
-                chapter.setEngine_domain(book.engine_domain);
-                chapter.setExtern_bookid(book.extern_bookid);
                 pageList.add(chapter);
             }
         } catch (Exception e) {

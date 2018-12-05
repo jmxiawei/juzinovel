@@ -36,7 +36,7 @@ public class ChapterParserQingkan9 extends BaseChapterParser {
             Elements chapterlist = element.getElementsByTag("li");
             int l = chapterlist.size();
             for (int i = 0; i < l; i++) {
-                Chapter chapter = new Chapter();
+                Chapter chapter = getEmptyChapter(book);
                 Element element1 = chapterlist.get(i);
                 String c_url = element1.childNode(0).attributes().get("href");
                 if (TextUtils.isEmpty(c_url)) {
@@ -51,8 +51,6 @@ public class ChapterParserQingkan9 extends BaseChapterParser {
                 } else {
                     continue;
                 }
-                chapter.setEngine_domain(book.engine_domain);
-                chapter.setExtern_bookid(book.extern_bookid);
                 pageList.add(chapter);
             }
         } catch (Exception e) {

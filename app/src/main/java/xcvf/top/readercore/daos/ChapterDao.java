@@ -29,8 +29,9 @@ public class ChapterDao extends AbstractDao<Chapter, Void> {
         public final static Property Is_fetch = new Property(2, int.class, "is_fetch", false, "IS_FETCH");
         public final static Property Engine_domain = new Property(3, String.class, "engine_domain", false, "ENGINE_DOMAIN");
         public final static Property Is_download = new Property(4, boolean.class, "is_download", false, "IS_DOWNLOAD");
-        public final static Property Self_page = new Property(5, String.class, "self_page", false, "SELF_PAGE");
-        public final static Property Chapterid = new Property(6, int.class, "chapterid", false, "CHAPTERID");
+        public final static Property Bookid = new Property(5, int.class, "bookid", false, "BOOKID");
+        public final static Property Self_page = new Property(6, String.class, "self_page", false, "SELF_PAGE");
+        public final static Property Chapterid = new Property(7, int.class, "chapterid", false, "CHAPTERID");
     }
 
 
@@ -51,8 +52,9 @@ public class ChapterDao extends AbstractDao<Chapter, Void> {
                 "\"IS_FETCH\" INTEGER NOT NULL ," + // 2: is_fetch
                 "\"ENGINE_DOMAIN\" TEXT," + // 3: engine_domain
                 "\"IS_DOWNLOAD\" INTEGER NOT NULL ," + // 4: is_download
-                "\"SELF_PAGE\" TEXT UNIQUE ," + // 5: self_page
-                "\"CHAPTERID\" INTEGER NOT NULL );"); // 6: chapterid
+                "\"BOOKID\" INTEGER NOT NULL ," + // 5: bookid
+                "\"SELF_PAGE\" TEXT UNIQUE ," + // 6: self_page
+                "\"CHAPTERID\" INTEGER NOT NULL );"); // 7: chapterid
     }
 
     /** Drops the underlying database table. */
@@ -81,12 +83,13 @@ public class ChapterDao extends AbstractDao<Chapter, Void> {
             stmt.bindString(4, engine_domain);
         }
         stmt.bindLong(5, entity.getIs_download() ? 1L: 0L);
+        stmt.bindLong(6, entity.getBookid());
  
         String self_page = entity.getSelf_page();
         if (self_page != null) {
-            stmt.bindString(6, self_page);
+            stmt.bindString(7, self_page);
         }
-        stmt.bindLong(7, entity.getChapterid());
+        stmt.bindLong(8, entity.getChapterid());
     }
 
     @Override
@@ -109,12 +112,13 @@ public class ChapterDao extends AbstractDao<Chapter, Void> {
             stmt.bindString(4, engine_domain);
         }
         stmt.bindLong(5, entity.getIs_download() ? 1L: 0L);
+        stmt.bindLong(6, entity.getBookid());
  
         String self_page = entity.getSelf_page();
         if (self_page != null) {
-            stmt.bindString(6, self_page);
+            stmt.bindString(7, self_page);
         }
-        stmt.bindLong(7, entity.getChapterid());
+        stmt.bindLong(8, entity.getChapterid());
     }
 
     @Override
@@ -130,8 +134,9 @@ public class ChapterDao extends AbstractDao<Chapter, Void> {
             cursor.getInt(offset + 2), // is_fetch
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // engine_domain
             cursor.getShort(offset + 4) != 0, // is_download
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // self_page
-            cursor.getInt(offset + 6) // chapterid
+            cursor.getInt(offset + 5), // bookid
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // self_page
+            cursor.getInt(offset + 7) // chapterid
         );
         return entity;
     }
@@ -143,8 +148,9 @@ public class ChapterDao extends AbstractDao<Chapter, Void> {
         entity.setIs_fetch(cursor.getInt(offset + 2));
         entity.setEngine_domain(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setIs_download(cursor.getShort(offset + 4) != 0);
-        entity.setSelf_page(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setChapterid(cursor.getInt(offset + 6));
+        entity.setBookid(cursor.getInt(offset + 5));
+        entity.setSelf_page(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setChapterid(cursor.getInt(offset + 7));
      }
     
     @Override

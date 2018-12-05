@@ -5,6 +5,7 @@ import com.hannesdorfmann.mosby3.mvp.lce.MvpLceView;
 import java.util.List;
 
 import xcvf.top.readercore.bean.Book;
+import xcvf.top.readercore.bean.BookCate;
 import xcvf.top.readercore.bean.Category;
 
 /**
@@ -15,7 +16,7 @@ public interface BookShelfView extends MvpLceView<List<Book>> {
 
     void onLoadBookDetail(Book book);
 
-    void onLoadAllCate(List<Category> categories);
+    void onLoadAllCate(List<BookCate> categories);
 
 
 

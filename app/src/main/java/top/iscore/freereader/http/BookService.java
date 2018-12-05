@@ -7,6 +7,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 import xcvf.top.readercore.bean.Book;
+import xcvf.top.readercore.bean.BookCate;
 import xcvf.top.readercore.bean.Category;
 import xcvf.top.readercore.bean.Chapter;
 import xcvf.top.readercore.bean.Rank;
@@ -19,34 +20,6 @@ import xcvf.top.readercore.bean.User;
 
 public interface BookService {
 
-
-    /**
-     * 加载书籍章节
-     *
-     * @param service
-     * @param exterBookId
-     * @return
-     */
-    @FormUrlEncoded
-    @POST("reader/public/v1/")
-    Call<BaseModel<ArrayList<Chapter>>> getChapterList(@Field("service") String service
-            , @Field("extern_bookid") String exterBookId
-            , @Field("startid") int startid);
-
-    /**
-     * 加载书籍章节
-     *
-     * @param service
-     * @param chapterid
-     * @param type      0本章节,1上一章节，2下一章节
-     * @return
-     */
-    @FormUrlEncoded
-    @POST("reader/public/v1/")
-    Call<BaseModel<Chapter>> getOneChapter(@Field("service") String service
-            , @Field("extern_bookid") String extern_bookid
-            , @Field("chapterid") String chapterid
-            , @Field("type") int type);
 
 
     /**
@@ -83,7 +56,7 @@ public interface BookService {
     @POST("reader/public/v1/")
     Call<BaseModel<Book>> addBookShelf(@Field("service") String service
             , @Field("userid") String userid
-            , @Field("extern_bookid") String extern_bookid);
+            , @Field("bookid") int bookid);
 
     /**
      * 删除书架
@@ -93,7 +66,7 @@ public interface BookService {
     @FormUrlEncoded
     @POST("reader/public/v1/")
     Call<BaseModel<Book>> deleteBookShelf(@Field("service") String service
-            , @Field("userid") String userid, @Field("shelfid") String shelfid, @Field("extern_bookid") String extern_bookid);
+            , @Field("userid") String userid, @Field("shelfid") String shelfid, @Field("bookid") int bookid);
 
 
     /**
@@ -118,7 +91,7 @@ public interface BookService {
      */
     @FormUrlEncoded
     @POST("reader/public/v1/")
-    Call<BaseModel<ArrayList<Category>>> allcate(@Field("service") String service);
+    Call<BaseModel<ArrayList<BookCate>>> allcate(@Field("service") String service);
 
 
     /**
@@ -141,7 +114,7 @@ public interface BookService {
     @FormUrlEncoded
     @POST("reader/public/v1/")
     Call<BaseModel<Book>> detail(@Field("service") String service
-            , @Field("extern_bookid") String extern_bookid, @Field("userid") String userid);
+            , @Field("bookid") int bookid, @Field("userid") String userid);
 
     /**
      * 新增阅读记录
@@ -152,7 +125,7 @@ public interface BookService {
     @FormUrlEncoded
     @POST("reader/public/v1/")
     Call<BaseModel<Book>> addReadLog(@Field("service") String service
-            , @Field("extern_bookid") String extern_bookid,
+            , @Field("bookid") int bookid,
                                      @Field("chapterid") String chapterid,
                                      @Field("userid") String userid);
 
@@ -167,7 +140,7 @@ public interface BookService {
     @POST("reader/public/v1/")
     Call<BaseModel<Book>> addBookMarker(@Field("service") String service
                     , @Field("extern_bookid") String extern_bookid
-            , @Field("bookid") String bookid,
+                    , @Field("bookid") int bookid,
                                         @Field("chapterid") String chapterid,
                                         @Field("chapter_name") String chapter_name,
                                         @Field("page") String page,

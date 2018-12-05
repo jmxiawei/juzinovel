@@ -46,7 +46,7 @@ public class ChapterParser59XS extends BaseChapterParser {
             Elements chapterlist = element.getElementsByTag("dd");
             int l = chapterlist.size();
             for (int i = 0; i < l; i++) {
-                Chapter chapter = new Chapter();
+                Chapter chapter = getEmptyChapter(book);
                 Element element1 = chapterlist.get(i);
                 String self_page = element1.childNode(0).attributes().get("href");
                 if (TextUtils.isEmpty(self_page)
@@ -64,8 +64,6 @@ public class ChapterParser59XS extends BaseChapterParser {
                 } else {
                     continue;
                 }
-                chapter.setEngine_domain(book.engine_domain);
-                chapter.setExtern_bookid(book.extern_bookid);
                 pageList.add(chapter);
             }
         } catch (Exception e) {

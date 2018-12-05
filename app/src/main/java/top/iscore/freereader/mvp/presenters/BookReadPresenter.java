@@ -22,6 +22,9 @@ import top.iscore.freereader.http.BookService;
 import top.iscore.freereader.mvp.view.BookReadView;
 import xcvf.top.readercore.bean.Book;
 import xcvf.top.readercore.bean.Chapter;
+import xcvf.top.readercore.daos.ChapterDao;
+import xcvf.top.readercore.daos.DBManager;
+import xcvf.top.readercore.daos.DaoMaster;
 import xcvf.top.readercore.impl.ChapterParserFactory;
 
 /**
@@ -68,27 +71,7 @@ public class BookReadPresenter extends MvpBasePresenter<BookReadView> {
     }
 
     public ArrayList<Chapter> loadChaptersSync(Book book, int startId) {
-
-        ifViewAttached(new ViewAction<BookReadView>() {
-            @Override
-            public void run(@NonNull BookReadView view) {
-                view.showLoading(false);
-            }
-        });
-        Call<BaseModel<ArrayList<Chapter>>> baseModelCall = BaseHttpHandler.create().getProxy(BookService.class).getChapterList("Book.GetChapters", book.extern_bookid, startId);
-
-        try {
-            Response<BaseModel<ArrayList<Chapter>>> response = baseModelCall.execute();
-            if (response != null && response.isSuccessful()) {
-                final BaseModel<ArrayList<Chapter>> baseModel = response.body();
-                if (baseModel.getCode() == 0) {
-                    return baseModel.getData();
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return (ArrayList<Chapter>) Chapter.getAllChapter(book.bookid,book.extern_bookid);
     }
 
 

@@ -35,6 +35,7 @@ import top.iscore.freereader.mvp.presenters.BookShelfPresenter;
 import top.iscore.freereader.mvp.view.BookShelfView;
 import xcvf.top.readercore.ReaderActivity;
 import xcvf.top.readercore.bean.Book;
+import xcvf.top.readercore.bean.BookCate;
 import xcvf.top.readercore.bean.Category;
 import xcvf.top.readercore.bean.Mode;
 import xcvf.top.readercore.bean.User;
@@ -194,7 +195,7 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
     }
 
     @Override
-    public void onLoadAllCate(List<Category> categories) {
+    public void onLoadAllCate(List<BookCate> categories) {
 
     }
 

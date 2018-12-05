@@ -32,6 +32,7 @@ import top.iscore.freereader.mvp.presenters.BookShelfPresenter;
 import top.iscore.freereader.mvp.view.BookShelfView;
 import xcvf.top.readercore.ReaderActivity;
 import xcvf.top.readercore.bean.Book;
+import xcvf.top.readercore.bean.BookCate;
 import xcvf.top.readercore.bean.Category;
 import xcvf.top.readercore.bean.Mode;
 import xcvf.top.readercore.bean.User;
@@ -75,13 +76,13 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
     @BindView(R.id.tv_pre_new_chapter)
     TextView tvPreNewChapter;
 
-    private String bookid;
+    private int bookid;
     User mUser;
     Book mBook;
     LoadingFragment loadingFragment;
     UserInfoChangedHandler userInfoChangedHandler;
 
-    public static void toBookDetail(Activity activity, String bookid) {
+    public static void toBookDetail(Activity activity, int bookid) {
         Intent intent = new Intent(activity, BookDetailActivity.class);
         intent.putExtra("bookid", bookid);
         activity.startActivity(intent);
@@ -90,7 +91,7 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        bookid = getIntent().getStringExtra("bookid");
+        bookid = getIntent().getIntExtra("bookid",0);
         setContentView(R.layout.activity_book_detail);
         ButterKnife.bind(this);
         userInfoChangedHandler = UserInfoChangedHandler.newInstance(this).put(this).register();
@@ -107,7 +108,7 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
         priorityBookAdapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener<Book>() {
             @Override
             public void onRecyclerViewItemClick(CommonViewHolder holder, int position, Book item) {
-                BookDetailActivity.toBookDetail(BookDetailActivity.this, item.extern_bookid);
+                BookDetailActivity.toBookDetail(BookDetailActivity.this, item.bookid);
             }
         });
     }
@@ -202,9 +203,9 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
             case R.id.tv_add:
                 if (mUser.getUid() > 0) {
                     if (mBook.shelfid == null) {
-                        presenter.addBookShelf(mUser.getUid(), mBook.getExtern_bookid(), mBook);
+                        presenter.addBookShelf(mUser.getUid(), mBook.getBookid(), mBook);
                     } else {
-                        presenter.deleteBookShelf(mUser.getUid(), mBook.shelfid, mBook.extern_bookid);
+                        presenter.deleteBookShelf(mUser.getUid(), mBook.shelfid, mBook.bookid);
                     }
                 } else {
                     //没登录
@@ -212,7 +213,7 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
                     loginDialog.setFinishTask(new UserInfoChangedHandler.OnUserChanged() {
                         @Override
                         public void onChanged(User user) {
-                            presenter.addBookShelf(mUser.getUid(), mBook.getExtern_bookid(), mBook);
+                            presenter.addBookShelf(mUser.getUid(), mBook.bookid, mBook);
                         }
                     }).show(getSupportFragmentManager(), "LoginDialog");
 
@@ -242,7 +243,7 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
     }
 
     @Override
-    public void onLoadAllCate(List<Category> categories) {
+    public void onLoadAllCate(List<BookCate> categories) {
 
     }
 

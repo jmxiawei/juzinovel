@@ -34,16 +34,16 @@ public class ChapterProviderImpl implements IChapterProvider {
     }
 
     @Override
-    public void getChapter(final int type, final String bookid, final String chapterid, final Chapter chapter, final IChapterListener chapterListener) {
+    public void getChapter(final int type, final String extern_bookid, final String chapterid, final Chapter chapter, final IChapterListener chapterListener) {
         Task.callInBackground(new Callable<Chapter>() {
             @Override
             public Chapter call() throws Exception {
                 if (type == IChapterProvider.TYPE_NEXT) {
-                    return Chapter.getNextChapter(bookid, chapterid);
+                    return Chapter.getNextChapter(extern_bookid, chapterid);
                 } else if (type == IChapterProvider.TYPE_PRE) {
-                    return Chapter.getPreChapter(bookid, chapterid);
+                    return Chapter.getPreChapter(extern_bookid, chapterid);
                 } else if (type == IChapterProvider.TYPE_DETAIL) {
-                    return Chapter.getChapter(bookid, chapterid);
+                    return Chapter.getChapter(extern_bookid, chapterid);
                 }
                 return null;
             }
@@ -59,28 +59,10 @@ public class ChapterProviderImpl implements IChapterProvider {
         }, Task.UI_THREAD_EXECUTOR);
     }
 
-    /**
-     * 网络获取章节
-     *
-     * @param chapterid
-     * @param type
-     * @return
-     * @throws Exception
-     */
-    private Chapter getChapterFromNet(String bookid, String chapterid, int type) throws Exception {
-        try {
-            Response<BaseModel<Chapter>> chapter = BaseHttpHandler.create().getProxy(BookService.class).getOneChapter("Chapter.getSingleChapter", bookid, chapterid, type).execute();
-            if (chapter != null && chapter.isSuccessful()) {
-                return chapter.body().getData();
-            }
-        } catch (Exception e) {
-            throw new Exception(String.valueOf(IChapterListener.CODE_NO_NET));
-        }
-        return null;
-    }
+
 
     @Override
-    public void saveChapter(final String booid, final List<Chapter> chapterList, final IChapterListener chapterListener) {
+    public void saveChapter(final String bookid, final List<Chapter> chapterList, final IChapterListener chapterListener) {
         Task.callInBackground(new Callable<List<Chapter>>() {
             @Override
             public List<Chapter> call() throws Exception {
@@ -93,12 +75,12 @@ public class ChapterProviderImpl implements IChapterProvider {
                         getChapterDao();
                 List<Chapter> chapters = chapterList;
                 if (chapterList != null) {
-                    chapterDao.queryBuilder().where(ChapterDao.Properties.Extern_bookid.eq(booid))
+                    chapterDao.queryBuilder().where(ChapterDao.Properties.Extern_bookid.eq(bookid))
                             .buildDelete().executeDeleteWithoutDetachingEntities();
                     chapterDao.insertOrReplaceInTx(chapterList);
                 } else {
                     chapters = chapterDao.queryBuilder()
-                            .where(ChapterDao.Properties.Extern_bookid.eq(booid))
+                            .where(ChapterDao.Properties.Extern_bookid.eq(bookid))
                             .orderAsc(ChapterDao.Properties.Chapterid).list();
                 }
                 LogUtils.e("finish save chapter =" + ((SystemClock.elapsedRealtime() - start)/1000.f));

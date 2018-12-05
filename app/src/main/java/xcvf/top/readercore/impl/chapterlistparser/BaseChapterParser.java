@@ -43,6 +43,14 @@ public class BaseChapterParser implements IChapterParser {
         return 0;
     }
 
+    public Chapter getEmptyChapter(Book book){
+        Chapter chapter = new Chapter();
+        chapter.setBookid(book.bookid);
+        chapter.setEngine_domain(book.engine_domain);
+        chapter.setExtern_bookid(book.extern_bookid);
+        return chapter;
+    }
+
 
     /**
      *

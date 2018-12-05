@@ -96,9 +96,9 @@ public class BookShelfOptionDialog extends DialogFragment {
             @Override
             public void onRecyclerViewItemClick(CommonViewHolder holder, int position, Category item) {
                 if (item.getId() == 0) {
-                    BookDetailActivity.toBookDetail(getActivity(), mBook.extern_bookid);
+                    BookDetailActivity.toBookDetail(getActivity(), mBook.bookid);
                 } else if (item.getId() == 1) {
-                    mBookShelfPresenter.deleteBookShelf(mUser.getUid(),mBook.shelfid,mBook.extern_bookid);
+                    mBookShelfPresenter.deleteBookShelf(mUser.getUid(),mBook.shelfid,mBook.bookid);
                 } else if (item.getId() == 2) {
                     DownloadIntentService.startDownloadService(getActivity(), mBook);
                 }
