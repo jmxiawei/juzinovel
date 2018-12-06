@@ -25,6 +25,7 @@ public class BookMark  implements Parcelable {
     @Unique
     String unique_key;
     int userid;
+    int bookid;
     String extern_bookid;
     String chapterid;
 
@@ -53,14 +54,14 @@ public class BookMark  implements Parcelable {
         DBManager.getDaoSession().getBookMarkDao().insertOrReplace(this);
     }
 
-    public BookMark(int userid, String extern_bookid) {
+    public BookMark(int userid, int bookid) {
         this.userid = userid;
-        this.extern_bookid = extern_bookid;
-        unique_key = EncryptUtils.encryptMD5ToString((userid + extern_bookid));
+        this.bookid = bookid;
+        unique_key = EncryptUtils.encryptMD5ToString((userid +"freereader"+ bookid));
     }
 
     public static BookMark getMark(Book book, int userid) {
-        String uniquekey = EncryptUtils.encryptMD5ToString((userid + book.extern_bookid));
+        String uniquekey = EncryptUtils.encryptMD5ToString((userid +"freereader"+ book.bookid));
         return DBManager.getDaoSession().getBookMarkDao().queryBuilder().where(BookMarkDao.Properties.Unique_key.eq(uniquekey))
                 .limit(1).build().unique();
     }
@@ -118,6 +119,14 @@ public class BookMark  implements Parcelable {
         this.userid = userid;
     }
 
+    public int getBookid() {
+        return this.bookid;
+    }
+
+    public void setBookid(int bookid) {
+        this.bookid = bookid;
+    }
+
     protected BookMark(Parcel in) {
         this.time_stamp = in.readLong();
         this.unique_key = in.readString();
@@ -127,11 +136,12 @@ public class BookMark  implements Parcelable {
         this.page = in.readInt();
     }
 
-    @Generated(hash = 31109284)
-    public BookMark(long time_stamp, String unique_key, int userid, String extern_bookid, String chapterid, int page) {
+    @Generated(hash = 1370582779)
+    public BookMark(long time_stamp, String unique_key, int userid, int bookid, String extern_bookid, String chapterid, int page) {
         this.time_stamp = time_stamp;
         this.unique_key = unique_key;
         this.userid = userid;
+        this.bookid = bookid;
         this.extern_bookid = extern_bookid;
         this.chapterid = chapterid;
         this.page = page;

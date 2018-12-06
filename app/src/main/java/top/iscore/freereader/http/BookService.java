@@ -143,8 +143,8 @@ public interface BookService {
                     , @Field("bookid") int bookid,
                                         @Field("chapterid") String chapterid,
                                         @Field("chapter_name") String chapter_name,
-                                        @Field("page") String page,
-                                        @Field("userid") String userid);
+                                        @Field("page") int page,
+                                        @Field("userid") int userid,@Field("engine_domain") String engine_domain,@Field("read_url") String read_url);
 
 
     /**

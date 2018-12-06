@@ -35,12 +35,13 @@ public class BookDao extends AbstractDao<Book, Void> {
         public final static Property Desc = new Property(8, String.class, "desc", false, "DESC");
         public final static Property Info_url = new Property(9, String.class, "info_url", false, "INFO_URL");
         public final static Property Read_url = new Property(10, String.class, "read_url", false, "READ_URL");
-        public final static Property Latest_chapter_name = new Property(11, String.class, "latest_chapter_name", false, "LATEST_CHAPTER_NAME");
-        public final static Property Latest_chapter_url = new Property(12, String.class, "latest_chapter_url", false, "LATEST_CHAPTER_URL");
-        public final static Property Keywords = new Property(13, String.class, "keywords", false, "KEYWORDS");
-        public final static Property Extern_bookid = new Property(14, String.class, "extern_bookid", false, "EXTERN_BOOKID");
-        public final static Property Update_time = new Property(15, String.class, "update_time", false, "UPDATE_TIME");
-        public final static Property UniqueKey = new Property(16, String.class, "uniqueKey", false, "UNIQUE_KEY");
+        public final static Property Chapter_name = new Property(11, String.class, "chapter_name", false, "CHAPTER_NAME");
+        public final static Property Chapterid = new Property(12, String.class, "chapterid", false, "CHAPTERID");
+        public final static Property Page = new Property(13, int.class, "page", false, "PAGE");
+        public final static Property Keywords = new Property(14, String.class, "keywords", false, "KEYWORDS");
+        public final static Property Extern_bookid = new Property(15, String.class, "extern_bookid", false, "EXTERN_BOOKID");
+        public final static Property Update_time = new Property(16, String.class, "update_time", false, "UPDATE_TIME");
+        public final static Property UniqueKey = new Property(17, String.class, "uniqueKey", false, "UNIQUE_KEY");
     }
 
 
@@ -67,12 +68,13 @@ public class BookDao extends AbstractDao<Book, Void> {
                 "\"DESC\" TEXT," + // 8: desc
                 "\"INFO_URL\" TEXT," + // 9: info_url
                 "\"READ_URL\" TEXT," + // 10: read_url
-                "\"LATEST_CHAPTER_NAME\" TEXT," + // 11: latest_chapter_name
-                "\"LATEST_CHAPTER_URL\" TEXT," + // 12: latest_chapter_url
-                "\"KEYWORDS\" TEXT," + // 13: keywords
-                "\"EXTERN_BOOKID\" TEXT," + // 14: extern_bookid
-                "\"UPDATE_TIME\" TEXT," + // 15: update_time
-                "\"UNIQUE_KEY\" TEXT UNIQUE );"); // 16: uniqueKey
+                "\"CHAPTER_NAME\" TEXT," + // 11: chapter_name
+                "\"CHAPTERID\" TEXT," + // 12: chapterid
+                "\"PAGE\" INTEGER NOT NULL ," + // 13: page
+                "\"KEYWORDS\" TEXT," + // 14: keywords
+                "\"EXTERN_BOOKID\" TEXT," + // 15: extern_bookid
+                "\"UPDATE_TIME\" TEXT," + // 16: update_time
+                "\"UNIQUE_KEY\" TEXT UNIQUE );"); // 17: uniqueKey
     }
 
     /** Drops the underlying database table. */
@@ -136,34 +138,35 @@ public class BookDao extends AbstractDao<Book, Void> {
             stmt.bindString(11, read_url);
         }
  
-        String latest_chapter_name = entity.getLatest_chapter_name();
-        if (latest_chapter_name != null) {
-            stmt.bindString(12, latest_chapter_name);
+        String chapter_name = entity.getChapter_name();
+        if (chapter_name != null) {
+            stmt.bindString(12, chapter_name);
         }
  
-        String latest_chapter_url = entity.getLatest_chapter_url();
-        if (latest_chapter_url != null) {
-            stmt.bindString(13, latest_chapter_url);
+        String chapterid = entity.getChapterid();
+        if (chapterid != null) {
+            stmt.bindString(13, chapterid);
         }
+        stmt.bindLong(14, entity.getPage());
  
         String keywords = entity.getKeywords();
         if (keywords != null) {
-            stmt.bindString(14, keywords);
+            stmt.bindString(15, keywords);
         }
  
         String extern_bookid = entity.getExtern_bookid();
         if (extern_bookid != null) {
-            stmt.bindString(15, extern_bookid);
+            stmt.bindString(16, extern_bookid);
         }
  
         String update_time = entity.getUpdate_time();
         if (update_time != null) {
-            stmt.bindString(16, update_time);
+            stmt.bindString(17, update_time);
         }
  
         String uniqueKey = entity.getUniqueKey();
         if (uniqueKey != null) {
-            stmt.bindString(17, uniqueKey);
+            stmt.bindString(18, uniqueKey);
         }
     }
 
@@ -222,34 +225,35 @@ public class BookDao extends AbstractDao<Book, Void> {
             stmt.bindString(11, read_url);
         }
  
-        String latest_chapter_name = entity.getLatest_chapter_name();
-        if (latest_chapter_name != null) {
-            stmt.bindString(12, latest_chapter_name);
+        String chapter_name = entity.getChapter_name();
+        if (chapter_name != null) {
+            stmt.bindString(12, chapter_name);
         }
  
-        String latest_chapter_url = entity.getLatest_chapter_url();
-        if (latest_chapter_url != null) {
-            stmt.bindString(13, latest_chapter_url);
+        String chapterid = entity.getChapterid();
+        if (chapterid != null) {
+            stmt.bindString(13, chapterid);
         }
+        stmt.bindLong(14, entity.getPage());
  
         String keywords = entity.getKeywords();
         if (keywords != null) {
-            stmt.bindString(14, keywords);
+            stmt.bindString(15, keywords);
         }
  
         String extern_bookid = entity.getExtern_bookid();
         if (extern_bookid != null) {
-            stmt.bindString(15, extern_bookid);
+            stmt.bindString(16, extern_bookid);
         }
  
         String update_time = entity.getUpdate_time();
         if (update_time != null) {
-            stmt.bindString(16, update_time);
+            stmt.bindString(17, update_time);
         }
  
         String uniqueKey = entity.getUniqueKey();
         if (uniqueKey != null) {
-            stmt.bindString(17, uniqueKey);
+            stmt.bindString(18, uniqueKey);
         }
     }
 
@@ -272,12 +276,13 @@ public class BookDao extends AbstractDao<Book, Void> {
             cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // desc
             cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // info_url
             cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // read_url
-            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // latest_chapter_name
-            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // latest_chapter_url
-            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // keywords
-            cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // extern_bookid
-            cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15), // update_time
-            cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16) // uniqueKey
+            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // chapter_name
+            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // chapterid
+            cursor.getInt(offset + 13), // page
+            cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // keywords
+            cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15), // extern_bookid
+            cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16), // update_time
+            cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17) // uniqueKey
         );
         return entity;
     }
@@ -295,12 +300,13 @@ public class BookDao extends AbstractDao<Book, Void> {
         entity.setDesc(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
         entity.setInfo_url(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
         entity.setRead_url(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
-        entity.setLatest_chapter_name(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
-        entity.setLatest_chapter_url(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
-        entity.setKeywords(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
-        entity.setExtern_bookid(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
-        entity.setUpdate_time(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
-        entity.setUniqueKey(cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16));
+        entity.setChapter_name(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
+        entity.setChapterid(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
+        entity.setPage(cursor.getInt(offset + 13));
+        entity.setKeywords(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
+        entity.setExtern_bookid(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
+        entity.setUpdate_time(cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16));
+        entity.setUniqueKey(cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17));
      }
     
     @Override
