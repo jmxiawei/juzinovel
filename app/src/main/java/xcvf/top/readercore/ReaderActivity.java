@@ -347,17 +347,13 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
             }
             int index = readerView.indexOfCurrentChapter();
             if (index == 0) {
-                LogUtils.e("PRE_CHAPTER");
                 onScroll(0, 0, IPageScrollListener.PRE_CHAPTER);
             } else if (index == 2) {
-                LogUtils.e("NEXT_CHAPTER");
                 onScroll(0, 0, IPageScrollListener.NEXT_CHAPTER);
             } else if (index != 1) {
-                LogUtils.e("PRE_CHAPTER NEXT_CHAPTER");
                 onScroll(0, 0, IPageScrollListener.PRE_CHAPTER);
                 onScroll(0, 0, IPageScrollListener.NEXT_CHAPTER);
             }
-
         }
     };
 
