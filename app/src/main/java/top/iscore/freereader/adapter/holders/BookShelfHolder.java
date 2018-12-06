@@ -2,6 +2,7 @@ package top.iscore.freereader.adapter.holders;
 
 import android.content.Context;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -38,6 +39,10 @@ public class BookShelfHolder extends CommonViewHolder<Book> {
     LinearLayout llContent;
     @BindView(R.id.tv_engine)
     TextView tvEngine;
+    @BindView(R.id.tv_author)
+    TextView tvAuthor;
+    @BindView(R.id.book_content)
+    LinearLayout bookContent;
 
     public BookShelfHolder(Context context, ViewGroup root) {
         super(context, root, R.layout.item_holder_bookself);
@@ -56,8 +61,14 @@ public class BookShelfHolder extends CommonViewHolder<Book> {
             RoundedCornersTransformation roundedCornersTransformation
                     = new RoundedCornersTransformation(itemView.getContext(), 10, 0);
             Glide.with(itemView.getContext()).load(book.cover).placeholder(R.color.text_gray_light).bitmapTransform(roundedCornersTransformation).into(imgCover);
-            tvName.setText(Html.fromHtml(book.name+""));
-            tvChapter.setText(book.latest_chapter_name);
+            tvName.setText(Html.fromHtml(book.name + ""));
+            tvAuthor.setText(" | " + book.author);
+            if (TextUtils.isEmpty(book.chapter_name)) {
+                tvChapter.setText("暂无阅读历史");
+            } else {
+                tvChapter.setText("读到： " + book.chapter_name);
+            }
+
             llNew.setVisibility(View.INVISIBLE);
         }
 

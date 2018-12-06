@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -20,7 +21,9 @@ import com.hannesdorfmann.mosby3.mvp.MvpActivity;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Callable;
 
+import bolts.Task;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import top.iscore.freereader.BookDetailActivity;
@@ -291,13 +294,28 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
         }
     };
 
+    /**
+     * 阅读历史，本地>服务端
+     *
+     * @param loadedChapter
+     */
     private void checkChapters(final boolean loadedChapter) {
         mBookMark = BookMark.getMark(book, mUser.getUid());
         String chapterid = "0";
         if (mBookMark != null) {
             chapterid = mBookMark.getChapterid();
-        }else {
-
+        } else {
+            if (!TextUtils.isEmpty(book.chapter_name)) {
+                //服务端阅读历史记录
+                mBookMark = new BookMark(mUser.getUid(), book.bookid);
+                mBookMark.setPage(book.page);
+                mBookMark.setChapterid(book.chapterid);
+                mBookMark.setExtern_bookid(book.extern_bookid);
+                chapterid = book.chapterid;
+            }
+        }
+        if (TextUtils.isEmpty(chapterid)) {
+            chapterid = "0";
         }
         int type = IChapterProvider.TYPE_DETAIL;
         if ("0".equals(chapterid)) {
@@ -361,7 +379,13 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
 
     @Override
     public void clickArea(Area area) {
-        fullScreenHandler.check();
+        if (area == Area.CENTER) {
+            fullScreenHandler.check();
+        } else if (area == Area.LEFT) {
+            //onScroll(0, 0, IPageScrollListener.PRE_CHAPTER);
+        } else if (area == Area.RIGHT) {
+            //onScroll(0, 0, IPageScrollListener.NEXT_CHAPTER);
+        }
     }
 
 
@@ -400,25 +424,33 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
      * 更新书签
      */
     private void saveBookMark() {
-        Chapter chapter = readerView.getCurrentChapter();
-        //保存书签
-        if (chapter != null) {
-            if (mBookMark == null) {
-                mBookMark = new BookMark(mUser.getUid(), book.extern_bookid);
+
+        Task.callInBackground(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                Chapter chapter = readerView.getCurrentChapter();
+                //保存书签
+                if (chapter != null) {
+                    if (mBookMark == null) {
+                        mBookMark = new BookMark(mUser.getUid(), book.bookid);
+                    }
+                    mBookMark.setExtern_bookid(book.extern_bookid);
+                    mBookMark.setChapterid(String.valueOf(chapter.chapterid));
+                    mBookMark.setTime_stamp(System.currentTimeMillis());
+                    Page page = readerView.getCurrentPage();
+                    mBookMark.setPage(page.getIndex());
+                    mBookMark.save();
+                    mBookShelfPresenter.addBookMarker(mUser.getUid(),
+                            book.bookid,
+                            book.extern_bookid,
+                            chapter.chapter_name,
+                            "" + chapter.chapterid,
+                            page.getIndex(), book.engine_domain, book.read_url);
+                }
+                return null;
             }
-            mBookMark.setExtern_bookid(book.extern_bookid);
-            mBookMark.setChapterid(String.valueOf(chapter.chapterid));
-            mBookMark.setTime_stamp(System.currentTimeMillis());
-            Page page = readerView.getCurrentPage();
-            mBookMark.setPage(page.getIndex());
-            mBookMark.save();
-            mBookShelfPresenter.addBookMarker(mUser.getUid(),
-                    book.bookid,
-                    book.extern_bookid,
-                    chapter.chapter_name,
-                    ""+chapter.chapterid,
-                    page.getIndex(),book.engine_domain,book.read_url);
-        }
+        });
+
     }
 
     @Override
@@ -438,7 +470,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
                     mLoadingFragment.show(getSupportFragmentManager(), "LoadingFragment");
                     checkChapters(loadedChapter);
                 }
-
+                LogUtils.e("startLoad step1" + SystemClock.elapsedRealtime());
             }
         });
 

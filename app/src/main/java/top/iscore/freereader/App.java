@@ -19,6 +19,7 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 
+import bolts.Task;
 import xcvf.top.readercore.bean.TextConfig;
 import xcvf.top.readercore.daos.DBManager;
 
@@ -55,6 +56,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         Utils.init(this);
+        LogUtils.getConfig().setLogSwitch(!BuildConfig.DEBUG);
         Stetho.initializeWithDefaults(this);
         TextConfig.initSpace(this);
         DBManager.init(this);
@@ -74,10 +76,7 @@ public class App extends Application {
                 LogUtils.e(crashInfo);
             }
         });
-
-
     }
-
 
 
 //    /**

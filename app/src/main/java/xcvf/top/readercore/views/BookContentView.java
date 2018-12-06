@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ScreenUtils;
 
 import xcvf.top.readercore.bean.TextConfig;
 import xcvf.top.readercore.impl.ChapterPagerSnapHelper;
@@ -26,6 +27,9 @@ import xcvf.top.readercore.interfaces.OnPageChangedListener;
  */
 public class BookContentView extends RecyclerView {
 
+    /**
+     * 判定点击事件的
+     */
     static final int V_CLICK = 6;
 
     ChapterPagerSnapHelper mPagerSnapHelper;
@@ -45,6 +49,8 @@ public class BookContentView extends RecyclerView {
     long downTimestamp = 0L;
     int mPosition = 0;
 
+    int screenWidth;
+
     public void setAreaClickListener(IAreaClickListener mAreaClickListener) {
         this.mAreaClickListener = mAreaClickListener;
     }
@@ -63,9 +69,9 @@ public class BookContentView extends RecyclerView {
 
     public int getCurrentPage() {
         LinearLayoutManager ll = (LinearLayoutManager) getLayoutManager();
-        if(ll !=null){
+        if (ll != null) {
             return ll.findFirstVisibleItemPosition();
-        }else {
+        } else {
             return 0;
         }
     }
@@ -82,9 +88,6 @@ public class BookContentView extends RecyclerView {
     private OnPageChangedListener onPageChangeListener = new SimplePageChangeListener() {
         @Override
         public void onPageSelected(int position) {
-            LogUtils.e("position = " + position);
-
-
             mPosition = position;
         }
     };
@@ -117,10 +120,24 @@ public class BookContentView extends RecyclerView {
                 } else {
                     if (Math.abs(downX - cdownX) < V_CLICK && Math.abs(downY - cdownY) < V_CLICK
                             && (SystemClock.elapsedRealtime() - downTimestamp < 100)) {
-                        //点击
-                        if (mAreaClickListener != null) {
-                            mAreaClickListener.clickArea(Area.CENTER);
+
+                        if (cdownX < screenWidth / 3) {
+                            //点击
+                            if (mAreaClickListener != null) {
+                                mAreaClickListener.clickArea(Area.LEFT);
+                            }
+                        } else if (cdownX > screenWidth * 2 / 3) {
+                            if (mAreaClickListener != null) {
+                                mAreaClickListener.clickArea(Area.RIGHT);
+                            }
+                        } else {
+                            //点击
+                            if (mAreaClickListener != null) {
+                                mAreaClickListener.clickArea(Area.CENTER);
+                            }
                         }
+
+
                     }
                 }
                 break;
@@ -128,7 +145,7 @@ public class BookContentView extends RecyclerView {
             default:
                 break;
         }
-        return  super.dispatchTouchEvent(ev);
+        return super.dispatchTouchEvent(ev);
     }
 
     @Override
@@ -190,6 +207,7 @@ public class BookContentView extends RecyclerView {
 
     void init() {
         touchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop() * 4;
+        screenWidth = ScreenUtils.getScreenWidth();
         mPagerSnapHelper = new ChapterPagerSnapHelper();
         mPagerSnapHelper.setOnPageChangedListener(onPageChangeListener);
         mPagerSnapHelper.attachToRecyclerView(this);

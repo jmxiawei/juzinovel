@@ -39,6 +39,11 @@ import xcvf.top.readercore.styles.ModeProvider;
  */
 public class BookListActivity extends MvpActivity<SearchView, SearchPresenter> implements SearchView, SwitchModeListener {
 
+    public static final  int TYPE_KEYWORD = 0;
+    public static final  int TYPE_CATE = 1;
+    public static final  int TYPE_AUTHOR = 2;
+    public static final  int TYPE_RANK = 3;
+
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout refreshLayout;
     @BindView(R.id.recycler)
@@ -57,22 +62,24 @@ public class BookListActivity extends MvpActivity<SearchView, SearchPresenter> i
     String title;
     int type;
     String params;
+    int ranklistid;
     @BindView(R.id.tv_title)
     TextView tvTitle;
 
     /**
      * 查询列表
-     *
+     * 0 关键字查找 1 分类 2 作者书籍查找 3 排行榜
      * @param activity
      * @param title
      * @param type
      * @param params
      */
-    public static void toBookList(Activity activity, String title, int type, String params) {
+    public static void toBookList(Activity activity, String title, int type, String params,int ranklistid) {
         Intent intent = new Intent(activity, BookListActivity.class);
         intent.putExtra("title", title);
         intent.putExtra("type", type);
         intent.putExtra("params", params);
+        intent.putExtra("ranklistid", ranklistid);
         activity.startActivity(intent);
     }
 
@@ -121,19 +128,9 @@ public class BookListActivity extends MvpActivity<SearchView, SearchPresenter> i
 
         load();
     }
-
+    //0 关键字查找 1 分类 2 作者书籍查找 3 排行榜
     private void load() {
-
-        if (type == 0) {
-            //根绝类别搜索
-            presenter.searchBook(null, params, null, page);
-        } else if (type == 1) {
-            presenter.searchBook(params, null, null, page);
-        } else if (type == 2) {
-            //排行榜
-            presenter.searchBook(null, null, params, page);
-        }
-
+        presenter.searchBook(params, type, ranklistid, page);
     }
 
 
@@ -201,6 +198,7 @@ public class BookListActivity extends MvpActivity<SearchView, SearchPresenter> i
     }
 
     public void getIntentData() {
+        ranklistid = getIntent().getIntExtra("ranklistid",0);
         title = getIntent().getStringExtra("title");
         type = getIntent().getIntExtra("type", 0);
         params = getIntent().getStringExtra("params");

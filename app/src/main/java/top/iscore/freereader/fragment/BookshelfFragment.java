@@ -1,5 +1,6 @@
 package top.iscore.freereader.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -41,6 +42,7 @@ import xcvf.top.readercore.bean.Mode;
 import xcvf.top.readercore.bean.User;
 import xcvf.top.readercore.daos.BookDao;
 import xcvf.top.readercore.daos.DBManager;
+import xcvf.top.readercore.interfaces.ISwitchTabListener;
 import xcvf.top.readercore.styles.ModeProvider;
 import xcvf.top.readercore.views.BookShelfOptionDialog;
 
@@ -59,6 +61,7 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
     User mUser;
     SwitchModeHandler switchModeListener;
     UserInfoChangedHandler userInfoChangedHandler;
+    ISwitchTabListener switchTabListener;
 
     @Nullable
     @Override
@@ -75,10 +78,16 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        switchTabListener = (ISwitchTabListener) activity;
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         updateMode();
-        loadData(true);
+        loadData(false);
     }
 
 
@@ -90,6 +99,7 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
                         .childViewBgColor(R.id.book_content, R.attr.colorPrimary)
                         .childViewTextColor(R.id.tv_name, R.attr.text_color)
                         .childViewTextColor(R.id.tv_chapter, R.attr.text_second_color)
+                        .childViewTextColor(R.id.tv_author, R.attr.text_second_color)
                         .childViewTextColor(R.id.tv_add, R.attr.text_color))
                 .create()
                 .setTheme(ModeProvider.getCurrentModeTheme());
@@ -181,6 +191,11 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
     public void onRecyclerViewItemClick(CommonViewHolder holder, int position, Book item) {
         if (item.bookid != -1) {
             ReaderActivity.toReadPage(getActivity(), item);
+        } else {
+            //切换到发现页面
+            if (switchTabListener != null) {
+                switchTabListener.switchFragment(1);
+            }
         }
     }
 

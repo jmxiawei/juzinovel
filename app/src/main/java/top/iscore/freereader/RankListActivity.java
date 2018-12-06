@@ -67,7 +67,7 @@ public class RankListActivity extends MvpActivity<RankListView, RankListPresente
             @Override
             public void onRecyclerViewItemClick(CommonViewHolder holder, int position, Rank item) {
                 if(item.getRankid() > 0){
-                    BookListActivity.toBookList(RankListActivity.this, item.listname, 2, item.rankid + "");
+                    BookListActivity.toBookList(RankListActivity.this, item.listname, BookListActivity.TYPE_RANK, null,item.rankid);
                 }
             }
         });

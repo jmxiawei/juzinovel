@@ -48,7 +48,7 @@ public class User implements Parcelable {
         return this;
     }
 
-    public  int getUid() {
+    public int getUid() {
         return uid;
     }
 
@@ -102,8 +102,12 @@ public class User implements Parcelable {
         return user;
     }
 
-    public void deleteUser(){
-        DBManager.getDaoSession().getUserDao().delete(this);
+    public void deleteUser() {
+        DBManager.getDaoSession().getUserDao().
+                queryBuilder().
+                where(UserDao.Properties.Uid.eq(uid)).
+                buildDelete().
+                executeDeleteWithoutDetachingEntities();
     }
 
     public void save() {
@@ -142,7 +146,7 @@ public class User implements Parcelable {
 
     @Generated(hash = 1687928020)
     public User(String nickname, int uid, String avatar, String account, String gender,
-            String token, String update_time) {
+                String token, String update_time) {
         this.nickname = nickname;
         this.uid = uid;
         this.avatar = avatar;

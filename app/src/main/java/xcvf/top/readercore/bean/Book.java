@@ -175,7 +175,7 @@ public class Book implements Parcelable {
 
     public void save(String userid) {
         setUserid(userid);
-        uniqueKey = extern_bookid + "_iscore.top_" + userid;
+        uniqueKey =getUKey(userid,bookid);
         DBManager.getDaoSession().getBookDao().insertOrReplace(this);
     }
 

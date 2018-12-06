@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,7 +111,7 @@ public class BookShelfPresenter extends MvpBasePresenter<BookShelfView> {
             }
         });
         book.save(userid + "");
-        if(userid==0){
+        if (userid == 0) {
             ifViewAttached(new ViewAction<BookShelfView>() {
                 @Override
                 public void run(@NonNull BookShelfView view) {
@@ -233,19 +234,16 @@ public class BookShelfPresenter extends MvpBasePresenter<BookShelfView> {
      * @param userid
      * @param bookid
      */
-    public void addBookMarker(int userid, int bookid,String extern_bookid,
-                              String chapter_name,String chapterid,int page,String engine_domain,String read_url) {
-        final Call<BaseModel<Book>> resCall = BaseHttpHandler.create().getProxy(BookService.class).addBookMarker("Book.addBookMarker", extern_bookid,bookid,chapterid,chapter_name,page,userid,engine_domain,read_url);
-        resCall.enqueue(new Callback<BaseModel<Book>>() {
-            @Override
-            public void onResponse(Call<BaseModel<Book>> call, final Response<BaseModel<Book>> response) {
-
-            }
-
-            @Override
-            public void onFailure(Call<BaseModel<Book>> call, Throwable t) {
-            }
-        });
+    public void addBookMarker(int userid, int bookid, String extern_bookid,
+                              String chapter_name, String chapterid, int page, String engine_domain, String read_url) {
+        try {
+            final Call<BaseModel<Book>> resCall = BaseHttpHandler.create().getProxy(BookService.class).addBookMarker("Book.addBookMarker",
+                    extern_bookid, bookid, chapterid,
+                    chapter_name, page, userid, engine_domain, read_url);
+            resCall.execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

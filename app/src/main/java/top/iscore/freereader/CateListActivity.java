@@ -80,7 +80,7 @@ public class CateListActivity extends MvpActivity<BookShelfView, BookShelfPresen
         mAdapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener<BookCate>() {
             @Override
             public void onRecyclerViewItemClick(CommonViewHolder holder, int position, BookCate item) {
-                BookListActivity.toBookList(CateListActivity.this, item.getName(), 0, item.getName());
+                BookListActivity.toBookList(CateListActivity.this, item.getName(), BookListActivity.TYPE_CATE, item.getName(),0);
             }
         });
     }

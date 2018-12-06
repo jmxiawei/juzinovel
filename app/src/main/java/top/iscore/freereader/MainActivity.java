@@ -38,6 +38,7 @@ import top.iscore.freereader.mode.setter.ViewBackgroundColorSetter;
 import top.iscore.freereader.update.UpdateAppHttpUtil;
 import xcvf.top.readercore.bean.Mode;
 import xcvf.top.readercore.bean.User;
+import xcvf.top.readercore.interfaces.ISwitchTabListener;
 import xcvf.top.readercore.styles.ModeProvider;
 import xcvf.top.readercore.views.LoginDialog;
 import xcvf.top.readercore.views.PopMenu;
@@ -46,7 +47,7 @@ import xcvf.top.readercore.views.PopMenu;
 /**
  * 首页
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ISwitchTabListener {
 
 
     String[] permissions = new String[]{
@@ -165,4 +166,9 @@ public class MainActivity extends AppCompatActivity {
             updateMode();
         }
     };
+
+    @Override
+    public void switchFragment(int position) {
+        viewpager.setCurrentItem(position);
+    }
 }

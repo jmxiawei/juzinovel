@@ -1,30 +1,20 @@
 package top.iscore.freereader.mvp.presenters;
 
 import android.content.Context;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Callable;
 
 import bolts.Continuation;
 import bolts.Task;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import top.iscore.freereader.App;
-import top.iscore.freereader.http.BaseHttpHandler;
-import top.iscore.freereader.http.BaseModel;
-import top.iscore.freereader.http.BookService;
 import top.iscore.freereader.mvp.view.BookReadView;
 import xcvf.top.readercore.bean.Book;
 import xcvf.top.readercore.bean.Chapter;
-import xcvf.top.readercore.daos.ChapterDao;
-import xcvf.top.readercore.daos.DBManager;
-import xcvf.top.readercore.daos.DaoMaster;
 import xcvf.top.readercore.impl.ChapterParserFactory;
 
 /**
@@ -67,6 +57,7 @@ public class BookReadPresenter extends MvpBasePresenter<BookReadView> {
 
 
     public void loadChapters(Context context, Book book) {
+        LogUtils.e();
         loadChapterByUrl(context, book);
     }
 

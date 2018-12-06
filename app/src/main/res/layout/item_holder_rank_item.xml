@@ -7,12 +7,10 @@
 
 
 
-
-
     <ImageView
         android:id="@+id/img"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
         android:layout_marginLeft="@dimen/horizon_margin"
         android:scaleType="centerInside"
         android:src="@mipmap/ic_launcher_round"
@@ -22,7 +20,8 @@
 
     <TextView
         android:id="@+id/tv_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="36dp"
         android:gravity="center_vertical|left"
         android:paddingLeft="4dp"
@@ -35,9 +34,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical|left"
-        android:text="起点"
+        android:text="起点小说"
+        android:layout_marginRight="@dimen/horizon_margin"
         android:layout_marginLeft="4dp"
-        android:textColor="#ff0000"
+        android:textColor="#99ff0000"
         android:textSize="10sp" />
 
 </LinearLayout>

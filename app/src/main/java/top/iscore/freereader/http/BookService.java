@@ -79,8 +79,8 @@ public interface BookService {
     @FormUrlEncoded
     @POST("reader/public/v1/")
     Call<BaseModel<ArrayList<Book>>> search(@Field("service") String service
-            , @Field("keyword") String keyword, @Field("catename") String catename,
-                                            @Field("ranklistid") String ranklistid,
+            , @Field("keyword") String keyword,@Field("type") int type,
+                                            @Field("ranklistid") int ranklistid,
                                             @Field("page") int page);
 
     /**

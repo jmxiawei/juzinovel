@@ -41,13 +41,16 @@ public class RankListPresenter extends MvpBasePresenter<RankListView> {
 
                     ArrayList<Rank> gg_rank = new ArrayList<>();
                     ArrayList<Rank> mm_rank = new ArrayList<>();
+                    ArrayList<Rank> other = new ArrayList<>();
                     final ArrayList<Rank> new_rank = new ArrayList<>();
 
                     for (int i = 0; i < size; i++) {
                         if ("mm".equals(ranks.get(i).getGender())) {
                             mm_rank.add(ranks.get(i));
-                        } else {
+                        } else if("gg".equals(ranks.get(i).getGender())) {
                             gg_rank.add(ranks.get(i));
+                        }else {
+                            other.add(ranks.get(i));
                         }
                     }
 
@@ -55,7 +58,7 @@ public class RankListPresenter extends MvpBasePresenter<RankListView> {
                     if (gg_rank.size() > 0) {
                         Rank rank = new Rank();
                         rank.setRankid(-1);
-                        rank.setListname("男生");
+                        rank.setListname("男生最热榜单");
                         new_rank.add(rank);
                         new_rank.addAll(gg_rank);
                     }
@@ -63,7 +66,15 @@ public class RankListPresenter extends MvpBasePresenter<RankListView> {
                     if (mm_rank.size() > 0) {
                         Rank rank = new Rank();
                         rank.setRankid(-2);
-                        rank.setListname("女生");
+                        rank.setListname("女生最热榜单");
+                        new_rank.add(rank);
+                        new_rank.addAll(mm_rank);
+                    }
+
+                    if (other.size() > 0) {
+                        Rank rank = new Rank();
+                        rank.setRankid(-3);
+                        rank.setListname("其他榜单");
                         new_rank.add(rank);
                         new_rank.addAll(mm_rank);
                     }

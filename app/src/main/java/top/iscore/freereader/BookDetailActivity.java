@@ -188,7 +188,7 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
             }
         }
     }
-
+    // 0 关键字查找 1 分类 2 作者书籍查找 3 排行榜
     @OnClick({R.id.iv_back, R.id.tv_author, R.id.tv_add, R.id.tv_start, R.id.tv_more})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -197,7 +197,7 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
                 break;
             case R.id.tv_author:
                 if (mBook != null) {
-                    BookListActivity.toBookList(this, mBook.author + "的书籍", 1, mBook.author);
+                    BookListActivity.toBookList(this, mBook.author + "的书籍", BookListActivity.TYPE_AUTHOR, mBook.author,0);
                 }
                 break;
             case R.id.tv_add:
@@ -226,7 +226,7 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
                 break;
             case R.id.tv_more:
                 if (mBook != null) {
-                    BookListActivity.toBookList(this, "你可能感兴趣", 0, mBook.cate_name);
+                    BookListActivity.toBookList(this, "你可能感兴趣", BookListActivity.TYPE_CATE, mBook.cate_name,0);
                 }
                 break;
             default:
@@ -265,7 +265,7 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
     public void showContent() {
         tvAuthor.setText(mBook.author);
         tvBookName.setText(mBook.name);
-        tvLatest.setText(mBook.latest_chapter_name);
+        tvLatest.setText("");
         tvCate.setText(mBook.cate_name);
         tvDesc.setText(mBook.desc);
         RoundedCornersTransformation roundedCornersTransformation

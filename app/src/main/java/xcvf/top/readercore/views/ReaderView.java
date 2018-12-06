@@ -122,6 +122,17 @@ public class ReaderView extends FrameLayout {
     }
 
 
+    public void scrollNextPage() {
+        int page = mBookContentView.getCurrentPage();
+        mBookContentView.scrollToPosition(page + 1);
+    }
+
+
+    public void scrollPrePage() {
+        int page = mBookContentView.getCurrentPage();
+        mBookContentView.scrollToPosition(-1);
+    }
+
     /**
      * 获取当前的章节
      *
