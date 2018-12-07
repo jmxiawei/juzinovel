@@ -41,7 +41,7 @@ public class SearchBookHolder extends CommonViewHolder<Book> {
     @Override
     public void bindData(Book book, int position) {
         tvName.setText(book.name);
-        tvLatest.setText("作者：" + book.author);
+        tvLatest.setText(book.author+"  著");
         RoundedCornersTransformation roundedCornersTransformation
                 = new RoundedCornersTransformation(itemView.getContext(), 10, 0);
         Glide.with(itemView.getContext()).load(book.cover).placeholder(R.color.text_gray_light).bitmapTransform(roundedCornersTransformation).into(imgCover);

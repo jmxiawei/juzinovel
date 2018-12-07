@@ -19,7 +19,7 @@ import java.lang.reflect.Method;
 import top.iscore.freereader.R;
 
 /**
- * Created by xiongxuesong-pc on 2016/5/15.
+ *
  * <p>
  * 动态设置状态栏中字体颜色
  */

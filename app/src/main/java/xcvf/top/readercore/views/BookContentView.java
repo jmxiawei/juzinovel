@@ -57,6 +57,7 @@ public class BookContentView extends RecyclerView {
 
     public void setPageScrollListener(IPageScrollListener mPageScrollListener) {
         this.mPageScrollListener = mPageScrollListener;
+
     }
 
 
@@ -89,6 +90,11 @@ public class BookContentView extends RecyclerView {
         @Override
         public void onPageSelected(int position) {
             mPosition = position;
+
+
+            int count = getRecycledViewPool().getRecycledViewCount(0);
+            LogUtils.e("count=========================" + count);
+
         }
     };
 
