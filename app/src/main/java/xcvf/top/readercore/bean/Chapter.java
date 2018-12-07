@@ -2,7 +2,6 @@ package xcvf.top.readercore.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.text.TextUtils;
 import android.util.Base64;
 
 import com.blankj.utilcode.util.LogUtils;
@@ -17,11 +16,8 @@ import java.util.Objects;
 
 import xcvf.top.readercore.daos.ChapterDao;
 import xcvf.top.readercore.daos.DBManager;
-import xcvf.top.readercore.interfaces.IPage;
 
 import org.greenrobot.greendao.annotation.Generated;
-
-import static android.util.Base64.DEFAULT;
 
 /**
  * 章节
@@ -93,7 +89,7 @@ public class Chapter implements Parcelable {
     }
 
     @Transient
-    List<IPage> pages = new ArrayList<>();
+    List<Page> pages = new ArrayList<>();
 
     public String getChapter_name() {
         return chapter_name;
@@ -121,11 +117,11 @@ public class Chapter implements Parcelable {
     }
 
 
-    public List<IPage> getPages() {
+    public List<Page> getPages() {
         return pages;
     }
 
-    public void setPages(List<IPage> pages) {
+    public void setPages(List<Page> pages) {
         this.pages.clear();
         if (pages != null) {
             this.pages.addAll(pages);

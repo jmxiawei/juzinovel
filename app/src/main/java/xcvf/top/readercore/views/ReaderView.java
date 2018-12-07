@@ -26,6 +26,9 @@ public class ReaderView extends FrameLayout {
 
     private static final int CACHE_CHAPTER = 5;
 
+
+
+
     Book mBook;
     BookContentView mBookContentView;
     /**

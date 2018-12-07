@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.SPUtils;
 import com.hannesdorfmann.mosby3.mvp.MvpActivity;
 
 import java.util.ArrayList;
@@ -52,7 +51,6 @@ import xcvf.top.readercore.interfaces.IAreaClickListener;
 import xcvf.top.readercore.interfaces.IChapterListener;
 import xcvf.top.readercore.interfaces.IChapterProvider;
 import xcvf.top.readercore.interfaces.ILoadChapter;
-import xcvf.top.readercore.interfaces.IPage;
 import xcvf.top.readercore.interfaces.IPageScrollListener;
 import xcvf.top.readercore.interfaces.OnTextConfigChangedListener;
 import xcvf.top.readercore.services.DownloadIntentService;
@@ -197,7 +195,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
                     if (mLoadingFragment != null) {
                         mLoadingFragment.dismiss();
                     }
-                    mChapterDisplayedImpl.showChapter(false, readerView, 0, IPage.LOADING_PAGE, chapter);
+                    mChapterDisplayedImpl.showChapter(false, readerView, 0, Page.LOADING_PAGE, chapter);
                 }
             });
         }
@@ -326,7 +324,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
             public void onChapter(int code, Chapter srcChapter, Chapter chapter, HashMap<String, Object> params) {
                 if (chapter != null) {
                     isShowSuccess = true;
-                    mChapterDisplayedImpl.showChapter(false, readerView, 0, mBookMark == null ? IPage.LOADING_PAGE : mBookMark.getPage(), chapter);
+                    mChapterDisplayedImpl.showChapter(false, readerView, 0, mBookMark == null ? Page.LOADING_PAGE : mBookMark.getPage(), chapter);
                     saveBookMark();
                 }
                 loadData(!loadedChapter);
@@ -399,7 +397,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
                 ChapterProviderImpl.newInstance().getChapter(ChapterProviderImpl.TYPE_PRE, book.extern_bookid, String.valueOf(chapter.chapterid), chapter, new IChapterListener() {
                     @Override
                     public void onChapter(int code, Chapter srcChapter, Chapter chapter, HashMap<String, Object> params) {
-                        mChapterDisplayedImpl.showChapter(false, readerView, 0, IPage.LOADING_PAGE, chapter);
+                        mChapterDisplayedImpl.showChapter(false, readerView, 0, Page.LOADING_PAGE, chapter);
                     }
                 });
             }
@@ -410,7 +408,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
                 ChapterProviderImpl.newInstance().getChapter(ChapterProviderImpl.TYPE_NEXT, book.extern_bookid, String.valueOf(chapter.chapterid), chapter, new IChapterListener() {
                     @Override
                     public void onChapter(int code, Chapter srcChapter, Chapter chapter, HashMap<String, Object> params) {
-                        mChapterDisplayedImpl.showChapter(false, readerView, 0, IPage.LOADING_PAGE, chapter);
+                        mChapterDisplayedImpl.showChapter(false, readerView, 0, Page.LOADING_PAGE, chapter);
                     }
                 });
             }

@@ -1,7 +1,5 @@
 package xcvf.top.readercore.impl;
 
-import android.util.Base64;
-
 import com.blankj.utilcode.util.LogUtils;
 
 import java.util.ArrayList;
@@ -16,7 +14,6 @@ import xcvf.top.readercore.bean.TextConfig;
 import xcvf.top.readercore.impl.downloader.BaseChapterFileDownloader;
 import xcvf.top.readercore.interfaces.ChapterFileDownloader;
 import xcvf.top.readercore.interfaces.IDisplayer;
-import xcvf.top.readercore.interfaces.IPage;
 import xcvf.top.readercore.views.ReaderView;
 
 /**
@@ -42,63 +39,53 @@ public class ChapterDisplayedImpl implements IDisplayer {
             LogUtils.e("加载成功.无需加载");
             return;
         }
-
+        addEmptyPage(chapter, readerView, reset, jumpCharPosition, page);
         final String url = chapter.getFullPath();
         LogUtils.e(url);
-        Task.callInBackground(new Callable<ArrayList<String>>() {
+        Task.callInBackground(new Callable<ArrayList<Page>>() {
             @Override
-            public ArrayList<String> call() throws Exception {
-
+            public ArrayList<Page> call() throws Exception {
                 if (BaseChapterFileDownloader.isInTask(url)) {
                     throw new Exception("pass");
                 }
-
                 ChapterFileDownloader downloader = ChapterParserFactory.getDownloader(chapter.engine_domain);
                 if (downloader != null) {
-                    return downloader.download(readerView.getContext(), url);
+                    ArrayList<String> list = downloader.download(readerView.getContext(), url);
+                    TextConfig config = TextConfig.getConfig();
+                    return HtmlPageProvider.newInstance().providerPages(chapter, list, config.pageWidth, config.maxLine(), config.getSamplePaint());
                 }
                 return null;
             }
-        }).continueWith(new Continuation<ArrayList<String>, Object>() {
+        }).continueWith(new Continuation<ArrayList<Page>, Object>() {
             @Override
-            public Object then(Task<ArrayList<String>> task) throws Exception {
+            public Object then(Task<ArrayList<Page>> task) throws Exception {
                 if (task.getError() != null &&
                         "pass".equals(task.getError().getMessage())) {
                     //异常表示pass，忽略
                     return null;
                 }
-                final ArrayList<String> list = task.getResult();
+                final ArrayList<Page> list = task.getResult();
                 if (list != null && list.size() > 0) {
-                    //下载成功
-                    final TextConfig config = TextConfig.getConfig();
-                    Task.callInBackground(new Callable<List<IPage>>() {
-                        @Override
-                        public List<IPage> call() throws Exception {
-                            return HtmlPageProvider.newInstance().providerPages(chapter, list, config.pageWidth, config.maxLine(), config.getSamplePaint());
-                        }
-                    }).continueWith(new Continuation<List<IPage>, Object>() {
-                        @Override
-                        public Object then(Task<List<IPage>> task) throws Exception {
-                            chapter.setPages(task.getResult());
-                            readerView.setChapter(reset, chapter, jumpCharPosition, page);
-                            return null;
-                        }
-                    }, Task.UI_THREAD_EXECUTOR);
-                } else {
-                    Page errorPage = new Page();
-                    errorPage.setIndex(Page.ERROR_PAGE);
-                    errorPage.setChapterid(String.valueOf(chapter.chapterid));
-                    List<IPage> pages = new ArrayList<>();
-                    pages.add(errorPage);
-                    chapter.setPages(pages);
-                    chapter.setStatus(Chapter.STATUS_ERROR);
+                    chapter.setPages(task.getResult());
                     readerView.setChapter(reset, chapter, jumpCharPosition, page);
+                } else {
+                    addEmptyPage(chapter, readerView, reset, jumpCharPosition, page);
                 }
-
                 return null;
             }
         }, Task.UI_THREAD_EXECUTOR);
 
+    }
+
+    private void addEmptyPage(Chapter chapter, ReaderView readerView, boolean reset, int jumpCharPosition, int page) {
+        Page errorPage = new Page();
+        errorPage.setIndex(Page.ERROR_PAGE);
+        errorPage.setChapterid(chapter.chapterid);
+        List<Page> pages = new ArrayList<>();
+        pages.add(errorPage);
+        chapter.setPages(pages);
+        chapter.setStatus(Chapter.STATUS_ERROR);
+        readerView.setChapter(reset, chapter, jumpCharPosition, page);
     }
 
 }

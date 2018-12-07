@@ -2,27 +2,14 @@ package xcvf.top.readercore.impl;
 
 import android.graphics.Paint;
 import android.text.TextUtils;
-import android.widget.TextView;
 
-import com.blankj.utilcode.util.LogUtils;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
-import org.jsoup.nodes.TextNode;
-
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import xcvf.top.readercore.bean.Chapter;
 import xcvf.top.readercore.bean.Line;
 import xcvf.top.readercore.bean.Page;
-import xcvf.top.readercore.interfaces.IPage;
 import xcvf.top.readercore.interfaces.IPageProvider;
-import xcvf.top.readercore.utils.Constant;
 import xcvf.top.readercore.utils.TextBreakUtil;
 
 /**
@@ -46,10 +33,10 @@ public class HtmlPageProvider implements IPageProvider {
     }
 
     @Override
-    public List<IPage> providerPages(Chapter chapter, ArrayList<String> filelist, int maxWidth, int maxLinesPerPage, Paint paint) {
+    public ArrayList<Page> providerPages(Chapter chapter, ArrayList<String> filelist, int maxWidth, int maxLinesPerPage, Paint paint) {
 
 
-        ArrayList<IPage> pageList = new ArrayList<>();
+        ArrayList<Page> pageList = new ArrayList<>();
         IChapterContentParser parser =  ChapterParserFactory.getContentParser(chapter.engine_domain);
         if(parser== null){
             return  pageList;
@@ -57,7 +44,7 @@ public class HtmlPageProvider implements IPageProvider {
         String content =parser.parser(chapter,filelist);
         int chapter_total_length = content.length();
         Page page = new Page();
-        page.setChapterid(String.valueOf(chapter.chapterid));
+        page.setChapterid(chapter.chapterid);
         int pageTotalChars = 0;
         while (content.length() > 0) {
             if (page.getLines().size() >= maxLinesPerPage) {
@@ -67,7 +54,7 @@ public class HtmlPageProvider implements IPageProvider {
                 page.setIndex(pageList.size() + 1);
                 pageList.add(page);
                 page = new Page();
-                page.setChapterid(String.valueOf(chapter.chapterid));
+                page.setChapterid(chapter.chapterid);
                 pageTotalChars = 0;
             }
             Line line = (Line) TextBreakUtil.getLine(content, maxWidth, paint);
@@ -85,7 +72,7 @@ public class HtmlPageProvider implements IPageProvider {
 
         int size = pageList.size();
 
-        for (IPage subpage : pageList) {
+        for (Page subpage : pageList) {
             subpage.setTotalPage(size);
         }
         return pageList;

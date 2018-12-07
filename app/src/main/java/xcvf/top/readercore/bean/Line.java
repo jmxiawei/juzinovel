@@ -4,17 +4,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 import xcvf.top.readercore.interfaces.IChar;
-import xcvf.top.readercore.interfaces.ILine;
 
 /**
  * Created by xiaw on 2018/7/11.
  */
-public class Line implements ILine {
+public class Line {
 
-    List<IChar> chars = new LinkedList<>();
+    List<TxtChar> chars = new LinkedList<>();
 
-    @Override
-    public void addChar(IChar iChar) {
+    public void addChar(TxtChar iChar) {
         chars.add(iChar);
     }
 
@@ -29,8 +27,7 @@ public class Line implements ILine {
         return builder.toString();
     }
 
-    @Override
-    public List<IChar> getChars() {
+    public List<TxtChar> getChars() {
         return chars;
     }
 }

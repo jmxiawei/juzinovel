@@ -12,14 +12,12 @@ import com.blankj.utilcode.util.TimeUtils;
 
 import java.text.SimpleDateFormat;
 
-import butterknife.BindView;
 import top.iscore.freereader.R;
 import xcvf.top.readercore.bean.Chapter;
 import xcvf.top.readercore.bean.Page;
 import xcvf.top.readercore.bean.TextConfig;
 import xcvf.top.readercore.interfaces.IChapterProvider;
 import xcvf.top.readercore.interfaces.ILoadChapter;
-import xcvf.top.readercore.interfaces.IPage;
 import xcvf.top.readercore.interfaces.IPageScrollListener;
 import xcvf.top.readercore.views.PageTextView;
 
@@ -29,7 +27,7 @@ import xcvf.top.readercore.views.PageTextView;
 
 public class PageHolder extends RecyclerView.ViewHolder {
 
-    IPage page;
+    Page page;
     TextView tvChapterName;
     PageTextView tv;
     TextView tvTime;
@@ -65,7 +63,10 @@ public class PageHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
-    public void setPage(final Chapter chapter, IPage page) {
+    public void setPage(final Chapter chapter, Page page) {
+        if (chapter == null || page == null) {
+            return;
+        }
         this.page = page;
         TextConfig textConfig = TextConfig.getConfig();
         tvTime.setText(TimeUtils.millis2String(System.currentTimeMillis(), new SimpleDateFormat("HH:mm")));

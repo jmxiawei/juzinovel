@@ -5,13 +5,12 @@ import android.graphics.Paint;
 
 import xcvf.top.readercore.bean.Line;
 import xcvf.top.readercore.bean.TxtChar;
-import xcvf.top.readercore.interfaces.ILine;
 
 
 public class TextBreakUtil {
 
 
-    public static ILine getLine(String content, float measureWidth, Paint paint) {
+    public static Line getLine(String content, float measureWidth, Paint paint) {
         if (content == null || content.length() == 0) {
             return null;
         }

@@ -3,17 +3,17 @@ package xcvf.top.readercore.bean;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
-import xcvf.top.readercore.interfaces.ILine;
-import xcvf.top.readercore.interfaces.IPage;
+import java.util.Objects;
 
 /**
  * Created by xiaw on 2018/7/11.
  */
-public class Page implements IPage {
+public class Page {
 
+    public static final int LOADING_PAGE = -1;
+    public static final int ERROR_PAGE = -2;
     //这一页所有的行
-    List<ILine> lines = new ArrayList<>();
+    List<Line> lines = new ArrayList<>();
     //当前章节的第几页
     int index;
 
@@ -23,7 +23,7 @@ public class Page implements IPage {
     //本页起始的字符在本章节中的位置
     int startPositionInChapter;
 
-    public String chapterid;
+    public int chapterid;
     public Page() {
     }
 
@@ -36,7 +36,7 @@ public class Page implements IPage {
         return this;
     }
 
-    public Page setLines(List<ILine> lines) {
+    public Page setLines(List<Line> lines) {
         this.lines = lines;
         return this;
     }
@@ -52,31 +52,24 @@ public class Page implements IPage {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Page page = (Page) o;
-
-        if (index != page.index) return false;
-        return chapterid != null ? chapterid.equals(page.chapterid) : page.chapterid == null;
+        return index == page.index &&
+                chapterid == page.chapterid;
     }
 
     @Override
     public int hashCode() {
-        int result = index;
-        result = 31 * result + (chapterid != null ? chapterid.hashCode() : 0);
-        return result;
+
+        return Objects.hash(index, chapterid);
     }
 
-    public String getChapterid() {
+    public int getChapterid() {
         return chapterid;
     }
 
-    public Page setChapterid(String chapterid) {
+    public Page setChapterid(int chapterid) {
         this.chapterid = chapterid;
         return this;
     }
@@ -98,31 +91,31 @@ public class Page implements IPage {
         this.index = index;
     }
 
-    @Override
+
     public int getIndex() {
         return index;
     }
 
-    @Override
+
     public int getTotalPage() {
         return  this.totalPage;
     }
 
-    @Override
+
     public void setTotalPage(int totalPage) {
         this.totalPage = totalPage;
     }
 
-    @Override
-    public void addLines(ILine line) {
+
+    public void addLines(Line line) {
         if (lines == null) {
             lines = new LinkedList<>();
         }
         lines.add(line);
     }
 
-    @Override
-    public List<ILine> getLines() {
+
+    public List<Line> getLines() {
         return lines;
     }
 }

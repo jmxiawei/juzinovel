@@ -13,7 +13,6 @@ import xcvf.top.readercore.bean.Line;
 import xcvf.top.readercore.bean.Page;
 import xcvf.top.readercore.bean.TextConfig;
 import xcvf.top.readercore.bean.TxtChar;
-import xcvf.top.readercore.interfaces.ILine;
 
 /**
  * Created by bifan-wei
@@ -28,7 +27,7 @@ public class TxtBitmapUtil {
 
         Bitmap bitmap = bg.copy(Bitmap.Config.RGB_565, true);
         Canvas canvas = new Canvas(bitmap);
-        List<ILine> lines = page.getLines();
+        List<Line> lines = page.getLines();
         if (lines == null || lines.size() == 0) {
             return null;
         }
@@ -42,7 +41,7 @@ public class TxtBitmapUtil {
             int charLength = line1.getChars().size();
             for (int j = 0; j < charLength; j++) {
                 //一个字符
-                TxtChar txtChar = (TxtChar) line1.getChars().get(j);
+                TxtChar txtChar = line1.getChars().get(j);
                 String str = String.valueOf(txtChar.getData());
                 canvas.drawText(str, sx, sy, paint);
                 sx += txtChar.getWidth();

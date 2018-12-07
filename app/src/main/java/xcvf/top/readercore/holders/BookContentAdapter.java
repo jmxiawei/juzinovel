@@ -13,7 +13,6 @@ import java.util.List;
 import xcvf.top.readercore.bean.Chapter;
 import xcvf.top.readercore.bean.Page;
 import xcvf.top.readercore.interfaces.ILoadChapter;
-import xcvf.top.readercore.interfaces.IPage;
 import xcvf.top.readercore.interfaces.IPageScrollListener;
 import xcvf.top.readercore.views.BookContentView;
 
@@ -25,7 +24,7 @@ import xcvf.top.readercore.views.BookContentView;
  */
 public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
 
-    List<IPage> pageList = new ArrayList<>();
+    List<Page> pageList = new ArrayList<>();
 
     LinkedList<Chapter> mCacheChapterList = new LinkedList<>();
     IPageScrollListener pageScrollListener;
@@ -51,7 +50,7 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
         return mCacheChapterList;
     }
 
-    private void checkChaptetList(Chapter chapter) {
+    private void checkChapterList(Chapter chapter) {
         if (mCacheChapterList.contains(chapter)) {
             int total = 0;
             int size = mCacheChapterList.size();
@@ -60,6 +59,13 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
             }
             if (total != getItemCount()) {
                 mCacheChapterList.remove(chapter);
+                Iterator<Page> pageIterator = pageList.iterator();
+                while (pageIterator.hasNext()) {
+                    Page page = pageIterator.next();
+                    if (page.chapterid == chapter.chapterid) {
+                        pageIterator.remove();
+                    }
+                }
             }
         }
     }
@@ -76,7 +82,7 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
             pageList.clear();
             notifyDataSetChanged();
         }
-        checkChaptetList(mChapter);
+        checkChapterList(mChapter);
         if (!mCacheChapterList.contains(mChapter)) {
             int size = mCacheChapterList.size();
             int index = -1;
@@ -121,7 +127,7 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
                 int page = findPageByPosition(jumpCharPosition, mChapter.getPages());
                 bookContentView.scrollToPosition(page);
             } else {
-                if (startPage != IPage.LOADING_PAGE && startPage > 0) {
+                if (startPage != Page.LOADING_PAGE && startPage > 0) {
                     //历史记录
                     bookContentView.scrollToPosition(startPage - 1);
                 }
@@ -134,7 +140,7 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
                     && mChapter.getStatus() == Chapter.STATUS_OK) {
                 mCacheChapterList.set(index, mChapter);
                 int fronPage = getFrontPage(index);
-                List<IPage> pageList = mChapter.getPages();
+                List<Page> pageList = mChapter.getPages();
                 if (pageList.size() > 0) {
                     replace(fronPage, pageList.get(0));
                     appendList(fronPage + 1, pageList.subList(1, pageList.size()));
@@ -142,8 +148,8 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
             }
         }
 
-        if(mShowChapterListener!=null){
-            mShowChapterListener.load(0,mChapter);
+        if (mShowChapterListener != null) {
+            mShowChapterListener.load(0, mChapter);
         }
 
     }
@@ -154,7 +160,7 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
      *
      * @return
      */
-    private int findPageByPosition(int p, List<IPage> pages) {
+    private int findPageByPosition(int p, List<Page> pages) {
         int size = pages == null ? 0 : pages.size();
         for (int i = 0; i < size; i--) {
             Page page = (Page) pages.get(i);
@@ -192,19 +198,19 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
      *
      * @param pages
      */
-    private void appendListTop(List<IPage> pages) {
+    private void appendListTop(List<Page> pages) {
         this.pageList.addAll(0, pages);
         notifyItemRangeInserted(0, pages.size());
 
     }
 
-    private void appendPage(IPage page) {
+    private void appendPage(Page page) {
         this.pageList.add(page);
         notifyDataSetChanged();
     }
 
 
-    private void replace(int position, IPage page) {
+    private void replace(int position, Page page) {
         this.pageList.set(position, page);
         notifyItemChanged(position);
     }
@@ -215,17 +221,17 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
      * @param startIndex
      * @param pageList
      */
-    private void appendList(int startIndex, List<IPage> pageList) {
+    private void appendList(int startIndex, List<Page> pageList) {
         this.pageList.addAll(startIndex, pageList);
         notifyItemRangeInserted(startIndex, pageList.size());
     }
 
-    private void appendList(List<IPage> pageList) {
+    private void appendList(List<Page> pageList) {
         this.pageList.addAll(pageList);
         notifyItemRangeInserted(this.pageList.size() - pageList.size(), this.pageList.size());
     }
 
-    private void setPageList(List<IPage> pageList) {
+    private void setPageList(List<Page> pageList) {
         this.pageList.clear();
         if (pageList != null) {
             this.pageList.addAll(pageList);
@@ -236,19 +242,22 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
 
     @Override
     public PageHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new PageHolder(parent.getContext(), parent, mLoadChapter);
+        PageHolder holder = new PageHolder(parent.getContext(), parent, mLoadChapter);
+        LogUtils.e("onCreateViewHolder========================================" + holder.hashCode());
+        return holder;
     }
 
     @Override
     public void onBindViewHolder(PageHolder holder, int position) {
-        IPage page = pageList.get(position);
+        LogUtils.e("onBindViewHolder========================================" + holder.hashCode());
+        Page page = pageList.get(position);
         holder.setPageScrollListener(pageScrollListener);
         holder.setPage(getCurrentChapter(page), page);
     }
 
-    private Chapter getCurrentChapter(IPage page) {
+    private Chapter getCurrentChapter(Page page) {
         for (int i = 0; i < mCacheChapterList.size(); i++) {
-            List<IPage> pageList = mCacheChapterList.get(i).getPages();
+            List<Page> pageList = mCacheChapterList.get(i).getPages();
             if (pageList.contains(page)) {
                 return mCacheChapterList.get(i);
             }
@@ -257,7 +266,7 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
     }
 
 
-    public IPage getCurrentPage(int page) {
+    public Page getCurrentPage(int page) {
         if (page < pageList.size()) {
             return pageList.get(page);
         }
@@ -265,26 +274,25 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
     }
 
     /**
-     *
      * @param page
      * @return 0 位于最开始一章 1位于中间，2位于最后一章 3 只有一章
      */
-    public int indexOfCurrentChapter(int page){
+    public int indexOfCurrentChapter(int page) {
         if (page >= pageList.size() || page < 0) {
             return -1;
         }
-        IPage page1 = pageList.get(page);
+        Page page1 = pageList.get(page);
         for (int i = 0; i < mCacheChapterList.size(); i++) {
-            List<IPage> pageList = mCacheChapterList.get(i).getPages();
+            List<Page> pageList = mCacheChapterList.get(i).getPages();
             if (pageList.contains(page1)) {
-                if(i==0){
-                    if(mCacheChapterList.size()==1){
-                        return  3;
+                if (i == 0) {
+                    if (mCacheChapterList.size() == 1) {
+                        return 3;
                     }
-                    return  0;
-                }else if(i == mCacheChapterList.size() -1){
+                    return 0;
+                } else if (i == mCacheChapterList.size() - 1) {
                     return 2;
-                }else {
+                } else {
                     return 1;
                 }
             }
@@ -292,13 +300,18 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
         return -1;
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return 0;
+    }
+
     public Chapter getCurrentChapter(int page) {
         if (page >= pageList.size() || page < 0) {
             return null;
         }
-        IPage page1 = pageList.get(page);
+        Page page1 = pageList.get(page);
         for (int i = 0; i < mCacheChapterList.size(); i++) {
-            List<IPage> pageList = mCacheChapterList.get(i).getPages();
+            List<Page> pageList = mCacheChapterList.get(i).getPages();
             if (pageList.contains(page1)) {
                 return mCacheChapterList.get(i);
             }

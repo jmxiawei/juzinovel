@@ -56,7 +56,8 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         Utils.init(this);
-        LogUtils.getConfig().setLogSwitch(BuildConfig.DEBUG);
+        boolean log = BuildConfig.DEBUG;
+        LogUtils.getConfig().setLogSwitch(log);
         Stetho.initializeWithDefaults(this);
         TextConfig.initSpace(this);
         DBManager.init(this);

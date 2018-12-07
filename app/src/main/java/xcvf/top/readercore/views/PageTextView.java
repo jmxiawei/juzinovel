@@ -14,7 +14,6 @@ import xcvf.top.readercore.bean.Line;
 import xcvf.top.readercore.bean.Page;
 import xcvf.top.readercore.bean.TextConfig;
 import xcvf.top.readercore.bean.TxtChar;
-import xcvf.top.readercore.interfaces.ILine;
 
 /**
  * 显示一页数据
@@ -62,7 +61,7 @@ public class PageTextView extends AppCompatTextView {
         if (page == null) {
             return;
         }
-        List<ILine> lines = page.getLines();
+        List<Line> lines = page.getLines();
         if (lines == null || lines.size() == 0) {
             return;
         }
