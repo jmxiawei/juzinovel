@@ -20,6 +20,7 @@ import xcvf.top.readercore.daos.DBManager;
 import xcvf.top.readercore.daos.DaoSession;
 import xcvf.top.readercore.impl.ChapterParserFactory;
 import xcvf.top.readercore.impl.FileDownloader;
+import xcvf.top.readercore.impl.downloader.BaseChapterFileDownloader;
 import xcvf.top.readercore.impl.path.PathGeneratorFactory;
 import xcvf.top.readercore.interfaces.ChapterFileDownloader;
 import xcvf.top.readercore.utils.Constant;
@@ -34,8 +35,10 @@ public class DownloadIntentService extends IntentService {
     int mCount;
     int finishCount = 0;
     Chapter chapter;
-    Book  mBook;
+    Book mBook;
+    long startId;
     BookReadPresenter bookReadPresenter;
+
     /**
      * 启动一个下载任务
      *
@@ -54,9 +57,10 @@ public class DownloadIntentService extends IntentService {
      *
      * @param context
      */
-    public static void startDownloadService(Context context,Book book) {
+    public static void startDownloadService(Context context, Book book, long startId) {
         Intent intent = new Intent(context, DownloadIntentService.class);
         intent.putExtra("book", book);
+        intent.putExtra("startId", startId);
         context.startService(intent);
     }
 
@@ -71,11 +75,13 @@ public class DownloadIntentService extends IntentService {
         if (intent == null) {
             return;
         }
-        mBook =  intent.getParcelableExtra("book");
-        if(mBook != null){
+        LogUtils.e("onHandleIntent" + hashCode());
+        mBook = intent.getParcelableExtra("book");
+        startId = intent.getLongExtra("startId", 0);
+        if (mBook != null) {
             bookReadPresenter = new BookReadPresenter();
-            chapterList = bookReadPresenter.loadChaptersSync(mBook,0);
-            if(chapterList!=null && chapterList.size()>0){
+            chapterList = bookReadPresenter.loadChaptersSync(mBook, startId);
+            if (chapterList != null && chapterList.size() > 0) {
                 chapter = chapterList.get(0);
             }
         }
@@ -87,12 +93,12 @@ public class DownloadIntentService extends IntentService {
             final Chapter chapter = chapterList.get(i);
 
             List<String> files = null;
-            ChapterFileDownloader downloader =  ChapterParserFactory.getDownloader(chapter.engine_domain);
-            if(downloader !=null){
-                files = downloader.download(getApplicationContext(),chapter.getFullPath());
+            ChapterFileDownloader downloader = ChapterParserFactory.getDownloader(chapter.engine_domain);
+            if (downloader != null && !BaseChapterFileDownloader.isInTask(chapter.getFullPath())) {
+                files = downloader.download(getApplicationContext(), chapter.getFullPath());
             }
 
-            if (files!=null&& files.size()>0) {
+            if (files != null && files.size() > 0) {
                 chapter.setIs_download(true);
                 session.getChapterDao().insertOrReplace(chapter);
                 Intent itn = new Intent(PROGRESS);

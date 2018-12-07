@@ -217,6 +217,6 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
     @Override
     public void onChanged(User user) {
         mUser = user;
-        showContent();
+        loadData(true);
     }
 }

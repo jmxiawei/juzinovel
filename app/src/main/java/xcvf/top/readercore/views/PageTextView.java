@@ -26,6 +26,8 @@ public class PageTextView extends AppCompatTextView {
     int mHeight;
     int mLeft;
     private static final boolean DEBUG = false;
+    TextConfig config = TextConfig.getConfig();
+    Paint mPaint;
 
     public PageTextView(Context context) {
         super(context);
@@ -37,6 +39,7 @@ public class PageTextView extends AppCompatTextView {
 
     public PageTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+
     }
 
     public PageTextView setPage(Page page) {
@@ -66,24 +69,25 @@ public class PageTextView extends AppCompatTextView {
             return;
         }
         int line = page.getLines().size();
-        TextConfig config = TextConfig.getConfig();
-        Paint paint = config.getSamplePaint();
-        paint.setColor(getResources().getColor(config.getTextColor()));
+        mPaint = config.getSamplePaint();
+        mPaint.setColor(getResources().getColor(config.getTextColor()));
         int lineHeight = config.getTextSize();
         int sx = 0, sy = lineHeight + config.paddingTop;
         for (int i = 0; i < line; i++) {
             Line line1 = (Line) page.getLines().get(i);
-            int charLength = line1.getChars().size();
-            for (int j = 0; j < charLength; j++) {
-                //一个字符
-                TxtChar txtChar = (TxtChar) line1.getChars().get(j);
-                String str = String.valueOf(txtChar.getData());
-                canvas.drawText(str, sx, sy, paint);
-                sx += txtChar.getWidth();
-            }
+            String lineStr = line1.toString();
+            canvas.drawText(lineStr, sx, sy, mPaint);
+//            int charLength = line1.getChars().size();
+//            for (int j = 0; j < charLength; j++) {
+//                //一个字符
+//                TxtChar txtChar = (TxtChar) line1.getChars().get(j);
+//                String str = String.valueOf(txtChar.getData());
+//                canvas.drawText(str, sx, sy, mPaint);
+//                sx += txtChar.getWidth();
+//            }
             if (DEBUG) {
-                canvas.drawLine(0, sy, 1000, sy, paint);
-                canvas.drawText(String.valueOf(i), 0, sy, paint);
+                canvas.drawLine(0, sy, 1000, sy, mPaint);
+                canvas.drawText(String.valueOf(i), 0, sy, mPaint);
             }
             sx = 0;
             sy += (lineHeight + config.getLineSpace());

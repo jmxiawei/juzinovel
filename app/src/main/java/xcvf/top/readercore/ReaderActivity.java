@@ -140,7 +140,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
 
     @Override
     public void onBackPressed() {
-        if (TextUtils.isEmpty(book.shelfid)) {
+        if (TextUtils.isEmpty(book.shelfid) && !book.findFromLocal()) {
             ContentDialog dialog = new ContentDialog();
             dialog.setTitle("添书").setContent("是否将本书加入书架?").setNegativeListener(new View.OnClickListener() {
                 @Override
@@ -363,15 +363,15 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
             if (mLoadingFragment != null) {
                 mLoadingFragment.dismiss();
             }
-            int index = readerView.indexOfCurrentChapter();
-            if (index == 0) {
-                onScroll(0, 0, IPageScrollListener.PRE_CHAPTER);
-            } else if (index == 2) {
-                onScroll(0, 0, IPageScrollListener.NEXT_CHAPTER);
-            } else if (index != 1) {
-                onScroll(0, 0, IPageScrollListener.PRE_CHAPTER);
-                onScroll(0, 0, IPageScrollListener.NEXT_CHAPTER);
-            }
+//            int index = readerView.indexOfCurrentChapter();
+//            if (index == 0) {
+//                onScroll(0, 0, IPageScrollListener.PRE_CHAPTER);
+//            } else if (index == 2) {
+//                onScroll(0, 0, IPageScrollListener.NEXT_CHAPTER);
+//            } else if (index != 1) {
+//                onScroll(0, 0, IPageScrollListener.PRE_CHAPTER);
+//                onScroll(0, 0, IPageScrollListener.NEXT_CHAPTER);
+//            }
         }
     };
 

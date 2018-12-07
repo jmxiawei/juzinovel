@@ -1,7 +1,5 @@
 package xcvf.top.readercore.bean;
 
-import xcvf.top.readercore.interfaces.IChar;
-
 /**
  * Created by xiaw on 2018/7/11.
  */

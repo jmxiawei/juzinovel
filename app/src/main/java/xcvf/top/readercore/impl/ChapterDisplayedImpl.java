@@ -39,7 +39,7 @@ public class ChapterDisplayedImpl implements IDisplayer {
             LogUtils.e("加载成功.无需加载");
             return;
         }
-        addEmptyPage(chapter, readerView, reset, jumpCharPosition, page);
+        addEmptyPage(chapter, readerView, reset, jumpCharPosition, page,Page.LOADING_PAGE);
         final String url = chapter.getFullPath();
         LogUtils.e(url);
         Task.callInBackground(new Callable<ArrayList<Page>>() {
@@ -69,7 +69,7 @@ public class ChapterDisplayedImpl implements IDisplayer {
                     chapter.setPages(task.getResult());
                     readerView.setChapter(reset, chapter, jumpCharPosition, page);
                 } else {
-                    addEmptyPage(chapter, readerView, reset, jumpCharPosition, page);
+                    addEmptyPage(chapter, readerView, reset, jumpCharPosition, page,Page.ERROR_PAGE);
                 }
                 return null;
             }
@@ -77,9 +77,18 @@ public class ChapterDisplayedImpl implements IDisplayer {
 
     }
 
-    private void addEmptyPage(Chapter chapter, ReaderView readerView, boolean reset, int jumpCharPosition, int page) {
+    /**
+     * 添加一个占位的页面
+     * @param chapter 章节
+     * @param readerView
+     * @param reset
+     * @param jumpCharPosition
+     * @param page
+     * @param status -1 加载中 -2 错误
+     */
+    private void addEmptyPage(Chapter chapter, ReaderView readerView, boolean reset, int jumpCharPosition, int page,int status) {
         Page errorPage = new Page();
-        errorPage.setIndex(Page.ERROR_PAGE);
+        errorPage.setIndex(status);
         errorPage.setChapterid(chapter.chapterid);
         List<Page> pages = new ArrayList<>();
         pages.add(errorPage);

@@ -3,6 +3,9 @@ package xcvf.top.readercore.impl;
 import android.graphics.Paint;
 import android.text.TextUtils;
 
+import com.blankj.utilcode.util.TimeUtils;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +44,7 @@ public class HtmlPageProvider implements IPageProvider {
         if(parser== null){
             return  pageList;
         }
+        String time  = TimeUtils.millis2String(System.currentTimeMillis(), new SimpleDateFormat("HH:mm"));
         String content =parser.parser(chapter,filelist);
         int chapter_total_length = content.length();
         Page page = new Page();
@@ -52,6 +56,7 @@ public class HtmlPageProvider implements IPageProvider {
                 page.setStartPositionInChapter(chapter_total_length - content.length() - pageTotalChars);
                 page.setPageTotalChars(pageTotalChars);
                 page.setIndex(pageList.size() + 1);
+                page.setTime(time);
                 pageList.add(page);
                 page = new Page();
                 page.setChapterid(chapter.chapterid);
@@ -67,6 +72,7 @@ public class HtmlPageProvider implements IPageProvider {
             page.setStartPositionInChapter(chapter_total_length - pageTotalChars);
             page.setPageTotalChars(pageTotalChars);
             page.setIndex(pageList.size() + 1);
+            page.setTime(time);
             pageList.add(page);
         }
 

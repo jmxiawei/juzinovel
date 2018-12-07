@@ -18,13 +18,22 @@ public class Page {
     int index;
 
     int totalPage;
-
+    String time;
     int pageTotalChars;
     //本页起始的字符在本章节中的位置
     int startPositionInChapter;
 
     public int chapterid;
     public Page() {
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public Page setTime(String time) {
+        this.time = time;
+        return this;
     }
 
     public int getPageTotalChars() {

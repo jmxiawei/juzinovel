@@ -18,11 +18,10 @@ public class Line {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder("  ");
+        StringBuilder builder = new StringBuilder();
         int size = chars.size();
         for (int i = 0; i < size; i++) {
-            builder.append(chars.get(i).getData()
-            );
+            builder.append(chars.get(i).getData());
         }
         return builder.toString();
     }

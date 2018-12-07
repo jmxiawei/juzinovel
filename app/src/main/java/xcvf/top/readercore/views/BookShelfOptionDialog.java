@@ -100,7 +100,7 @@ public class BookShelfOptionDialog extends DialogFragment {
                 } else if (item.getId() == 1) {
                     mBookShelfPresenter.deleteBookShelf(mUser.getUid(),mBook.shelfid,mBook.bookid);
                 } else if (item.getId() == 2) {
-                    DownloadIntentService.startDownloadService(getActivity(), mBook);
+                    DownloadIntentService.startDownloadService(getActivity(), mBook,0);
                 }
                 dismiss();
             }

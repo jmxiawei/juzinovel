@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.TimeUtils;
@@ -39,7 +40,7 @@ public class PageHolder extends RecyclerView.ViewHolder {
     LinearLayout llNotify;
 
     LinearLayout llProgress;
-
+    ProgressBar progressBar;
     TextView tv_notify_net;
     TextView tvRetry;
 
@@ -55,6 +56,7 @@ public class PageHolder extends RecyclerView.ViewHolder {
         llProgress = itemView.findViewById(R.id.ll_progress);
         llNotify = itemView.findViewById(R.id.ll_notify);
         tvRetry = itemView.findViewById(R.id.tv_retry);
+        progressBar = itemView.findViewById(R.id.progress_loading);
     }
 
 
@@ -69,7 +71,7 @@ public class PageHolder extends RecyclerView.ViewHolder {
         }
         this.page = page;
         TextConfig textConfig = TextConfig.getConfig();
-        tvTime.setText(TimeUtils.millis2String(System.currentTimeMillis(), new SimpleDateFormat("HH:mm")));
+        tvTime.setText(page.getTime());
         textConfig.applyColor(tvTime);
         textConfig.applyColor(tvChapterName);
         textConfig.applyColor(tvProgress);
@@ -84,11 +86,12 @@ public class PageHolder extends RecyclerView.ViewHolder {
             tvProgress.setText(page.getIndex() + "/" + chapter.getPages().size());
             tv.setVisibility(View.VISIBLE);
             llProgress.setVisibility(View.INVISIBLE);
-        } else {
+        } else if (this.page.getIndex() == Page.ERROR_PAGE) {
             tv.setVisibility(View.INVISIBLE);
             llProgress.setVisibility(View.VISIBLE);
             tvProgress.setText("-/-");
             llNotify.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
             tvRetry.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -97,6 +100,12 @@ public class PageHolder extends RecyclerView.ViewHolder {
                     }
                 }
             });
+        } else if (this.page.getIndex() == Page.LOADING_PAGE) {
+            tv.setVisibility(View.INVISIBLE);
+            llProgress.setVisibility(View.VISIBLE);
+            tvProgress.setText("-/-");
+            llNotify.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
         }
     }
 

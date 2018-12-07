@@ -67,6 +67,7 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
                     }
                 }
             }
+            notifyDataSetChanged();
         }
     }
 

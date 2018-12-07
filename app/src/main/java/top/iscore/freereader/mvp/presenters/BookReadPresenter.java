@@ -61,8 +61,8 @@ public class BookReadPresenter extends MvpBasePresenter<BookReadView> {
         loadChapterByUrl(context, book);
     }
 
-    public ArrayList<Chapter> loadChaptersSync(Book book, int startId) {
-        return (ArrayList<Chapter>) Chapter.getAllChapter(book.bookid,book.extern_bookid);
+    public ArrayList<Chapter> loadChaptersSync(Book book, long startId) {
+        return (ArrayList<Chapter>) Chapter.getAllChapter(book.bookid,book.extern_bookid,startId);
     }
 
 

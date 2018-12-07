@@ -175,10 +175,13 @@ public class Book implements Parcelable {
 
     public void save(String userid) {
         setUserid(userid);
-        uniqueKey =getUKey(userid,bookid);
+        uniqueKey = getUKey(userid, bookid);
         DBManager.getDaoSession().getBookDao().insertOrReplace(this);
     }
 
+    public boolean findFromLocal() {
+        return null != DBManager.getDaoSession().getBookDao().queryBuilder().where(BookDao.Properties.Bookid.eq(bookid)).limit(1).unique();
+    }
 
     private static String getUKey(String userid, int bookid) {
         return bookid + "_iscore.top_" + userid;
@@ -197,7 +200,7 @@ public class Book implements Parcelable {
         if (list != null) {
             for (Book book : list) {
                 book.setUserid(userid);
-                book.setUniqueKey(getUKey(userid,book.bookid));
+                book.setUniqueKey(getUKey(userid, book.bookid));
             }
             DBManager.getDaoSession().getBookDao().insertOrReplaceInTx(list);
         }
@@ -248,7 +251,6 @@ public class Book implements Parcelable {
         this.read_url = read_url;
     }
 
-    
 
     @Override
     public int describeContents() {
@@ -304,8 +306,8 @@ public class Book implements Parcelable {
 
     @Generated(hash = 332585091)
     public Book(int bookid, String cover, String shelfid, String userid, String name, String author, String engine_domain,
-            String cate_name, String desc, String info_url, String read_url, String chapter_name, String chapterid,
-            int page, String keywords, String extern_bookid, String update_time, String uniqueKey) {
+                String cate_name, String desc, String info_url, String read_url, String chapter_name, String chapterid,
+                int page, String keywords, String extern_bookid, String update_time, String uniqueKey) {
         this.bookid = bookid;
         this.cover = cover;
         this.shelfid = shelfid;

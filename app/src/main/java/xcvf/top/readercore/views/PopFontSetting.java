@@ -37,7 +37,7 @@ import xcvf.top.readercore.styles.ModeProvider;
 public class PopFontSetting extends PopupWindow {
 
 
-    public static final int MIN_BRIGHTNESS = 10;
+    public static final int MIN_BRIGHTNESS = 2;
 
     public static final int MAX_BRIGHTNESS = 240;
 

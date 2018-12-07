@@ -173,11 +173,12 @@ public class Chapter implements Parcelable {
      * @param bookid
      * @return
      */
-    public static List<Chapter> getAllChapter(int bookid,String extern_bookid) {
+    public static List<Chapter> getAllChapter(int bookid,String extern_bookid,long startid) {
         return DBManager.getDaoSession().
                 getChapterDao().
                 queryBuilder().
                 where(ChapterDao.Properties.Bookid.eq(bookid)).
+                where(ChapterDao.Properties.Chapterid.ge(startid)).
                 where(ChapterDao.Properties.Extern_bookid.eq(extern_bookid)).build().list();
     }
 
