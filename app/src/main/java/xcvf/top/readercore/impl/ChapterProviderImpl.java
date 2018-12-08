@@ -60,6 +60,26 @@ public class ChapterProviderImpl implements IChapterProvider {
     }
 
 
+    public  List<Chapter> saveSync( String bookid,  List<Chapter> chapterList){
+        long start = SystemClock.elapsedRealtime();
+        ChapterDao chapterDao = DBManager.
+                getDaoMaster().
+                newSession().
+                getChapterDao();
+        List<Chapter> chapters = chapterList;
+        if (chapterList != null) {
+            chapterDao.queryBuilder().where(ChapterDao.Properties.Extern_bookid.eq(bookid))
+                    .buildDelete().executeDeleteWithoutDetachingEntities();
+            chapterDao.insertOrReplaceInTx(chapterList);
+        } else {
+            chapters = chapterDao.queryBuilder()
+                    .where(ChapterDao.Properties.Extern_bookid.eq(bookid))
+                    .orderAsc(ChapterDao.Properties.Chapterid).list();
+        }
+        LogUtils.e("finish save chapter =" + ((SystemClock.elapsedRealtime() - start)/1000.f));
+        return  chapters;
+    }
+
 
     @Override
     public void saveChapter(final String bookid, final List<Chapter> chapterList, final IChapterListener chapterListener) {
@@ -68,23 +88,7 @@ public class ChapterProviderImpl implements IChapterProvider {
             public List<Chapter> call() throws Exception {
                 // 第一次 直接使用原始列表
                 // 第二次 先查所有的，再插入
-                long start = SystemClock.elapsedRealtime();
-                ChapterDao chapterDao = DBManager.
-                        getDaoMaster().
-                        newSession().
-                        getChapterDao();
-                List<Chapter> chapters = chapterList;
-                if (chapterList != null) {
-                    chapterDao.queryBuilder().where(ChapterDao.Properties.Extern_bookid.eq(bookid))
-                            .buildDelete().executeDeleteWithoutDetachingEntities();
-                    chapterDao.insertOrReplaceInTx(chapterList);
-                } else {
-                    chapters = chapterDao.queryBuilder()
-                            .where(ChapterDao.Properties.Extern_bookid.eq(bookid))
-                            .orderAsc(ChapterDao.Properties.Chapterid).list();
-                }
-                LogUtils.e("finish save chapter =" + ((SystemClock.elapsedRealtime() - start)/1000.f));
-                return chapters;
+                return saveSync(bookid,chapterList);
             }
         }).continueWith(new Continuation<List<Chapter>, Object>() {
             @Override

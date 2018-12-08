@@ -249,7 +249,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
                 BookDetailActivity.toBookDetail(ReaderActivity.this, book.bookid);
             }else if(action == SettingAction.ACTION_CHANGE){
                 BookSourceDialog bookSourceDialog = new BookSourceDialog();
-                bookSourceDialog.setBook(book,readerView.getCurrentChapter());
+                bookSourceDialog.setBook(book,readerView.getCurrentChapter(),mChangeSourceListener);
                 bookSourceDialog.show(getSupportFragmentManager(),"BookSourceDialog");
             }
         }
@@ -290,8 +290,11 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
      */
     private IChangeSourceListener mChangeSourceListener  = new IChangeSourceListener() {
         @Override
-        public void onChangeSource(Book book, BookMark bookMark) {
-            
+        public void onChangeSource(Book bk, BookMark bookMark) {
+            book.setExtern_bookid(bk.extern_bookid);
+            book.engine_domain = bk.engine_domain;
+            book.read_url = bk.read_url;
+            checkChapters(false);
         }
     };
 

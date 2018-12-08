@@ -38,6 +38,8 @@ import xcvf.top.readercore.bean.Chapter;
 import xcvf.top.readercore.bean.Mode;
 import xcvf.top.readercore.bean.User;
 import xcvf.top.readercore.impl.ChapterParserFactory;
+import xcvf.top.readercore.impl.ChapterProviderImpl;
+import xcvf.top.readercore.interfaces.IChangeSourceListener;
 import xcvf.top.readercore.interfaces.IChapterParser;
 import xcvf.top.readercore.styles.ModeProvider;
 
@@ -60,10 +62,11 @@ public class BookSourceDialog extends DialogFragment implements BookSourceView {
     User mUser;
     @BindView(R.id.progress_loading)
     ProgressBar progressLoading;
-
-    public void setBook(Book mBook, Chapter chapter) {
+    IChangeSourceListener changeSourceListener;
+    public void setBook(Book mBook, Chapter chapter, IChangeSourceListener changeSourceListener) {
         this.mBook = mBook;
         this.mChapter = chapter;
+        this.changeSourceListener = changeSourceListener;
     }
 
     @Nullable
@@ -100,12 +103,16 @@ public class BookSourceDialog extends DialogFragment implements BookSourceView {
             @Override
             public void onRecyclerViewItemClick(final CommonViewHolder holder, int position, final Book item) {
                 progressLoading.setVisibility(View.VISIBLE);
+                item.read_url = item.info_url;
                 Task.callInBackground(new Callable<Chapter>() {
                     @Override
                     public Chapter call() throws Exception {
                         IChapterParser chapterParser = ChapterParserFactory.getChapterParser(item.engine_domain);
                         if(chapterParser !=null){
                           ArrayList<Chapter>  chapterList = (ArrayList<Chapter>) chapterParser.parser(holder.itemView.getContext(),item,item.read_url);
+                          if(chapterList!=null && chapterList.size()>0){
+                              ChapterProviderImpl.newInstance().saveSync(mBook.bookid+"",chapterList);
+                          }
                           return  findFromList(chapterList,mChapter);
                         }
                         return null;
@@ -126,8 +133,10 @@ public class BookSourceDialog extends DialogFragment implements BookSourceView {
                             bookMark.setTime_stamp(System.currentTimeMillis());
                             bookMark.save();
                             dismiss();
+                            if(changeSourceListener!=null){
+                                changeSourceListener.onChangeSource(item,bookMark);
+                            }
                         }
-
                         return null;
                     }
                 },Task.UI_THREAD_EXECUTOR);
