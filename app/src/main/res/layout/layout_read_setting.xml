@@ -29,6 +29,13 @@
             android:textColor="@color/color_light_white"
             android:textSize="16sp" />
 
+        <TextView
+            android:id="@+id/tv_change"
+            android:layout_width="64dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="换源"
+            android:textColor="@color/color_light_white" />
 
         <TextView
             android:id="@+id/tv_detail"

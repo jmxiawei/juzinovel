@@ -21,7 +21,6 @@ import com.blankj.utilcode.util.LogUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import top.iscore.freereader.BookDetailActivity;
 import top.iscore.freereader.R;
 import xcvf.top.readercore.bean.Book;
 import xcvf.top.readercore.bean.Mode;
@@ -76,6 +75,7 @@ public class ReaderSettingView extends FrameLayout {
     TextView tvDownload;
     @BindView(R.id.tv_detail)
     TextView tvDetail;
+
 
     public void setSettingListener(ISettingListener settingListener) {
         this.settingListener = settingListener;
@@ -162,7 +162,8 @@ public class ReaderSettingView extends FrameLayout {
         }
     }
 
-    @OnClick({R.id.iv_back, R.id.ll_mode, R.id.ll_font, R.id.ll_cache, R.id.ll_chapter_list, R.id.tv_detail})
+    @OnClick({R.id.iv_back, R.id.ll_mode, R.id.ll_font, R.id.ll_cache,
+            R.id.ll_chapter_list, R.id.tv_detail,R.id.tv_change})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
@@ -195,6 +196,10 @@ public class ReaderSettingView extends FrameLayout {
                     settingListener.onSettingChanged(SettingAction.ACTION_DETAIL);
                 }
                 break;
+            case R.id.tv_change:
+                if (settingListener != null) {
+                    settingListener.onSettingChanged(SettingAction.ACTION_CHANGE);
+                }
             default:
                 break;
         }

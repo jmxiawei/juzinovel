@@ -106,6 +106,17 @@ public interface BookService {
 
 
     /**
+     * 换源列表
+     *
+     * @param service
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("reader/public/v1/")
+    Call<BaseModel<ArrayList<Book>>> listSource(@Field("service") String service
+            , @Field("name") String name, @Field("author") String author);
+
+    /**
      * 书籍详情
      *
      * @param service

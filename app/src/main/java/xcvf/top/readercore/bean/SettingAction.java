@@ -7,6 +7,7 @@ public enum  SettingAction {
     ACTION_FONT,
     ACTION_CHAPTER,
     ACTION_BACK,
-    ACTION_DETAIL
+    ACTION_DETAIL,
+    ACTION_CHANGE
 
 }

@@ -48,6 +48,7 @@ import xcvf.top.readercore.impl.ChapterProviderImpl;
 import xcvf.top.readercore.impl.FullScreenHandler;
 import xcvf.top.readercore.interfaces.Area;
 import xcvf.top.readercore.interfaces.IAreaClickListener;
+import xcvf.top.readercore.interfaces.IChangeSourceListener;
 import xcvf.top.readercore.interfaces.IChapterListener;
 import xcvf.top.readercore.interfaces.IChapterProvider;
 import xcvf.top.readercore.interfaces.ILoadChapter;
@@ -56,6 +57,7 @@ import xcvf.top.readercore.interfaces.OnTextConfigChangedListener;
 import xcvf.top.readercore.services.DownloadIntentService;
 import xcvf.top.readercore.styles.ModeConfig;
 import xcvf.top.readercore.styles.ModeProvider;
+import xcvf.top.readercore.views.BookSourceDialog;
 import xcvf.top.readercore.views.ContentDialog;
 import xcvf.top.readercore.views.PopDownload;
 import xcvf.top.readercore.views.PopFontSetting;
@@ -245,6 +247,10 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
 
             } else if (action == SettingAction.ACTION_DETAIL) {
                 BookDetailActivity.toBookDetail(ReaderActivity.this, book.bookid);
+            }else if(action == SettingAction.ACTION_CHANGE){
+                BookSourceDialog bookSourceDialog = new BookSourceDialog();
+                bookSourceDialog.setBook(book,readerView.getCurrentChapter());
+                bookSourceDialog.show(getSupportFragmentManager(),"BookSourceDialog");
             }
         }
     };
@@ -279,6 +285,15 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
         }
     };
 
+    /**
+     *
+     */
+    private IChangeSourceListener mChangeSourceListener  = new IChangeSourceListener() {
+        @Override
+        public void onChangeSource(Book book, BookMark bookMark) {
+            
+        }
+    };
 
     /**
      * 切换章节,直接切换到某个章节
