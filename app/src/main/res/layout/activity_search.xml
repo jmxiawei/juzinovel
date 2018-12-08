@@ -59,6 +59,46 @@
         </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
         <LinearLayout
+            android:id="@+id/ll_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/horizon_margin"
+                android:layout_marginLeft="@dimen/horizon_margin"
+                android:layout_marginRight="@dimen/horizon_margin"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="搜索历史"
+                    android:textSize="12sp"
+                    android:textColor="@color/text_black"/>
+
+
+                <TextView
+                    android:id="@+id/tv_clear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="清空"
+                    android:layout_marginLeft="@dimen/horizon_margin"
+                    android:textSize="10sp"
+                    android:textColor="@color/text_gray_light"/>
+
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/word_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/ll_loading"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

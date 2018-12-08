@@ -50,8 +50,14 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
         return mCacheChapterList;
     }
 
+
+    /**
+     * 如果之前有
+     * @param chapter
+     */
     private void checkChapterList(Chapter chapter) {
-        if (mCacheChapterList.contains(chapter)) {
+        if (mCacheChapterList.contains(chapter)
+                && chapter.getStatus()== Chapter.STATUS_OK) {
             int total = 0;
             int size = mCacheChapterList.size();
             for (int i = 0; i < size; i++) {
@@ -137,8 +143,7 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
             //存在。如果是失败的页面
             int index = mCacheChapterList.indexOf(mChapter);
             Chapter chapter = mCacheChapterList.get(index);
-            if (chapter.getStatus() == Chapter.STATUS_ERROR
-                    && mChapter.getStatus() == Chapter.STATUS_OK) {
+            if (chapter.getStatus() == Chapter.STATUS_ERROR) {
                 mCacheChapterList.set(index, mChapter);
                 int fronPage = getFrontPage(index);
                 List<Page> pageList = mChapter.getPages();

@@ -26,8 +26,7 @@ public class PageTextView extends AppCompatTextView {
     int mHeight;
     int mLeft;
     private static final boolean DEBUG = false;
-    TextConfig config = TextConfig.getConfig();
-    Paint mPaint;
+
 
     public PageTextView(Context context) {
         super(context);
@@ -68,8 +67,9 @@ public class PageTextView extends AppCompatTextView {
         if (lines == null || lines.size() == 0) {
             return;
         }
+        TextConfig config = TextConfig.getConfig();
         int line = page.getLines().size();
-        mPaint = config.getSamplePaint();
+        Paint mPaint = config.getSamplePaint();
         mPaint.setColor(getResources().getColor(config.getTextColor()));
         int lineHeight = config.getTextSize();
         int sx = 0, sy = lineHeight + config.paddingTop;

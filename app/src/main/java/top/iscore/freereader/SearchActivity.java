@@ -1,14 +1,17 @@
 package top.iscore.freereader;
 
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.hannesdorfmann.mosby3.mvp.MvpActivity;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -16,23 +19,25 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
-
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import top.iscore.freereader.adapter.SearchBookAdapter;
+import top.iscore.freereader.fragment.adapters.BaseRecyclerAdapter;
 import top.iscore.freereader.fragment.adapters.CommonViewHolder;
 import top.iscore.freereader.fragment.adapters.OnRecyclerViewItemClickListener;
+import top.iscore.freereader.fragment.adapters.ViewHolderCreator;
 import top.iscore.freereader.mode.Colorful;
 import top.iscore.freereader.mode.SwitchModeListener;
 import top.iscore.freereader.mode.setter.ViewBackgroundColorSetter;
 import top.iscore.freereader.mode.setter.ViewGroupSetter;
 import top.iscore.freereader.mvp.presenters.SearchPresenter;
 import top.iscore.freereader.mvp.view.SearchView;
-import xcvf.top.readercore.ReaderActivity;
 import xcvf.top.readercore.bean.Book;
 import xcvf.top.readercore.bean.Mode;
+import xcvf.top.readercore.bean.SearchWord;
 import xcvf.top.readercore.styles.ModeProvider;
 
 /**
@@ -59,6 +64,12 @@ public class SearchActivity extends MvpActivity<SearchView, SearchPresenter> imp
     LinearLayout llTitle;
     SwitchModeHandler switchModeListener;
     int page = 1;
+    @BindView(R.id.word_history)
+    RecyclerView wordHistory;
+    @BindView(R.id.tv_clear)
+    TextView tvClear;
+    @BindView(R.id.ll_search)
+    LinearLayout llSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +136,38 @@ public class SearchActivity extends MvpActivity<SearchView, SearchPresenter> imp
         });
         refreshLayout.setEnableRefresh(false);
         refreshLayout.setEnableLoadMore(true);
+        loadHistoryWord();
+    }
+
+    private BaseRecyclerAdapter<SearchWord> searchWordBaseRecyclerAdapter = new BaseRecyclerAdapter<SearchWord>() {
+        @Override
+        public ViewHolderCreator createViewHolderCreator() {
+            return new ViewHolderCreator() {
+                @Override
+                public CommonViewHolder<SearchWord> createByViewGroupAndType(ViewGroup parent, int viewType, Object... p) {
+                    return new CommonViewHolder<SearchWord>(parent.getContext(), parent, R.layout.item_search_word) {
+                        @Override
+                        public void bindData(SearchWord searchWord, int position) {
+                            TextView tv = itemView.findViewById(R.id.tv_name);
+                            tv.setText(searchWord.getWord());
+                        }
+                    };
+                }
+            };
+        }
+    };
+
+    private void loadHistoryWord() {
+        wordHistory.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        List<SearchWord> list = SearchWord.getList();
+        searchWordBaseRecyclerAdapter.setDataList(list);
+        wordHistory.setAdapter(searchWordBaseRecyclerAdapter);
+        searchWordBaseRecyclerAdapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener<SearchWord>() {
+            @Override
+            public void onRecyclerViewItemClick(CommonViewHolder holder, int position, SearchWord item) {
+                viewSearch.setQuery(item.getWord(),true);
+            }
+        });
     }
 
     private void load() {
@@ -138,7 +181,9 @@ public class SearchActivity extends MvpActivity<SearchView, SearchPresenter> imp
         }
         String text = viewSearch.getQuery().toString();
         if (!TextUtils.isEmpty(text)) {
-            presenter.searchBook(viewSearch.getQuery().toString(), 0,0, page);
+            SearchWord word = new SearchWord(text, System.currentTimeMillis());
+            word.save();
+            presenter.searchBook(viewSearch.getQuery().toString(), 0, 0, page);
         }
     }
 
@@ -179,6 +224,8 @@ public class SearchActivity extends MvpActivity<SearchView, SearchPresenter> imp
         dismissLoading();
         refreshLayout.finishLoadMore();
         refreshLayout.finishRefresh();
+        llSearch.setVisibility(View.GONE);
+
     }
 
     @Override
@@ -200,5 +247,11 @@ public class SearchActivity extends MvpActivity<SearchView, SearchPresenter> imp
     protected void onDestroy() {
         super.onDestroy();
         switchModeListener.onDestroy();
+    }
+
+    @OnClick(R.id.tv_clear)
+    public void onViewClicked() {
+        SearchWord.deleteAll();
+        loadHistoryWord();
     }
 }

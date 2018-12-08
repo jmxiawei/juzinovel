@@ -16,6 +16,7 @@ import top.iscore.freereader.mvp.view.BookReadView;
 import xcvf.top.readercore.bean.Book;
 import xcvf.top.readercore.bean.Chapter;
 import xcvf.top.readercore.impl.ChapterParserFactory;
+import xcvf.top.readercore.interfaces.IChapterParser;
 
 /**
  * 阅读页面
@@ -37,8 +38,11 @@ public class BookReadPresenter extends MvpBasePresenter<BookReadView> {
         Task.callInBackground(new Callable<ArrayList<Chapter>>() {
             @Override
             public ArrayList<Chapter> call() throws Exception {
-                return (ArrayList<Chapter>) ChapterParserFactory.getChapterParser(book.engine_domain).parser(context, book, book.read_url);
-
+                IChapterParser chapterParser = ChapterParserFactory.getChapterParser(book.engine_domain);
+                if(chapterParser!=null){
+                    return (ArrayList<Chapter>) chapterParser.parser(context, book, book.read_url);
+                }
+                return  null;
             }
         }).continueWith(new Continuation<ArrayList<Chapter>, Object>() {
             @Override
@@ -57,17 +61,11 @@ public class BookReadPresenter extends MvpBasePresenter<BookReadView> {
 
 
     public void loadChapters(Context context, Book book) {
-        LogUtils.e();
         loadChapterByUrl(context, book);
     }
 
     public ArrayList<Chapter> loadChaptersSync(Book book, long startId) {
         return (ArrayList<Chapter>) Chapter.getAllChapter(book.bookid,book.extern_bookid,startId);
-    }
-
-
-    public void saveBookMarker(String chapter_name,String chapterid,String bookid,String extern_bookid,int page){
-
     }
 
 

@@ -26,11 +26,21 @@
 
         <TextView
             android:id="@+id/tv_book"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="书籍详情"
             android:textColor="@color/color_white"
             android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_cache"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="缓存全本"
+            android:layout_marginRight="@dimen/horizon_margin"
+            android:textColor="@color/text_light_color"
+            android:textSize="14sp" />
 
 
     </LinearLayout>

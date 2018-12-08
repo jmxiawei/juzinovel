@@ -12,13 +12,13 @@ import java.util.List;
 
 import xcvf.top.readercore.bean.Book;
 import xcvf.top.readercore.bean.Chapter;
+import xcvf.top.readercore.impl.ChapterParserFactory;
 import xcvf.top.readercore.impl.FileDownloader;
 import xcvf.top.readercore.impl.path.PathGeneratorFactory;
 import xcvf.top.readercore.interfaces.IChapterParser;
 import xcvf.top.readercore.utils.Constant;
 
 public class BaseChapterParser implements IChapterParser {
-
 
     /**
      * 文件过期时间，3小时
@@ -71,7 +71,7 @@ public class BaseChapterParser implements IChapterParser {
      * @return
      */
     @Override
-    public File getChapterFile(Context context, String url) {
+    public File getChapterFile(Context context,String url) {
         String path = PathGeneratorFactory.get().generate(context,url);
         File file = new File(path);
         long current = System.currentTimeMillis();

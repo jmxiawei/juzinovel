@@ -88,11 +88,12 @@ public class ChapterDisplayedImpl implements IDisplayer {
      */
     private void addEmptyPage(Chapter chapter, ReaderView readerView, boolean reset, int jumpCharPosition, int page,int status) {
         Page errorPage = new Page();
-        errorPage.setIndex(status);
+
         errorPage.setChapterid(chapter.chapterid);
         List<Page> pages = new ArrayList<>();
         pages.add(errorPage);
         chapter.setPages(pages);
+        errorPage.setIndex(status);
         chapter.setStatus(Chapter.STATUS_ERROR);
         readerView.setChapter(reset, chapter, jumpCharPosition, page);
     }

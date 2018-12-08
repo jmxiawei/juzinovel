@@ -26,6 +26,7 @@ import org.greenrobot.greendao.annotation.Generated;
 @Entity
 public class Chapter implements Parcelable {
 
+    public static final int STATUS_LOADING = 2;
     @Transient
     public static final int STATUS_ERROR = 1;
     @Transient
@@ -134,12 +135,12 @@ public class Chapter implements Parcelable {
      * @param chapterid
      * @return
      */
-    public static Chapter getNextChapter(String bookid, String chapterid) {
+    public static Chapter getNextChapter(String extern_bookid, String chapterid) {
         Chapter chapter = DBManager.getDaoSession().
                 getChapterDao().
                 queryBuilder().
                 where(ChapterDao.Properties.Chapterid.gt(String.valueOf(chapterid))).
-                where(ChapterDao.Properties.Extern_bookid.eq(bookid)).
+                where(ChapterDao.Properties.Extern_bookid.eq(extern_bookid)).
                 orderAsc(ChapterDao.Properties.Chapterid).limit(1).build().unique();
         //chapter.self_page = new String(Base64.decode(chapter.self_page, Base64.DEFAULT));
         LogUtils.e(chapter);
@@ -189,16 +190,13 @@ public class Chapter implements Parcelable {
      * @param chapterid
      * @return
      */
-    public static Chapter getPreChapter(String bookid, String chapterid) {
+    public static Chapter getPreChapter(String extern_bookid, String chapterid) {
         Chapter chapter = DBManager.getDaoSession().
                 getChapterDao().
                 queryBuilder().
                 where(ChapterDao.Properties.Chapterid.lt(String.valueOf(chapterid))).
-                where(ChapterDao.Properties.Extern_bookid.eq(bookid)).
+                where(ChapterDao.Properties.Extern_bookid.eq(extern_bookid)).
                 orderDesc(ChapterDao.Properties.Chapterid).limit(1).build().unique();
-
-        //chapter.self_page = new String(Base64.decode(chapter.self_page, Base64.DEFAULT));
-
         return chapter;
     }
 
