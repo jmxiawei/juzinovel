@@ -16,6 +16,7 @@ import top.iscore.freereader.mvp.view.BookReadView;
 import xcvf.top.readercore.bean.Book;
 import xcvf.top.readercore.bean.Chapter;
 import xcvf.top.readercore.impl.ChapterParserFactory;
+import xcvf.top.readercore.impl.ChapterProviderImpl;
 import xcvf.top.readercore.interfaces.IChapterParser;
 
 /**
@@ -40,7 +41,8 @@ public class BookReadPresenter extends MvpBasePresenter<BookReadView> {
             public ArrayList<Chapter> call() throws Exception {
                 IChapterParser chapterParser = ChapterParserFactory.getChapterParser(book.engine_domain);
                 if(chapterParser!=null){
-                    return (ArrayList<Chapter>) chapterParser.parser(context, book, book.read_url);
+                    ArrayList<Chapter> chapters = (ArrayList<Chapter>) chapterParser.parser(context, book, book.read_url);
+                    return (ArrayList<Chapter>) ChapterProviderImpl.newInstance().saveSync(book.bookid+"",chapters);
                 }
                 return  null;
             }

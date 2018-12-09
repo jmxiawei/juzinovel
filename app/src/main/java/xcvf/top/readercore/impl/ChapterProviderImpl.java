@@ -68,8 +68,8 @@ public class ChapterProviderImpl implements IChapterProvider {
                 getChapterDao();
         List<Chapter> chapters = chapterList;
         if (chapterList != null) {
-            chapterDao.queryBuilder().where(ChapterDao.Properties.Extern_bookid.eq(bookid))
-                    .buildDelete().executeDeleteWithoutDetachingEntities();
+//            chapterDao.queryBuilder().where(ChapterDao.Properties.Extern_bookid.eq(bookid))
+//                    .buildDelete().executeDeleteWithoutDetachingEntities();
             chapterDao.insertOrReplaceInTx(chapterList);
         } else {
             chapters = chapterDao.queryBuilder()

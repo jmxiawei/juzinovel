@@ -42,6 +42,9 @@ public class ContentDialog extends DialogFragment {
     private View.OnClickListener negativeListener;
     private View.OnClickListener positiveListener;
 
+    String confirmTxt;
+    String cancelTxt;
+
     public View.OnClickListener getNegativeListener() {
         return negativeListener;
     }

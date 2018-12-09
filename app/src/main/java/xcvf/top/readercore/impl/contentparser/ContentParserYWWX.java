@@ -15,7 +15,7 @@ import java.util.List;
 import xcvf.top.readercore.bean.Chapter;
 import xcvf.top.readercore.impl.IChapterContentParser;
 
-public class DefaulContentParser implements IChapterContentParser {
+public class ContentParserYWWX implements IChapterContentParser {
 
 
     protected String filterNode(String text) {
@@ -37,9 +37,14 @@ public class DefaulContentParser implements IChapterContentParser {
                 Document document = Jsoup.parse(new File(filelist.get(l)), "gbk");
                 Element element = document.getElementById("content");
                 if (element == null) {
-                    //59xs
-                    element = document.getElementById("BookText");
-
+                    //ywwx
+                    Elements elements = document.getElementsByAttributeValue("class","txtc");
+                    if(elements!=null && elements.size()>0){
+                        element = elements.get(0);
+                    }
+                }
+                if(element == null){
+                    return  null;
                 }
                 int size = element.childNodeSize();
                 for (int i = 0; i < size; i++) {

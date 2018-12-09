@@ -154,13 +154,13 @@ public class Chapter implements Parcelable {
      * @param chapterid
      * @return
      */
-    public static Chapter getChapter(String bookid, String chapterid) {
+    public static Chapter getChapter(String extern_bookid, String chapterid) {
 
         Chapter chapter = DBManager.getDaoSession().
                 getChapterDao().
                 queryBuilder().
-                where(ChapterDao.Properties.Chapterid.eq(String.valueOf(chapterid))).
-                where(ChapterDao.Properties.Extern_bookid.eq(bookid)).
+                where(ChapterDao.Properties.Chapterid.ge(String.valueOf(chapterid))).
+                where(ChapterDao.Properties.Extern_bookid.eq(extern_bookid)).
                 limit(1).build().unique();
 
         //chapter.self_page = new String(Base64.decode(chapter.self_page, Base64.DEFAULT));

@@ -7,8 +7,10 @@ import xcvf.top.readercore.impl.chapterlistparser.ChapterParser59XS;
 import xcvf.top.readercore.impl.chapterlistparser.ChapterParser7Kankan;
 import xcvf.top.readercore.impl.chapterlistparser.ChapterParserPRWX;
 import xcvf.top.readercore.impl.chapterlistparser.ChapterParserQingkan9;
+import xcvf.top.readercore.impl.chapterlistparser.ChapterParserYWWX;
 import xcvf.top.readercore.impl.contentparser.ContentParser59XS;
 import xcvf.top.readercore.impl.contentparser.ContentParserPRWX;
+import xcvf.top.readercore.impl.contentparser.ContentParserYWWX;
 import xcvf.top.readercore.impl.contentparser.DefaulContentParser;
 import xcvf.top.readercore.impl.downloader.ChapterDownloader59XS;
 import xcvf.top.readercore.impl.downloader.ChapterDownloader7KanKan;
@@ -39,10 +41,9 @@ public class ChapterParserFactory {
                 "59小说",new ChapterParser59XS(),
                 ChapterDownloader59XS.newOne(ENGINE.XS59),new ContentParser59XS()));
 
-
         engineHashMap.put(ENGINE.YWWX,new Engine(ENGINE.YWWX,
-                "雅文文学",new ChapterParserPRWX(),
-                ChapterDownloaderPRWX.newOne(ENGINE.YWWX),new DefaulContentParser()));
+                "雅文文学",new ChapterParserYWWX(),
+                ChapterDownloaderPRWX.newOne(ENGINE.YWWX),new ContentParserYWWX()));
 
     }
 

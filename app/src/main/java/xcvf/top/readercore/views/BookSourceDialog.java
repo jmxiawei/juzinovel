@@ -1,10 +1,12 @@
 package xcvf.top.readercore.views;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ToastUtils;
+
+import org.greenrobot.greendao.annotation.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +75,7 @@ public class BookSourceDialog extends DialogFragment implements BookSourceView {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.layout_dialog_source, container, false);
         unbinder = ButterKnife.bind(this, view);
         bookSourcePresenter = new BookSourcePresenter();
@@ -96,7 +100,7 @@ public class BookSourceDialog extends DialogFragment implements BookSourceView {
 
     private void initView() {
         tvBookName.setText(mBook.name);
-        mBAdapter = new BAdapter();
+        mBAdapter = new BAdapter(mBook);
         recycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         recycler.setAdapter(mBAdapter);
         mBAdapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener<Book>() {
@@ -112,8 +116,15 @@ public class BookSourceDialog extends DialogFragment implements BookSourceView {
                           ArrayList<Chapter>  chapterList = (ArrayList<Chapter>) chapterParser.parser(holder.itemView.getContext(),item,item.read_url);
                           if(chapterList!=null && chapterList.size()>0){
                               ChapterProviderImpl.newInstance().saveSync(mBook.bookid+"",chapterList);
+                              Chapter chapter =  findFromList(chapterList,mChapter);
+                              if(chapter == null){
+                                  chapter =  new Chapter();
+                                  chapter.setIs_fetch(1);
+                                  return chapter;
+                              }else {
+                                  return chapter;
+                              }
                           }
-                          return  findFromList(chapterList,mChapter);
                         }
                         return null;
                     }
@@ -124,7 +135,10 @@ public class BookSourceDialog extends DialogFragment implements BookSourceView {
                         Chapter chapter = task.getResult();
                         if(chapter == null){
                             ToastUtils.showShort("换源失败,请重新选择来源");
+                        }else if(chapter.getIs_fetch() == 1){
+                            ToastUtils.showLong("换源成功,跳转章节失败，请重新选择来源或手动跳转到章节");
                         }else {
+                            //换源成功
                             BookMark bookMark = new BookMark(mUser.getUid(),item.bookid);
                             bookMark.setChapterid(chapter.chapterid+"");
                             bookMark.setBookid(item.bookid);
@@ -153,7 +167,8 @@ public class BookSourceDialog extends DialogFragment implements BookSourceView {
 
     private Chapter findFromList(ArrayList<Chapter> chapterList,Chapter orgin) {
         for (Chapter chapter: chapterList) {
-            if(chapter.chapter_name.equals(orgin.chapter_name)){
+            if(!TextUtils.isEmpty(chapter.chapter_name) &&
+                    chapter.chapter_name.equals(orgin.chapter_name)){
                  return chapter;
             }
         }
@@ -174,6 +189,12 @@ public class BookSourceDialog extends DialogFragment implements BookSourceView {
 
     private static class BAdapter extends BaseRecyclerAdapter<Book> {
 
+        Book currentBook;
+
+        public BAdapter(Book currentBook) {
+            this.currentBook = currentBook;
+        }
+
         @Override
         public ViewHolderCreator createViewHolderCreator() {
             return new ViewHolderCreator() {
@@ -183,12 +204,19 @@ public class BookSourceDialog extends DialogFragment implements BookSourceView {
                         @Override
                         public void bindData(Book book, int position) {
                             TextView tv_option = itemView.findViewById(R.id.tv_option);
+                            TextView tv_current = itemView.findViewById(R.id.tv_current);
                             Mode mode = ModeProvider.getCurrentMode();
                             if (mode == Mode.DayMode) {
                                 itemView.setBackgroundResource(R.drawable.btn_select_day);
                             } else {
                                 itemView.setBackgroundResource(R.drawable.btn_select_night);
                             }
+                            if(book.engine_domain.equals(currentBook.engine_domain)){
+                                tv_current.setVisibility(View.VISIBLE);
+                            }else {
+                                tv_current.setVisibility(View.INVISIBLE);
+                            }
+
                             tv_option.setText(ChapterParserFactory.getSourceName(book.engine_domain) + "(" + book.engine_domain + ")");
                         }
                     };

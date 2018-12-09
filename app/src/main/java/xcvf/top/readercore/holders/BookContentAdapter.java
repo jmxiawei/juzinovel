@@ -255,7 +255,7 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
 
     @Override
     public void onBindViewHolder(PageHolder holder, int position) {
-        LogUtils.e("onBindViewHolder========================================" + holder.hashCode());
+        //LogUtils.e("onBindViewHolder========================================" + holder.hashCode());
         Page page = pageList.get(position);
         holder.setPageScrollListener(pageScrollListener);
         holder.setPage(getCurrentChapter(page), page);
