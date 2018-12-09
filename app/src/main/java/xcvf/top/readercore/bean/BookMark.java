@@ -51,6 +51,9 @@ public class BookMark  implements Parcelable {
 
 
     public  void save() {
+        String uniquekey = EncryptUtils.encryptMD5ToString((userid +"freereader"+ bookid));
+        DBManager.getDaoSession().getBookMarkDao().queryBuilder().where(BookMarkDao.Properties.Unique_key.eq(uniquekey))
+                .buildDelete().executeDeleteWithoutDetachingEntities();
         DBManager.getDaoSession().getBookMarkDao().insertOrReplace(this);
     }
 

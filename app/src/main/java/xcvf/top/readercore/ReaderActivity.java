@@ -344,6 +344,8 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
                     isShowSuccess = true;
                     mChapterDisplayedImpl.showChapter(true, readerView, 0, mBookMark == null ? Page.LOADING_PAGE : mBookMark.getPage(), chapter);
                     saveBookMark();
+                }else {
+
                 }
                 loadData(!loadedChapter);
             }
@@ -483,15 +485,16 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
         if(mChapterList.size() == 0){
             //加载章节失败
             ContentDialog contentDialog = new ContentDialog();
-            contentDialog.setTitle("加载章节失败").setContent("加载书籍章节失败，建议重新加载或者切换来源").setNegativeListener(new View.OnClickListener() {
+            contentDialog.setTitle("加载章节失败").setContent("加载书籍章节失败，建议重新加载或者切换来源").setNegativeListener("重新加载",new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    loadedChapter = false;
+                    checkChapters(false);
                 }
-            }).setNegativeListener(new View.OnClickListener() {
+            }).setPositiveListener("切换来源",new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    mSettingListener.onSettingChanged(SettingAction.ACTION_CHANGE);
                 }
             }).show(getSupportFragmentManager(),"ContentDialog");
         }else {

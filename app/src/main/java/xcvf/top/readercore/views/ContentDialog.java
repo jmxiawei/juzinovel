@@ -45,8 +45,17 @@ public class ContentDialog extends DialogFragment {
     String confirmTxt;
     String cancelTxt;
 
-    public View.OnClickListener getNegativeListener() {
-        return negativeListener;
+    public ContentDialog setNegativeListener(String txt,View.OnClickListener negativeListener) {
+        this.negativeListener = negativeListener;
+        this.confirmTxt = txt;
+        return this;
+    }
+
+
+    public ContentDialog setPositiveListener(String txt,View.OnClickListener positiveListener) {
+        this.positiveListener = positiveListener;
+        this.cancelTxt = txt;
+        return this;
     }
 
     public ContentDialog setNegativeListener(View.OnClickListener negativeListener) {
@@ -54,9 +63,6 @@ public class ContentDialog extends DialogFragment {
         return this;
     }
 
-    public View.OnClickListener getPositiveListener() {
-        return positiveListener;
-    }
 
     public ContentDialog setPositiveListener(View.OnClickListener positiveListener) {
         this.positiveListener = positiveListener;
@@ -97,6 +103,15 @@ public class ContentDialog extends DialogFragment {
             tvCancel.setVisibility(View.VISIBLE);
         } else {
             tvCancel.setVisibility(View.GONE);
+        }
+
+        if(cancelTxt!=null){
+            tvCancel.setText(cancelTxt);
+        }
+
+
+        if(confirmTxt!=null){
+            tvOk.setText(confirmTxt);
         }
 
         if (positiveListener != null) {
