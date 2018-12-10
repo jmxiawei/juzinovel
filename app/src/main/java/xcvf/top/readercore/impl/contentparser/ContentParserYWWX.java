@@ -28,23 +28,22 @@ public class ContentParserYWWX implements IChapterContentParser {
     }
 
     @Override
-    public String parser(Chapter chapter,List<String> filelist) {
+    public String parser(Chapter chapter, List<String> filelist) {
 
         StringBuilder textBuff = new StringBuilder();
         try {
             int filesize = filelist == null ? 0 : filelist.size();
             for (int l = 0; l < filesize; l++) {
                 Document document = Jsoup.parse(new File(filelist.get(l)), "gbk");
-                Element element = document.getElementById("content");
-                if (element == null) {
-                    //ywwx
-                    Elements elements = document.getElementsByAttributeValue("class","txtc");
-                    if(elements!=null && elements.size()>0){
-                        element = elements.get(0);
-                    }
+                Element element = null;
+                //ywwx
+                Elements elements = document.getElementsByAttributeValue("class", "txtc");
+                if (elements != null && elements.size() > 0) {
+                    element = elements.get(0);
                 }
-                if(element == null){
-                    return  null;
+
+                if (element == null) {
+                    return null;
                 }
                 int size = element.childNodeSize();
                 for (int i = 0; i < size; i++) {
@@ -61,11 +60,10 @@ public class ContentParserYWWX implements IChapterContentParser {
                 }
                 deleteEndBr(textBuff);
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
         }
-        return  textBuff.toString().replace("\r\n", "");
+        return textBuff.toString().replace("\r\n", "");
     }
-
 
 
     /**

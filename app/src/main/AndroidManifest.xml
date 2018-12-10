@@ -27,6 +27,7 @@
         </activity>
         <activity
             android:name="xcvf.top.readercore.ReaderActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".SearchActivity"
@@ -38,6 +39,7 @@
 
         <activity
             android:name=".BookDetailActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".BookListActivity"

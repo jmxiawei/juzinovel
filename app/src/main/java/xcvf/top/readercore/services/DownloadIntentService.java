@@ -14,6 +14,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,16 +51,19 @@ public class DownloadIntentService extends IntentService {
     BookReadPresenter bookReadPresenter;
     //Notification.Builder mNotificationBuilder;
     //NotificationManager mNotificationManager;
+
     /**
      * 启动一个下载任务
      *
      * @param context
      */
-    public static void startDownloadService(Context context, Chapter chapter, ArrayList<Chapter> chapterList) {
+    public static void startDownloadService(Context context, Book book, Chapter chapter, ArrayList<Chapter> chapterList) {
         Intent intent = new Intent(context, DownloadIntentService.class);
         intent.putExtra("chapters", chapterList);
         intent.putExtra("chapter", chapter);
+        intent.putExtra("book", book);
         context.startService(intent);
+        ToastUtils.showShort(book.name + "已加入缓存列表！");
     }
 
 
@@ -73,6 +77,7 @@ public class DownloadIntentService extends IntentService {
         intent.putExtra("book", book);
         intent.putExtra("startId", startId);
         context.startService(intent);
+        ToastUtils.showShort(book.name + "已加入缓存列表！");
     }
 
 
@@ -95,16 +100,16 @@ public class DownloadIntentService extends IntentService {
         chapter = intent.getParcelableExtra("chapter");
         if (mBook != null) {
             bookReadPresenter = new BookReadPresenter();
-            if(chapterList==null || chapterList.size() == 0){
+            if (chapterList == null || chapterList.size() == 0) {
                 chapterList = bookReadPresenter.loadChaptersSync(mBook, startId);
-                if(chapterList == null || chapterList.size() == 0){
-                   IChapterParser chapterParser = ChapterParserFactory.getChapterParser(mBook.engine_domain);
-                    if(chapterParser !=null){
-                       chapterList = (ArrayList<Chapter>) chapterParser.parser(this,mBook,mBook.read_url);
+                if (chapterList == null || chapterList.size() == 0) {
+                    IChapterParser chapterParser = ChapterParserFactory.getChapterParser(mBook.engine_domain);
+                    if (chapterParser != null) {
+                        chapterList = (ArrayList<Chapter>) chapterParser.parser(this, mBook, mBook.read_url);
                     }
                 }
             }
-            if(chapter == null){
+            if (chapter == null) {
                 if (chapterList != null && chapterList.size() > 0) {
                     chapter = chapterList.get(0);
                 }
@@ -139,7 +144,6 @@ public class DownloadIntentService extends IntentService {
 
         }
     }
-
 
 
 //

@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="8dp"
     android:paddingLeft="@dimen/read_page_padding"
+    android:paddingTop="8dp"
     android:paddingRight="@dimen/read_page_padding"
-    android:paddingTop="8dp">
+    android:paddingBottom="8dp">
 
 
     <TextView
@@ -16,8 +16,8 @@
         android:layout_height="@dimen/read_page_title"
         android:alpha="0.6"
         android:gravity="center_vertical"
-        android:text="第二章 三千里金"
         android:singleLine="true"
+        android:text="第二章 三千里金"
         android:textColor="@color/text_gray_light"
         android:textSize="12sp" />
 
@@ -76,8 +76,8 @@
                 <ProgressBar
                     android:id="@+id/progress_loading"
                     android:layout_width="40dp"
-                    android:layout_gravity="center"
-                    android:layout_height="40dp" />
+                    android:layout_height="40dp"
+                    android:layout_gravity="center" />
 
             </FrameLayout>
 
@@ -104,9 +104,25 @@
             android:textColor="@color/text_gray_light"
             android:textSize="12sp" />
 
+
+        <TextView
+            android:id="@+id/tv_source"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:alpha="0.6"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:paddingLeft="@dimen/vertical_margin"
+            android:paddingRight="@dimen/vertical_margin"
+            android:singleLine="true"
+            android:text="笔趣阁"
+            android:textColor="@color/text_gray_light"
+            android:textSize="12sp" />
+
         <TextView
             android:id="@+id/tv_progress"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:alpha="0.6"
             android:gravity="center_vertical|right"

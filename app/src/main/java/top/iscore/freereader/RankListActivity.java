@@ -157,7 +157,7 @@ public class RankListActivity extends MvpActivity<RankListView, RankListPresente
 
                                 TextView tv = itemView.findViewById(R.id.tv_name);
                                 TextView tv_source = itemView.findViewById(R.id.tv_source);
-                                tv_source.setText(o.source);
+                                tv_source.setText(o.sourcename);
                                 ImageView img = itemView.findViewById(R.id.img);
                                 Glide.with(itemView.getContext()).load(o.icon).placeholder(R.color.text_gray_light).into(img);
                                 tv.setText(o.listname);

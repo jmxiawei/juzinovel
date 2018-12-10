@@ -37,7 +37,8 @@
         android:text="起点小说"
         android:layout_marginRight="@dimen/horizon_margin"
         android:layout_marginLeft="4dp"
-        android:textColor="#99ff0000"
+        android:textColor="@color/colorAccent"
+        android:alpha="0.6"
         android:textSize="10sp" />
 
 </LinearLayout>

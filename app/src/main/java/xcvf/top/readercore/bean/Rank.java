@@ -8,11 +8,21 @@ public class Rank {
     public int rankid;
     public String listname;
     public String source;
+    public String sourcename;
     public String update_time;
     public String gender;
     public String icon;
     public String getGender() {
         return gender;
+    }
+
+    public String getSourcename() {
+        return sourcename;
+    }
+
+    public Rank setSourcename(String sourcename) {
+        this.sourcename = sourcename;
+        return this;
     }
 
     public Rank setGender(String gender) {

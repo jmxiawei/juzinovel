@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="16dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingBottom="16dp">
 
     <TextView
         android:id="@+id/tv_book_name"
@@ -33,13 +33,29 @@
             android:layout_height="match_parent" />
 
 
-        <ProgressBar
-            android:id="@+id/progress_loading"
-            android:layout_width="40dp"
+        <LinearLayout
+            android:id="@+id/ll_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_height="40dp" />
+            android:gravity="center"
+            android:orientation="vertical">
 
+            <ProgressBar
+                android:id="@+id/progress_loading"
+                android:layout_width="40dp"
+                android:layout_height="40dp" />
 
+            <TextView
+                android:id="@+id/tv_tips"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="帝霸"
+                android:textColor="@color/colorAccent"
+                android:textSize="12sp" />
+        </LinearLayout>
 
     </FrameLayout>
 

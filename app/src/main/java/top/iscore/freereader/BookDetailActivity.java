@@ -97,13 +97,19 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        bookid = getIntent().getIntExtra("bookid", 0);
         setContentView(R.layout.activity_book_detail);
         ButterKnife.bind(this);
         userInfoChangedHandler = UserInfoChangedHandler.newInstance(this).put(this).register();
-        initView();
         mUser = User.currentUser();
+        onNewIntent(getIntent());
+    }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        bookid = intent.getIntExtra("bookid", 0);
+        initView();
+        presenter.loadBookDetail(mUser.getUid(), bookid);
     }
 
     private void initView() {
@@ -280,6 +286,7 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
         Glide.with(this).load(mBook.cover).placeholder(R.color.text_gray_light).bitmapTransform(roundedCornersTransformation).into(imgCover);
         priorityBookAdapter.setDataList(mBook.getPriorities());
         updateButton();
+        changeMode();
     }
 
     @Override
@@ -304,7 +311,7 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
 
     @OnClick(R.id.tv_cache)
     public void onViewClicked() {
-        if(!NetworkUtils.getWifiEnabled()){
+        if (!NetworkUtils.getWifiEnabled()) {
             ContentDialog dialog = new ContentDialog();
             dialog.setTitle("桔子小说友情提示").setContent("你没有连上WIFI哦，缓存会消耗你的流量,是否确定缓存？")
                     .setNegativeListener(new View.OnClickListener() {
@@ -316,13 +323,11 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
                     .setPositiveListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DownloadIntentService.startDownloadService(v.getContext(),mBook,0);
-                            ToastUtils.showShort(mBook.name+"已加入缓存列表！");
+                            DownloadIntentService.startDownloadService(v.getContext(), mBook, 0);
                         }
-                    }).show(getSupportFragmentManager(),"cacheDialog");
-        }else {
-            DownloadIntentService.startDownloadService(this,mBook,0);
-            ToastUtils.showShort(mBook.name+"已加入缓存列表！");
+                    }).show(getSupportFragmentManager(), "cacheDialog");
+        } else {
+            DownloadIntentService.startDownloadService(this, mBook, 0);
         }
     }
 }

@@ -1,6 +1,8 @@
 package xcvf.top.readercore.views;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -10,12 +12,11 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ToastUtils;
-
-import org.greenrobot.greendao.annotation.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,6 @@ import top.iscore.freereader.fragment.adapters.OnRecyclerViewItemClickListener;
 import top.iscore.freereader.fragment.adapters.ViewHolderCreator;
 import top.iscore.freereader.mode.Colorful;
 import top.iscore.freereader.mode.setter.ViewBackgroundColorSetter;
-import top.iscore.freereader.mode.setter.ViewGroupSetter;
 import top.iscore.freereader.mvp.presenters.BookSourcePresenter;
 import top.iscore.freereader.mvp.view.BookSourceView;
 import xcvf.top.readercore.bean.Book;
@@ -67,6 +67,11 @@ public class BookSourceDialog extends DialogFragment implements BookSourceView {
     @BindView(R.id.progress_loading)
     ProgressBar progressLoading;
     IChangeSourceListener changeSourceListener;
+    @BindView(R.id.tv_tips)
+    TextView tvTips;
+    @BindView(R.id.ll_progress)
+    LinearLayout llProgress;
+    Handler mHanlder = new Handler(Looper.getMainLooper());
     public void setBook(Book mBook, Chapter chapter, IChangeSourceListener changeSourceListener) {
         this.mBook = mBook;
         this.mChapter = chapter;
@@ -106,70 +111,78 @@ public class BookSourceDialog extends DialogFragment implements BookSourceView {
         mBAdapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener<Book>() {
             @Override
             public void onRecyclerViewItemClick(final CommonViewHolder holder, int position, final Book item) {
-                progressLoading.setVisibility(View.VISIBLE);
+
+                llProgress.setVisibility(View.VISIBLE);
+                tvTips.setText("正在加载章节...");
                 item.read_url = item.info_url;
                 Task.callInBackground(new Callable<Chapter>() {
                     @Override
                     public Chapter call() throws Exception {
                         IChapterParser chapterParser = ChapterParserFactory.getChapterParser(item.engine_domain);
-                        if(chapterParser !=null){
-                          ArrayList<Chapter>  chapterList = (ArrayList<Chapter>) chapterParser.parser(holder.itemView.getContext(),item,item.read_url);
-                          if(chapterList!=null && chapterList.size()>0){
-                              ChapterProviderImpl.newInstance().saveSync(mBook.bookid+"",chapterList);
-                              Chapter chapter =  findFromList(chapterList,mChapter);
-                              if(chapter == null){
-                                  chapter =  new Chapter();
-                                  chapter.setIs_fetch(1);
-                                  return chapter;
-                              }else {
-                                  return chapter;
-                              }
-                          }
+                        if (chapterParser != null) {
+                            final  ArrayList<Chapter> chapterList = (ArrayList<Chapter>) chapterParser.parser(holder.itemView.getContext(), item, item.read_url);
+                            if (chapterList != null && chapterList.size() > 0) {
+                                ChapterProviderImpl.newInstance().saveSync(mBook.bookid + "", chapterList);
+                                Chapter chapter = findFromList(chapterList, mChapter);
+                                item.chapters = chapterList;
+                                mHanlder.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        tvTips.setText("加载章节成功,共"+chapterList.size()+"章");
+                                    }
+                                });
+                                if (chapter == null) {
+                                    chapter = new Chapter();
+                                    chapter.setIs_fetch(1);
+                                    return chapter;
+                                } else {
+                                    return chapter;
+                                }
+                            }
                         }
                         return null;
                     }
                 }).continueWith(new Continuation<Chapter, Object>() {
                     @Override
                     public Object then(Task<Chapter> task) throws Exception {
-                        progressLoading.setVisibility(View.INVISIBLE);
+                        llProgress.setVisibility(View.INVISIBLE);
                         Chapter chapter = task.getResult();
-                        if(chapter == null){
+                        if (chapter == null) {
                             ToastUtils.showShort("换源失败,请重新选择来源");
-                        }else if(chapter.getIs_fetch() == 1){
+                        } else if (chapter.getIs_fetch() == 1) {
                             ToastUtils.showLong("换源成功,跳转章节失败，请重新选择来源或手动跳转到章节");
-                        }else {
+                        } else {
                             //换源成功
-                            BookMark bookMark = new BookMark(mUser.getUid(),item.bookid);
-                            bookMark.setChapterid(chapter.chapterid+"");
-                            bookMark.setBookid(item.bookid);
+                            BookMark bookMark = new BookMark(mUser.getUid(), mBook.bookid);
+                            bookMark.setChapterid(chapter.chapterid + "");
+                            bookMark.setBookid(mBook.bookid);// item没有bookid
                             bookMark.setExtern_bookid(item.extern_bookid);
                             bookMark.setPage(1);
                             bookMark.setTime_stamp(System.currentTimeMillis());
                             bookMark.save();
                             dismiss();
-                            if(changeSourceListener!=null){
-                                changeSourceListener.onChangeSource(item,bookMark);
+                            if (changeSourceListener != null) {
+                                changeSourceListener.onChangeSource(item, bookMark);
                             }
                         }
                         return null;
                     }
-                },Task.UI_THREAD_EXECUTOR);
-
-
+                }, Task.UI_THREAD_EXECUTOR);
 
 
             }
         });
-        progressLoading.setVisibility(View.VISIBLE);
+        llProgress.setVisibility(View.VISIBLE);
+        tvTips.setText("加载来源中...");
         bookSourcePresenter.loadBookSource(mBook.name, mBook.author);
     }
 
 
-    private Chapter findFromList(ArrayList<Chapter> chapterList,Chapter orgin) {
-        for (Chapter chapter: chapterList) {
-            if(!TextUtils.isEmpty(chapter.chapter_name) &&
-                    chapter.chapter_name.equals(orgin.chapter_name)){
-                 return chapter;
+    private Chapter findFromList(ArrayList<Chapter> chapterList, Chapter orgin) {
+        for (Chapter chapter : chapterList) {
+            if (!TextUtils.isEmpty(chapter.chapter_name) &&
+                    chapter.chapter_name.equals(orgin.chapter_name)) {
+                return chapter;
             }
         }
         return null;
@@ -184,7 +197,7 @@ public class BookSourceDialog extends DialogFragment implements BookSourceView {
     @Override
     public void onLoadAllSource(List<Book> books) {
         mBAdapter.setDataList(books);
-        progressLoading.setVisibility(View.GONE);
+        llProgress.setVisibility(View.INVISIBLE);
     }
 
     private static class BAdapter extends BaseRecyclerAdapter<Book> {
@@ -211,9 +224,9 @@ public class BookSourceDialog extends DialogFragment implements BookSourceView {
                             } else {
                                 itemView.setBackgroundResource(R.drawable.btn_select_night);
                             }
-                            if(book.engine_domain.equals(currentBook.engine_domain)){
+                            if (book.engine_domain.equals(currentBook.engine_domain)) {
                                 tv_current.setVisibility(View.VISIBLE);
-                            }else {
+                            } else {
                                 tv_current.setVisibility(View.INVISIBLE);
                             }
 

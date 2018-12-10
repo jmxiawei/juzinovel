@@ -53,11 +53,12 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
 
     /**
      * 如果之前有
+     *
      * @param chapter
      */
     private void checkChapterList(Chapter chapter) {
         if (mCacheChapterList.contains(chapter)
-                && chapter.getStatus()== Chapter.STATUS_OK) {
+                && chapter.getStatus() == Chapter.STATUS_OK) {
             int total = 0;
             int size = mCacheChapterList.size();
             for (int i = 0; i < size; i++) {
@@ -131,8 +132,12 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
                 //添加到前面
             }
             if (reset) {
-                int page = findPageByPosition(jumpCharPosition, mChapter.getPages());
-                bookContentView.scrollToPosition(page);
+                if (startPage > 0) {
+                    bookContentView.scrollToPosition(startPage - 1);
+                } else {
+                    int page = findPageByPosition(jumpCharPosition, mChapter.getPages());
+                    bookContentView.scrollToPosition(page);
+                }
             } else {
                 if (startPage != Page.LOADING_PAGE && startPage > 0) {
                     //历史记录
@@ -249,7 +254,7 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
     @Override
     public PageHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         PageHolder holder = new PageHolder(parent.getContext(), parent, mLoadChapter);
-        LogUtils.e("onCreateViewHolder========================================" + holder.hashCode());
+        //LogUtils.e("onCreateViewHolder========================================" + holder.hashCode());
         return holder;
     }
 

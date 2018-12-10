@@ -9,10 +9,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.TimeUtils;
-
-import java.text.SimpleDateFormat;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import top.iscore.freereader.R;
 import xcvf.top.readercore.bean.Chapter;
 import xcvf.top.readercore.bean.Page;
@@ -43,10 +41,13 @@ public class PageHolder extends RecyclerView.ViewHolder {
     ProgressBar progressBar;
     TextView tv_notify_net;
     TextView tvRetry;
+    @BindView(R.id.tv_source)
+    TextView tvSource;
 
     public PageHolder(Context context, ViewGroup parentView, ILoadChapter mILoadChapter) {
         super(LayoutInflater.from(context).inflate(R.layout.item_page_content, parentView, false));
         this.mILoadChapter = mILoadChapter;
+        ButterKnife.bind(this, itemView);
         tvChapterName = itemView.findViewById(R.id.tv_chapter_name);
         tv = itemView.findViewById(R.id.tv);
         tvTime = itemView.findViewById(R.id.tv_time);
@@ -79,7 +80,7 @@ public class PageHolder extends RecyclerView.ViewHolder {
         textConfig.applyColor(tvRetry);
         itemView.setBackgroundColor(itemView.getResources().getColor(textConfig.getBackgroundColor()));
         tvChapterName.setText(chapter.getChapter_name());
-
+        tvSource.setText("来源:" + chapter.engine_domain);
         if (this.page.getIndex() > 0) {
             this.chapter = chapter;
             tv.setPage((Page) page);

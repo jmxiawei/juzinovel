@@ -122,9 +122,6 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
         ButterKnife.bind(this);
         presenter.attachView(this);
         mBookShelfPresenter = new BookShelfPresenter();
-        book = getIntent().getParcelableExtra("book");
-        mUser = User.currentUser();
-        settingView.setBook(book);
         settingView.setSettingListener(mSettingListener);
         settingView.ActivityonCreate(this);
         initReadView();
@@ -134,11 +131,26 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
                 return;
             }
         }
-        checkChapters(loadedChapter);
         fullScreenHandler = new FullScreenHandler(this, readerView, settingView);
-
+        onNewIntent(getIntent());
     }
 
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent == null) {
+            return;
+        }
+        book = intent.getParcelableExtra("book");
+        mUser = User.currentUser();
+        settingView.setBook(book);
+        loadedChapter = false;
+        isShowSuccess = false;
+        mChapterList = null;
+        book.chapters = null;
+        checkChapters(loadedChapter);
+    }
 
     @Override
     public void onBackPressed() {
@@ -247,10 +259,10 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
 
             } else if (action == SettingAction.ACTION_DETAIL) {
                 BookDetailActivity.toBookDetail(ReaderActivity.this, book.bookid);
-            }else if(action == SettingAction.ACTION_CHANGE){
+            } else if (action == SettingAction.ACTION_CHANGE) {
                 BookSourceDialog bookSourceDialog = new BookSourceDialog();
-                bookSourceDialog.setBook(book,readerView.getCurrentChapter(),mChangeSourceListener);
-                bookSourceDialog.show(getSupportFragmentManager(),"BookSourceDialog");
+                bookSourceDialog.setBook(book, readerView.getCurrentChapter(), mChangeSourceListener);
+                bookSourceDialog.show(getSupportFragmentManager(), "BookSourceDialog");
             }
         }
     };
@@ -263,7 +275,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
         public void onComd(Chapter chapter, Category category) {
 
             ArrayList<Chapter> chapters = new ArrayList<>(Chapter.getLeftChapter(chapter.extern_bookid, String.valueOf(chapter.chapterid), category.getIntValue()));
-            DownloadIntentService.startDownloadService(getBaseContext(), chapter, chapters);
+            DownloadIntentService.startDownloadService(getBaseContext(), book, chapter, chapters);
         }
     };
 
@@ -288,12 +300,13 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
     /**
      * 切换来源
      */
-    private IChangeSourceListener mChangeSourceListener  = new IChangeSourceListener() {
+    private IChangeSourceListener mChangeSourceListener = new IChangeSourceListener() {
         @Override
         public void onChangeSource(Book bk, BookMark bookMark) {
             book.setExtern_bookid(bk.extern_bookid);
             book.engine_domain = bk.engine_domain;
             book.read_url = bk.read_url;
+            mChapterList = bk.chapters;
             checkChapters(false);
         }
     };
@@ -340,12 +353,13 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
         ChapterProviderImpl.newInstance().getChapter(type, book.extern_bookid, chapterid, null, new IChapterListener() {
             @Override
             public void onChapter(int code, Chapter srcChapter, Chapter chapter, HashMap<String, Object> params) {
+                if (chapter == null && mChapterList != null && mChapterList.size() > 0) {
+                    chapter = mChapterList.get(0);
+                }
                 if (chapter != null) {
                     isShowSuccess = true;
                     mChapterDisplayedImpl.showChapter(true, readerView, 0, mBookMark == null ? Page.LOADING_PAGE : mBookMark.getPage(), chapter);
                     saveBookMark();
-                }else {
-
                 }
                 loadData(!loadedChapter);
             }
@@ -458,7 +472,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
                     Page page = readerView.getCurrentPage();
                     mBookMark.setPage(page.getIndex());
                     mBookMark.save();
-                    if(mUser.getUid()>0){
+                    if (mUser.getUid() > 0 && page.getIndex() > 0) {
                         mBookShelfPresenter.addBookMarker(mUser.getUid(),
                                 book.bookid,
                                 book.extern_bookid,
@@ -475,29 +489,29 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
     @Override
     public void onLoadChapterList(final ArrayList<Chapter> chapters) {
         book.chapters = chapters;
-        mChapterList =chapters;
+        mChapterList = chapters;
         LogUtils.e("[读取章节完成..." + mChapterList.size() + "章]");
         if (mLoadingFragment != null) {
             mLoadingFragment.dismiss();
             fullScreenHandler.hide();
         }
 
-        if(mChapterList.size() == 0){
+        if (mChapterList.size() == 0) {
             //加载章节失败
             ContentDialog contentDialog = new ContentDialog();
-            contentDialog.setTitle("加载章节失败").setContent("加载书籍章节失败，建议重新加载或者切换来源").setNegativeListener("重新加载",new View.OnClickListener() {
+            contentDialog.setTitle("加载章节失败").setContent("加载书籍章节失败，建议重新加载或者切换来源").setNegativeListener("重新加载", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     loadedChapter = false;
                     checkChapters(false);
                 }
-            }).setPositiveListener("切换来源",new View.OnClickListener() {
+            }).setPositiveListener("切换来源", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mSettingListener.onSettingChanged(SettingAction.ACTION_CHANGE);
                 }
-            }).show(getSupportFragmentManager(),"ContentDialog");
-        }else {
+            }).show(getSupportFragmentManager(), "ContentDialog");
+        } else {
             if (!isShowSuccess) {
                 mLoadingFragment = LoadingFragment.newOne("读取章节内容...");
                 mLoadingFragment.show(getSupportFragmentManager(), "LoadingFragment");

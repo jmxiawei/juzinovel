@@ -41,7 +41,7 @@ public class ChapterDisplayedImpl implements IDisplayer {
         }
         addEmptyPage(chapter, readerView, reset, jumpCharPosition, page,Page.LOADING_PAGE);
         final String url = chapter.getFullPath();
-        LogUtils.e(url);
+        //LogUtils.e(url);
         Task.callInBackground(new Callable<ArrayList<Page>>() {
             @Override
             public ArrayList<Page> call() throws Exception {
@@ -86,9 +86,8 @@ public class ChapterDisplayedImpl implements IDisplayer {
      * @param page
      * @param status -1 加载中 -2 错误
      */
-    private void addEmptyPage(Chapter chapter, ReaderView readerView, boolean reset, int jumpCharPosition, int page,int status) {
+    public void addEmptyPage(Chapter chapter, ReaderView readerView, boolean reset, int jumpCharPosition, int page,int status) {
         Page errorPage = new Page();
-
         errorPage.setChapterid(chapter.chapterid);
         List<Page> pages = new ArrayList<>();
         pages.add(errorPage);

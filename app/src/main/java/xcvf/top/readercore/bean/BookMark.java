@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.blankj.utilcode.util.EncryptUtils;
+import com.blankj.utilcode.util.LogUtils;
 
 
 import org.greenrobot.greendao.annotation.Entity;
@@ -18,7 +19,7 @@ import xcvf.top.readercore.daos.DBManager;
  * Created by xiaw on 2018/10/24.
  */
 @Entity
-public class BookMark  implements Parcelable {
+public class BookMark implements Parcelable {
 
 
     long time_stamp;
@@ -50,23 +51,32 @@ public class BookMark  implements Parcelable {
     }
 
 
-    public  void save() {
-        String uniquekey = EncryptUtils.encryptMD5ToString((userid +"freereader"+ bookid));
-        DBManager.getDaoSession().getBookMarkDao().queryBuilder().where(BookMarkDao.Properties.Unique_key.eq(uniquekey))
-                .buildDelete().executeDeleteWithoutDetachingEntities();
+    public void save() {
         DBManager.getDaoSession().getBookMarkDao().insertOrReplace(this);
+    }
+
+    /**
+     * 书签根据用户和书籍id来识别唯一
+     *
+     * @param userid
+     * @param bookid
+     * @return
+     */
+    private static String getUniqueKey(int userid, int bookid) {
+        return userid + "--free_reader--" + bookid;
     }
 
     public BookMark(int userid, int bookid) {
         this.userid = userid;
         this.bookid = bookid;
-        unique_key = EncryptUtils.encryptMD5ToString((userid +"freereader"+ bookid));
+        unique_key = getUniqueKey(userid, bookid);
+        LogUtils.e("userid=" + userid + ",bookid=" + bookid + ",unique_key=" + unique_key);
     }
 
     public static BookMark getMark(Book book, int userid) {
-        String uniquekey = EncryptUtils.encryptMD5ToString((userid +"freereader"+ book.bookid));
+        String uniquekey = getUniqueKey(userid, book.bookid);
         return DBManager.getDaoSession().getBookMarkDao().queryBuilder().where(BookMarkDao.Properties.Unique_key.eq(uniquekey))
-                .limit(1).build().unique();
+                .orderDesc(BookMarkDao.Properties.Time_stamp).limit(1).build().unique();
     }
 
     public String getChapterid() {
@@ -149,7 +159,6 @@ public class BookMark  implements Parcelable {
         this.chapterid = chapterid;
         this.page = page;
     }
-
 
 
     public static final Creator<BookMark> CREATOR = new Creator<BookMark>() {

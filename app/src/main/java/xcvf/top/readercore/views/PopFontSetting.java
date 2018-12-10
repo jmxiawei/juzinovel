@@ -64,6 +64,7 @@ public class PopFontSetting extends PopupWindow {
     @BindView(R.id.img_max_brightness)
     ImageView imgMaxBrightness;
     Activity mActivity;
+    boolean useSystemBrightness = false;
 
     public PopFontSetting setOnTextConfigChangedListener(OnTextConfigChangedListener onTextConfigChangedListener) {
         this.onTextConfigChangedListener = onTextConfigChangedListener;
@@ -102,6 +103,8 @@ public class PopFontSetting extends PopupWindow {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 showBrightness(progress);
+                useSystemBrightness = false;
+                updateSystemBrightnessView();
             }
 
             @Override
@@ -114,7 +117,8 @@ public class PopFontSetting extends PopupWindow {
 
             }
         });
-
+        useSystemBrightness = false;
+        updateSystemBrightnessView();
     }
 
     private void showBrightness(float progress) {
@@ -173,17 +177,38 @@ public class PopFontSetting extends PopupWindow {
                 break;
             case R.id.img_min_brightness:
                 showBrightness(MIN_BRIGHTNESS);
+                useSystemBrightness = false;
+                updateSystemBrightnessView();
                 break;
             case R.id.img_max_brightness:
                 showBrightness(MAX_BRIGHTNESS);
+                useSystemBrightness = false;
+                updateSystemBrightnessView();
                 break;
             case R.id.tv_brightness_system:
-                int brightness1 = BrightnessHandler.getScreenBrightness(mActivity);
-                //float brightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
-                showBrightness(brightness1);
+                useSystemBrightness = !useSystemBrightness;
+                if (useSystemBrightness) {
+                    int brightness1 = BrightnessHandler.getScreenBrightness(mActivity);
+                    showBrightness(brightness1);
+                }
+                updateSystemBrightnessView();
                 break;
             default:
                 break;
+        }
+    }
+
+    /**
+     * 更新是否使用系统亮度按钮的显示
+     */
+    private void updateSystemBrightnessView() {
+
+        if (!useSystemBrightness) {
+            tvBrightnessSystem.setBackgroundResource(R.drawable.bg_rectange_shape);
+            tvBrightnessSystem.setTextColor(getContentView().getResources().getColor(R.color.color_white));
+        } else {
+            tvBrightnessSystem.setBackgroundResource(R.drawable.bg_rectange_orange_shape);
+            tvBrightnessSystem.setTextColor(getContentView().getResources().getColor(R.color.colorAccent));
         }
     }
 
