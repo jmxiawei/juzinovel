@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -22,19 +23,21 @@ import xcvf.top.readercore.interfaces.Area;
 import xcvf.top.readercore.interfaces.IAreaClickListener;
 import xcvf.top.readercore.interfaces.IPageScrollListener;
 import xcvf.top.readercore.interfaces.OnPageChangedListener;
+import xcvf.top.readercore.transformer.AccordionTransformer;
+import xcvf.top.readercore.transformer.CubeInTransformer;
+import xcvf.top.readercore.transformer.ParallaxTransformer;
+import xcvf.top.readercore.transformer.StackTransformer;
 
 /**
  * 翻页显示内容
  * Created by xiaw on 2018/7/11.
  */
-public class BookContentView extends RecyclerView {
+public class BookContentView extends ViewPager {
 
     /**
      * 判定点击事件的
      */
     static final int V_CLICK = 6;
-
-    ChapterPagerSnapHelper mPagerSnapHelper;
     IPageScrollListener mPageScrollListener;
     IAreaClickListener mAreaClickListener;
 
@@ -71,12 +74,7 @@ public class BookContentView extends RecyclerView {
     }
 
     public int getCurrentPage() {
-        LinearLayoutManager ll = (LinearLayoutManager) getLayoutManager();
-        if (ll != null) {
-            return ll.findFirstVisibleItemPosition();
-        } else {
-            return 0;
-        }
+        return getCurrentItem();
     }
 
     public BookContentView setCurrentPage(int currentPage) {
@@ -84,16 +82,6 @@ public class BookContentView extends RecyclerView {
         return this;
     }
 
-
-    /*
-     * 翻页
-     */
-    private OnPageChangedListener onPageChangeListener = new SimplePageChangeListener() {
-        @Override
-        public void onPageSelected(int position) {
-            mPosition = position;
-        }
-    };
 
 
     @Override
@@ -151,47 +139,6 @@ public class BookContentView extends RecyclerView {
         return super.dispatchTouchEvent(ev);
     }
 
-    @Override
-    public void onScrollStateChanged(int state) {
-
-
-        switch (state) {
-            case SCROLL_STATE_IDLE:
-                LinearLayoutManager ll = (LinearLayoutManager) getLayoutManager();
-                Adapter adapter = getAdapter();
-                if (ll != null) {
-                    int p = ll.findFirstVisibleItemPosition();
-                    int l = adapter == null ? 0 : adapter.getItemCount();
-                    currentPage = p;
-                    totalPage = l;
-
-                    //是否滑动到最后一页
-                    if (totalPage > 0 && currentPage == totalPage - 1) {
-                        isReachLastPage = true;
-                    } else {
-                        isReachLastPage = false;
-                    }
-
-                    //是否滑动到第一页
-                    if (totalPage > 0 && currentPage == 0) {
-                        isReachStartPage = true;
-                    } else {
-                        isReachStartPage = false;
-                    }
-
-                    if (mPageScrollListener != null) {
-                        mPageScrollListener.onScroll(p, l, IPageScrollListener.CURRENT_CHAPTER);
-                    }
-                }
-                break;
-            case SCROLL_STATE_DRAGGING:
-                break;
-            default:
-                break;
-        }
-
-
-    }
 
     public BookContentView(Context context) {
         super(context);
@@ -203,17 +150,13 @@ public class BookContentView extends RecyclerView {
         init();
     }
 
-    public BookContentView(Context context, @Nullable AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        init();
-    }
 
     void init() {
         touchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop() * 4;
         screenWidth = ScreenUtils.getScreenWidth();
-        mPagerSnapHelper = new ChapterPagerSnapHelper();
-        mPagerSnapHelper.setOnPageChangedListener(onPageChangeListener);
-        mPagerSnapHelper.attachToRecyclerView(this);
+        setOffscreenPageLimit(2);
+        //AccordionTransformer StackTransformer ParallaxTransformer
+        setPageTransformer(true,new StackTransformer());
     }
 
 

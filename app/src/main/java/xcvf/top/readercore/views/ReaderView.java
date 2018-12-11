@@ -70,6 +70,7 @@ public class ReaderView extends FrameLayout {
     public void setPageScrollListener(IPageScrollListener pageScrollListener) {
         this.pageScrollListener = pageScrollListener;
         mBookContentView.setPageScrollListener(this.pageScrollListener);
+
         mBookContentAdapter.setPageScrollListener(pageScrollListener);
     }
 
@@ -96,8 +97,6 @@ public class ReaderView extends FrameLayout {
         super(context, attrs, defStyleAttr);
         LayoutInflater.from(context).inflate(R.layout.layout_read_view, this, true);
         mBookContentView = findViewById(R.id.book_content);
-        mLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-        mBookContentView.setLayoutManager(mLayoutManager);
         mBookContentAdapter = new BookContentAdapter();
         mBookContentView.setAdapter(mBookContentAdapter);
     }
@@ -127,13 +126,13 @@ public class ReaderView extends FrameLayout {
 
     public void scrollNextPage() {
         int page = mBookContentView.getCurrentPage();
-        mBookContentView.scrollToPosition(page + 1);
+        mBookContentView.setCurrentItem(page + 1);
     }
 
 
     public void scrollPrePage() {
         int page = mBookContentView.getCurrentPage();
-        mBookContentView.scrollToPosition(-1);
+        mBookContentView.setCurrentItem(-1);
     }
 
     /**

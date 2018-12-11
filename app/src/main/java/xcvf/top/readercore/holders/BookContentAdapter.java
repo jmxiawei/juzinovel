@@ -1,6 +1,12 @@
 package xcvf.top.readercore.holders;
 
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.blankj.utilcode.util.LogUtils;
@@ -22,7 +28,7 @@ import xcvf.top.readercore.views.BookContentView;
  * 2.
  * Created by xiaw on 2018/7/11.
  */
-public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
+public class BookContentAdapter extends PagerAdapter {
 
     List<Page> pageList = new ArrayList<>();
 
@@ -30,6 +36,23 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
     IPageScrollListener pageScrollListener;
     ILoadChapter mLoadChapter;
     ILoadChapter mShowChapterListener;
+    int startIndex = 0;
+    private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int i, float v, int i1) {
+
+        }
+
+        @Override
+        public void onPageSelected(int i) {
+
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int i) {
+
+        }
+    };
 
     public void setShowChapterListener(ILoadChapter mShowChapterListener) {
         this.mShowChapterListener = mShowChapterListener;
@@ -57,24 +80,34 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
      * @param chapter
      */
     private void checkChapterList(Chapter chapter) {
-        if (mCacheChapterList.contains(chapter)
-                && chapter.getStatus() == Chapter.STATUS_OK) {
-            int total = 0;
-            int size = mCacheChapterList.size();
-            for (int i = 0; i < size; i++) {
-                total += mCacheChapterList.get(i).getPages().size();
+
+
+        int index = mCacheChapterList.indexOf(chapter);
+        if (index == -1) {
+            return;
+        } else {
+            Chapter origin = mCacheChapterList.get(index);
+            if (origin.getStatus() == Chapter.STATUS_OK) {
+                return;
             }
-            if (total != getItemCount()) {
-                mCacheChapterList.remove(chapter);
-                Iterator<Page> pageIterator = pageList.iterator();
-                while (pageIterator.hasNext()) {
-                    Page page = pageIterator.next();
-                    if (page.chapterid == chapter.chapterid) {
-                        pageIterator.remove();
+            if (chapter.getStatus() == Chapter.STATUS_OK) {
+                int total = 0;
+                int size = mCacheChapterList.size();
+                for (int i = 0; i < size; i++) {
+                    total += mCacheChapterList.get(i).getPages().size();
+                }
+                if (total != getCount()) {
+                    mCacheChapterList.remove(chapter);
+                    Iterator<Page> pageIterator = pageList.iterator();
+                    while (pageIterator.hasNext()) {
+                        Page page = pageIterator.next();
+                        if (page.chapterid == chapter.chapterid) {
+                            pageIterator.remove();
+                        }
                     }
                 }
+                notifyDataSetChanged();
             }
-            notifyDataSetChanged();
         }
     }
 
@@ -90,7 +123,7 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
             pageList.clear();
             notifyDataSetChanged();
         }
-        checkChapterList(mChapter);
+        //checkChapterList(mChapter);
         if (!mCacheChapterList.contains(mChapter)) {
             int size = mCacheChapterList.size();
             int index = size;
@@ -103,53 +136,44 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
                 }
             } else {
                 //  size >= 2
-                //Chapter pre = null;
                 for (int i = 0; i < size; i++) {
-                    Chapter current = mCacheChapterList.get(i);
+                    Chapter next = mCacheChapterList.get(i);
                     if (i == size - 1) {
-                        if (mChapter.chapterid > current.chapterid) {
+                        if (next.chapterid < mChapter.chapterid) {
+                            //比最大的大
                             index = size;
                             break;
                         }
-                    }
-                    if (i == 0) {
-                        if (mChapter.chapterid < current.chapterid) {
+                    } else if (i == 0) {
+                        if (mChapter.chapterid < next.chapterid) {
                             //比最小的小
                             index = 0;
                             break;
                         }
                     }
-//                    else {
-//                        // 1,2 如果当前章节在1,2之前，那么他的位置就是2
-//                        if (mChapter.chapterid > pre.chapterid
-//                                && mChapter.chapterid < current.chapterid) {
-//                            index = i;
-//                            break;
-//                        }
-//                    }
-                    //pre = current;
                 }
                 LogUtils.e("[ find position =" + index + ",size=" + size + "]");
             }
             if (index == size) {
                 mCacheChapterList.addLast(mChapter);
                 appendList(mChapter.getPages());
-            } else if (index == 0) {
+            } else {
                 //添加到前面
                 mCacheChapterList.addFirst(mChapter);
                 appendListTop(mChapter.getPages());
             }
+
             if (reset) {
                 if (startPage > 0) {
-                    bookContentView.scrollToPosition(startPage - 1);
+                    bookContentView.setCurrentItem(startPage - 1);
                 } else {
                     int page = findPageByPosition(jumpCharPosition, mChapter.getPages());
-                    bookContentView.scrollToPosition(page);
+                    bookContentView.setCurrentItem(page);
                 }
             } else {
                 if (startPage != Page.LOADING_PAGE && startPage > 0) {
                     //历史记录
-                    bookContentView.scrollToPosition(startPage - 1);
+                    bookContentView.setCurrentItem(startPage - 1);
                 }
             }
         } else {
@@ -219,8 +243,19 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
      */
     private void appendListTop(List<Page> pages) {
         this.pageList.addAll(0, pages);
-        notifyItemRangeInserted(0, pages.size());
+        notifyDataSetChanged();
 
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+
+        super.notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemPosition(@NonNull Object object) {
+        return POSITION_NONE;
     }
 
     private void appendPage(Page page) {
@@ -231,7 +266,7 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
 
     private void replace(int position, Page page) {
         this.pageList.set(position, page);
-        notifyItemChanged(position);
+        notifyDataSetChanged();
     }
 
     /**
@@ -242,12 +277,12 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
      */
     private void appendList(int startIndex, List<Page> pageList) {
         this.pageList.addAll(startIndex, pageList);
-        notifyItemRangeInserted(startIndex, pageList.size());
+        notifyDataSetChanged();
     }
 
     private void appendList(List<Page> pageList) {
         this.pageList.addAll(pageList);
-        notifyItemRangeInserted(this.pageList.size() - pageList.size(), this.pageList.size());
+        notifyDataSetChanged();
     }
 
     private void setPageList(List<Page> pageList) {
@@ -258,21 +293,6 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
         notifyDataSetChanged();
     }
 
-
-    @Override
-    public PageHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        PageHolder holder = new PageHolder(parent.getContext(), parent, mLoadChapter);
-        //LogUtils.e("onCreateViewHolder========================================" + holder.hashCode());
-        return holder;
-    }
-
-    @Override
-    public void onBindViewHolder(PageHolder holder, int position) {
-        //LogUtils.e("onBindViewHolder========================================" + holder.hashCode());
-        Page page = pageList.get(position);
-        holder.setPageScrollListener(pageScrollListener);
-        holder.setPage(getCurrentChapter(page), page);
-    }
 
     private Chapter getCurrentChapter(Page page) {
         for (int i = 0; i < mCacheChapterList.size(); i++) {
@@ -319,11 +339,6 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
         return -1;
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        return 0;
-    }
-
     public Chapter getCurrentChapter(int page) {
         if (page >= pageList.size() || page < 0) {
             return null;
@@ -339,19 +354,37 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
     }
 
 
-//    public Page getItem(int position) {
-//
-//    }
+    public Page getItem(int position) {
+        return pageList.get(position);
+    }
 
     @Override
-    public int getItemCount() {
+    public int getCount() {
+        return Integer.MAX_VALUE;
+    }
 
-//        int total = 0;
-//        int size = mCacheChapterList.size();
-//        for (int i = 0; i < size; i++) {
-//            total +=
-//        }
 
-        return pageList.size();
+    @NonNull
+    @Override
+    public Object instantiateItem(@NonNull ViewGroup container, int position) {
+
+        PageHolder holder = new PageHolder(container.getContext(), container, mLoadChapter);
+        Page page = getItem(position);
+        holder.setPageScrollListener(pageScrollListener);
+        holder.setPage(getCurrentChapter(position), page);
+        container.addView(holder.itemView);
+        holder.itemView.setTag(page);
+        LogUtils.e("instantiateItem=" + holder.hashCode());
+        return holder.itemView;
+    }
+
+    @Override
+    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+        container.removeView((View) object);
+    }
+
+    @Override
+    public boolean isViewFromObject(@NonNull View view, @NonNull Object o) {
+        return view == o;
     }
 }
