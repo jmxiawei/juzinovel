@@ -189,6 +189,7 @@ public class BookContentAdapter extends PagerAdapter {
                     appendList(fronPage + 1, pageList.subList(1, pageList.size()));
                 }
             }
+
         }
 
         if (mShowChapterListener != null) {
