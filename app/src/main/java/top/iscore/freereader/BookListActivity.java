@@ -1,6 +1,7 @@
 package top.iscore.freereader;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -37,7 +38,7 @@ import xcvf.top.readercore.styles.ModeProvider;
 /**
  * 书籍列表，根据不同的询条件
  */
-public class BookListActivity extends MvpActivity<SearchView, SearchPresenter> implements SearchView, SwitchModeListener {
+public class BookListActivity extends BaseActivity<SearchView, SearchPresenter> implements SearchView, SwitchModeListener {
 
     public static final  int TYPE_KEYWORD = 0;
     public static final  int TYPE_CATE = 1;
@@ -80,7 +81,8 @@ public class BookListActivity extends MvpActivity<SearchView, SearchPresenter> i
         intent.putExtra("type", type);
         intent.putExtra("params", params);
         intent.putExtra("ranklistid", ranklistid);
-        activity.startActivity(intent);
+        activity.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(activity).toBundle());
+
     }
 
     @Override

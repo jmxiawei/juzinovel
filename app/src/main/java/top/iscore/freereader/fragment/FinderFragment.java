@@ -1,5 +1,6 @@
 package top.iscore.freereader.fragment;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -70,10 +71,12 @@ public class FinderFragment extends BaseListFragment<Category> implements Switch
 
         if(item.getId() == 0){
             Intent intent = new Intent(getActivity(), CateListActivity.class);
-            startActivity(intent);
+            getActivity().startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+
         }else{
             Intent intent = new Intent(getActivity(), RankListActivity.class);
-            startActivity(intent);
+            getActivity().startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+
         }
 
 

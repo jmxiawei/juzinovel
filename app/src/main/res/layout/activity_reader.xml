@@ -8,7 +8,8 @@
     <xcvf.top.readercore.views.ReaderView
         android:id="@+id/readerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:transitionName="contentView"/>
 
 
     <xcvf.top.readercore.views.ReaderSettingView

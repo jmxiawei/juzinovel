@@ -2,6 +2,7 @@ package xcvf.top.readercore;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,7 +12,11 @@ import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
+import android.util.Pair;
 import android.view.View;
+import android.view.Window;
 import android.widget.FrameLayout;
 
 import com.blankj.utilcode.util.LogUtils;
@@ -25,6 +30,7 @@ import java.util.concurrent.Callable;
 import bolts.Task;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import top.iscore.freereader.BaseActivity;
 import top.iscore.freereader.BookDetailActivity;
 import top.iscore.freereader.R;
 import top.iscore.freereader.fragment.ChapterFragment;
@@ -68,7 +74,7 @@ import xcvf.top.readercore.views.ReaderView;
  * 阅读页面
  * Created by xiaw on 2018/6/30.
  */
-public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter> implements IAreaClickListener, IPageScrollListener, BookReadView {
+public class ReaderActivity extends BaseActivity<BookReadView, BookReadPresenter> implements IAreaClickListener, IPageScrollListener, BookReadView {
 
 
     Book book;
@@ -112,12 +118,17 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
     public static void toReadPage(Activity activity, Book book) {
         Intent intent = new Intent(activity, ReaderActivity.class);
         intent.putExtra("book", book);
-        activity.startActivity(intent);
+        activity.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(activity).toBundle());
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // 设置contentFeature,可使用切换动画
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        Transition fade = TransitionInflater.from(this).inflateTransition(android.R.transition.fade);
+        getWindow().setEnterTransition(fade);
+
         setContentView(R.layout.activity_reader);
         ButterKnife.bind(this);
         presenter.attachView(this);
@@ -156,7 +167,7 @@ public class ReaderActivity extends MvpActivity<BookReadView, BookReadPresenter>
     public void onBackPressed() {
         if (TextUtils.isEmpty(book.shelfid) && !book.findFromLocal()) {
             ContentDialog dialog = new ContentDialog();
-            dialog.setTitle("添书").setContent("是否将本书加入书架?").setNegativeListener(new View.OnClickListener() {
+            dialog.setTitle("添书").setContent("你还没关注本书，是否将本书加入书架?").setNegativeListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     finish();

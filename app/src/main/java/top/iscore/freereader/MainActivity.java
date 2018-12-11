@@ -1,6 +1,7 @@
 package top.iscore.freereader;
 
 import android.Manifest;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -138,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements ISwitchTabListene
         switch (view.getId()) {
             case R.id.img_search:
                 Intent intent = new Intent(this, SearchActivity.class);
-                startActivity(intent);
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
                 break;
             case R.id.img_more:
                 PopMenu popMenu = new PopMenu(this);

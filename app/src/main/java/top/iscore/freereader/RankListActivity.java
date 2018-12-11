@@ -35,7 +35,7 @@ import xcvf.top.readercore.styles.ModeProvider;
 /**
  * 排行榜
  */
-public class RankListActivity extends MvpActivity<RankListView, RankListPresenter> implements RankListView {
+public class RankListActivity extends BaseActivity<RankListView, RankListPresenter> implements RankListView {
     @BindView(R.id.img_back)
     ImageView imgBack;
     @BindView(R.id.tv_title)

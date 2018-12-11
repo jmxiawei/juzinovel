@@ -44,7 +44,7 @@ import xcvf.top.readercore.styles.ModeProvider;
  * 搜索
  * Created by xiaw on 2018/11/2.
  */
-public class SearchActivity extends MvpActivity<SearchView, SearchPresenter> implements SearchView, SwitchModeListener {
+public class SearchActivity extends BaseActivity<SearchView, SearchPresenter> implements SearchView, SwitchModeListener {
 
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout refreshLayout;

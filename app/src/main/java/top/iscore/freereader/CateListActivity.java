@@ -34,7 +34,7 @@ import xcvf.top.readercore.styles.ModeProvider;
 /**
  * 分类列表
  */
-public class CateListActivity extends MvpActivity<BookShelfView, BookShelfPresenter> implements BookShelfView {
+public class CateListActivity extends BaseActivity<BookShelfView, BookShelfPresenter> implements BookShelfView {
 
     @BindView(R.id.img_back)
     ImageView imgBack;

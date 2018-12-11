@@ -1,6 +1,7 @@
 package top.iscore.freereader;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -91,7 +92,8 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
     public static void toBookDetail(Activity activity, int bookid) {
         Intent intent = new Intent(activity, BookDetailActivity.class);
         intent.putExtra("bookid", bookid);
-        activity.startActivity(intent);
+        activity.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(activity).toBundle());
+
     }
 
     @Override
