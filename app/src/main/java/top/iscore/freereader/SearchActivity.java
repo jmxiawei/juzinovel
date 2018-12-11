@@ -1,7 +1,6 @@
 package top.iscore.freereader;
 
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.hannesdorfmann.mosby3.mvp.MvpActivity;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -70,6 +68,8 @@ public class SearchActivity extends BaseActivity<SearchView, SearchPresenter> im
     TextView tvClear;
     @BindView(R.id.ll_search)
     LinearLayout llSearch;
+    @BindView(R.id.ll_empty)
+    LinearLayout llEmpty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,7 +165,7 @@ public class SearchActivity extends BaseActivity<SearchView, SearchPresenter> im
         searchWordBaseRecyclerAdapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener<SearchWord>() {
             @Override
             public void onRecyclerViewItemClick(CommonViewHolder holder, int position, SearchWord item) {
-                viewSearch.setQuery(item.getWord(),true);
+                viewSearch.setQuery(item.getWord(), true);
             }
         });
     }
@@ -214,22 +214,30 @@ public class SearchActivity extends BaseActivity<SearchView, SearchPresenter> im
 
     @Override
     public void onLoad(List<Book> books) {
-        if (page == 1) {
-            mBookAdapter.setDataList(books);
+        if (books != null && books.size() > 0) {
+            if (page == 1) {
+                mBookAdapter.setDataList(books);
+            } else {
+                mBookAdapter.appendDataList(books);
+            }
+            page++;
+            refreshLayout.finishLoadMore();
+            refreshLayout.finishRefresh();
+            llSearch.setVisibility(View.GONE);
         } else {
-            mBookAdapter.appendDataList(books);
+            if (page == 1) {
+                llEmpty.setVisibility(View.VISIBLE);
+            }
+            refreshLayout.finishLoadMoreWithNoMoreData();
+            refreshLayout.finishRefresh();
         }
-
-        page++;
         dismissLoading();
-        refreshLayout.finishLoadMore();
-        refreshLayout.finishRefresh();
-        llSearch.setVisibility(View.GONE);
-
     }
 
     @Override
     public void showLoading() {
+        llSearch.setVisibility(View.GONE);
+        llEmpty.setVisibility(View.GONE);
         llLoading.setVisibility(View.VISIBLE);
     }
 

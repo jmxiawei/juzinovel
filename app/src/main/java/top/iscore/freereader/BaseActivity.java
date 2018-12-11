@@ -23,6 +23,8 @@ public abstract class BaseActivity<V extends MvpView, P extends MvpPresenter<V>>
         // 设置contentFeature,可使用切换动画
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         Transition fade = TransitionInflater.from(this).inflateTransition(android.R.transition.fade);
+        Transition fade1 = TransitionInflater.from(this).inflateTransition(android.R.transition.fade);
         getWindow().setEnterTransition(fade);
+        getWindow().setExitTransition(fade1);
     }
 }

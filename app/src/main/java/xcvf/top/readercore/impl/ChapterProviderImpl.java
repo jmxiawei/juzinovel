@@ -59,7 +59,12 @@ public class ChapterProviderImpl implements IChapterProvider {
         }, Task.UI_THREAD_EXECUTOR);
     }
 
-
+    /**
+     * 同步保存
+     * @param bookid
+     * @param chapterList
+     * @return
+     */
     public  List<Chapter> saveSync( String bookid,  List<Chapter> chapterList){
         long start = SystemClock.elapsedRealtime();
         ChapterDao chapterDao = DBManager.

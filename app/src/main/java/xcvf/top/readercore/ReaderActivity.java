@@ -431,7 +431,6 @@ public class ReaderActivity extends BaseActivity<BookReadView, BookReadPresenter
         }
     }
 
-
     @Override
     public void onScroll(int current, int total, int nextOrPre) {
 

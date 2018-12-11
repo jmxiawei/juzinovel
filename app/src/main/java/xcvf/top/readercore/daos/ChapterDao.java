@@ -15,7 +15,7 @@ import xcvf.top.readercore.bean.Chapter;
 /** 
  * DAO for table "CHAPTER".
 */
-public class ChapterDao extends AbstractDao<Chapter, Void> {
+public class ChapterDao extends AbstractDao<Chapter, String> {
 
     public static final String TABLENAME = "CHAPTER";
 
@@ -30,7 +30,7 @@ public class ChapterDao extends AbstractDao<Chapter, Void> {
         public final static Property Engine_domain = new Property(3, String.class, "engine_domain", false, "ENGINE_DOMAIN");
         public final static Property Is_download = new Property(4, boolean.class, "is_download", false, "IS_DOWNLOAD");
         public final static Property Bookid = new Property(5, int.class, "bookid", false, "BOOKID");
-        public final static Property Self_page = new Property(6, String.class, "self_page", false, "SELF_PAGE");
+        public final static Property Self_page = new Property(6, String.class, "self_page", true, "SELF_PAGE");
         public final static Property Chapterid = new Property(7, int.class, "chapterid", false, "CHAPTERID");
     }
 
@@ -53,7 +53,7 @@ public class ChapterDao extends AbstractDao<Chapter, Void> {
                 "\"ENGINE_DOMAIN\" TEXT," + // 3: engine_domain
                 "\"IS_DOWNLOAD\" INTEGER NOT NULL ," + // 4: is_download
                 "\"BOOKID\" INTEGER NOT NULL ," + // 5: bookid
-                "\"SELF_PAGE\" TEXT UNIQUE ," + // 6: self_page
+                "\"SELF_PAGE\" TEXT PRIMARY KEY NOT NULL UNIQUE ," + // 6: self_page
                 "\"CHAPTERID\" INTEGER NOT NULL );"); // 7: chapterid
     }
 
@@ -122,8 +122,8 @@ public class ChapterDao extends AbstractDao<Chapter, Void> {
     }
 
     @Override
-    public Void readKey(Cursor cursor, int offset) {
-        return null;
+    public String readKey(Cursor cursor, int offset) {
+        return cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6);
     }    
 
     @Override
@@ -154,20 +154,22 @@ public class ChapterDao extends AbstractDao<Chapter, Void> {
      }
     
     @Override
-    protected final Void updateKeyAfterInsert(Chapter entity, long rowId) {
-        // Unsupported or missing PK type
-        return null;
+    protected final String updateKeyAfterInsert(Chapter entity, long rowId) {
+        return entity.getSelf_page();
     }
     
     @Override
-    public Void getKey(Chapter entity) {
-        return null;
+    public String getKey(Chapter entity) {
+        if(entity != null) {
+            return entity.getSelf_page();
+        } else {
+            return null;
+        }
     }
 
     @Override
     public boolean hasKey(Chapter entity) {
-        // TODO
-        return false;
+        return entity.getSelf_page() != null;
     }
 
     @Override

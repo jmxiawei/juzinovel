@@ -93,10 +93,8 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
         checkChapterList(mChapter);
         if (!mCacheChapterList.contains(mChapter)) {
             int size = mCacheChapterList.size();
-            int index = -1;
-            if (size == 0) {
-                index = size;
-            } else if (size == 1) {
+            int index = size;
+            if (size == 1) {
                 Chapter chapter = mCacheChapterList.get(0);
                 if (chapter.chapterid < mChapter.chapterid) {
                     index = size;
@@ -104,32 +102,42 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
                     index = 0;
                 }
             } else {
-                //2
+                //  size >= 2
+                //Chapter pre = null;
                 for (int i = 0; i < size; i++) {
-                    Chapter next = mCacheChapterList.get(i);
+                    Chapter current = mCacheChapterList.get(i);
                     if (i == size - 1) {
-                        if (next.chapterid < mChapter.chapterid) {
-                            //比最大的大
+                        if (mChapter.chapterid > current.chapterid) {
                             index = size;
                             break;
                         }
-                    } else if (i == 0) {
-                        if (mChapter.chapterid < next.chapterid) {
+                    }
+                    if (i == 0) {
+                        if (mChapter.chapterid < current.chapterid) {
                             //比最小的小
                             index = 0;
                             break;
                         }
                     }
+//                    else {
+//                        // 1,2 如果当前章节在1,2之前，那么他的位置就是2
+//                        if (mChapter.chapterid > pre.chapterid
+//                                && mChapter.chapterid < current.chapterid) {
+//                            index = i;
+//                            break;
+//                        }
+//                    }
+                    //pre = current;
                 }
-
+                LogUtils.e("[ find position =" + index + ",size=" + size + "]");
             }
             if (index == size) {
                 mCacheChapterList.addLast(mChapter);
                 appendList(mChapter.getPages());
-            } else {
+            } else if (index == 0) {
+                //添加到前面
                 mCacheChapterList.addFirst(mChapter);
                 appendListTop(mChapter.getPages());
-                //添加到前面
             }
             if (reset) {
                 if (startPage > 0) {
@@ -330,8 +338,20 @@ public class BookContentAdapter extends RecyclerView.Adapter<PageHolder> {
         return null;
     }
 
+
+//    public Page getItem(int position) {
+//
+//    }
+
     @Override
     public int getItemCount() {
+
+//        int total = 0;
+//        int size = mCacheChapterList.size();
+//        for (int i = 0; i < size; i++) {
+//            total +=
+//        }
+
         return pageList.size();
     }
 }

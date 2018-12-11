@@ -9,31 +9,29 @@
     android:orientation="vertical">
 
 
-
     <LinearLayout
         android:id="@+id/ll_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
         android:background="?attr/colorAccent"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/img_back"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:padding="12dp"
             android:layout_marginLeft="@dimen/vertical_margin"
+            android:padding="12dp"
             android:scaleType="centerInside"
-            android:src="@mipmap/icon_back"/>
+            android:src="@mipmap/icon_back" />
 
         <android.support.v7.widget.SearchView
             android:id="@+id/view_search"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            app:defaultQueryHint="输入 书名/作者名"
-            />
+            android:layout_weight="1"
+            app:defaultQueryHint="输入 书名/作者名" />
     </LinearLayout>
 
 
@@ -41,8 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.scwang.smartrefresh.layout.SmartRefreshLayout
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/refreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -67,34 +64,35 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/horizon_margin"
                 android:layout_marginLeft="@dimen/horizon_margin"
+                android:layout_marginTop="@dimen/horizon_margin"
                 android:layout_marginRight="@dimen/horizon_margin"
                 android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="搜索历史"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_black"/>
+                    android:textColor="@color/text_black"
+                    android:textSize="12sp" />
 
 
                 <TextView
                     android:id="@+id/tv_clear"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="清空"
                     android:layout_marginLeft="@dimen/horizon_margin"
-                    android:textSize="10sp"
-                    android:textColor="@color/text_gray_light"/>
+                    android:text="清空"
+                    android:textColor="@color/text_gray_light"
+                    android:textSize="10sp" />
 
             </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/word_history"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
@@ -102,14 +100,39 @@
             android:id="@+id/ll_loading"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:visibility="gone"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
 
 
             <ProgressBar
                 android:layout_width="40dp"
                 android:layout_height="40dp" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/empty_bg_autosubscribe" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/horizon_margin"
+                android:gravity="center"
+                android:paddingLeft="@dimen/horizon_margin"
+                android:paddingRight="@dimen/horizon_margin"
+                android:text="没找到匹配书籍，重新输入关键字" />
 
         </LinearLayout>
 

@@ -7,6 +7,7 @@ import android.util.Base64;
 import com.blankj.utilcode.util.LogUtils;
 
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Transient;
 import org.greenrobot.greendao.annotation.Unique;
 
@@ -26,7 +27,6 @@ import org.greenrobot.greendao.annotation.Generated;
 @Entity
 public class Chapter implements Parcelable {
 
-    public static final int STATUS_LOADING = 2;
     @Transient
     public static final int STATUS_ERROR = 1;
     @Transient
@@ -39,8 +39,10 @@ public class Chapter implements Parcelable {
     public int is_fetch;
     public String engine_domain;
     public boolean is_download;
+
     public int bookid;
 
+    @Id
     @Unique
     private String self_page;
 
