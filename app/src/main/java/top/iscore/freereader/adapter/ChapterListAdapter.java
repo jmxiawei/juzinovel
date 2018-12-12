@@ -45,7 +45,7 @@ public class ChapterListAdapter extends BaseRecyclerAdapter<Chapter> {
                         View img = itemView.findViewById(R.id.iv_status);
                         ImageView iv_current = itemView.findViewById(R.id.iv_current);
                         TextView tv = itemView.findViewById(R.id.tv_chapter_name);
-                        TextView tv_download_status = itemView.findViewById(R.id.tv_download_status);
+                        ImageView tv_download_status = itemView.findViewById(R.id.tv_download_status);
                         tv.setText(cpt.chapter_name);
 
                         if (!cpt.is_download) {

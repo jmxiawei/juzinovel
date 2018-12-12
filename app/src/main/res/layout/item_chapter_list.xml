@@ -52,13 +52,12 @@
             android:textColor="@color/text_gray_dark"
             android:textSize="12sp" />
 
-        <TextView
+        <ImageView
             android:id="@+id/tv_download_status"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:textSize="10sp"
-            android:text="已缓存"
-            android:textColor="?attr/text_second_color"/>
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_marginRight="4dp"
+            android:src="@mipmap/ic_downloaded"/>
 
 
     </LinearLayout>
