@@ -1,13 +1,6 @@
 package xcvf.top.readercore.holders;
 
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.blankj.utilcode.util.LogUtils;
 
@@ -28,7 +21,7 @@ import xcvf.top.readercore.views.BookContentView;
  * 2.
  * Created by xiaw on 2018/7/11.
  */
-public class BookContentAdapter extends PagerAdapter {
+public class BookContentAdapter extends OpenPagerAdapter<Page> {
 
     List<Page> pageList = new ArrayList<>();
 
@@ -37,22 +30,11 @@ public class BookContentAdapter extends PagerAdapter {
     ILoadChapter mLoadChapter;
     ILoadChapter mShowChapterListener;
     int startIndex = 0;
-    private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
-        @Override
-        public void onPageScrolled(int i, float v, int i1) {
+    BookContentView bookContentView;
 
-        }
-
-        @Override
-        public void onPageSelected(int i) {
-
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int i) {
-
-        }
-    };
+    public BookContentAdapter(BookContentView bookContentView) {
+        this.bookContentView = bookContentView;
+    }
 
     public void setShowChapterListener(ILoadChapter mShowChapterListener) {
         this.mShowChapterListener = mShowChapterListener;
@@ -73,23 +55,22 @@ public class BookContentAdapter extends PagerAdapter {
         return mCacheChapterList;
     }
 
+    public List<Page> getPageList() {
+        return pageList;
+    }
 
     /**
      * 如果之前有
      *
      * @param chapter
      */
-    private void checkChapterList(Chapter chapter) {
+    private synchronized void checkChapterList(Chapter chapter) {
 
 
         int index = mCacheChapterList.indexOf(chapter);
         if (index == -1) {
             return;
         } else {
-            Chapter origin = mCacheChapterList.get(index);
-            if (origin.getStatus() == Chapter.STATUS_OK) {
-                return;
-            }
             if (chapter.getStatus() == Chapter.STATUS_OK) {
                 int total = 0;
                 int size = mCacheChapterList.size();
@@ -105,8 +86,9 @@ public class BookContentAdapter extends PagerAdapter {
                             pageIterator.remove();
                         }
                     }
+                    notifyDataSetChanged();
                 }
-                notifyDataSetChanged();
+
             }
         }
     }
@@ -180,7 +162,8 @@ public class BookContentAdapter extends PagerAdapter {
             //存在。如果是失败的页面
             int index = mCacheChapterList.indexOf(mChapter);
             Chapter chapter = mCacheChapterList.get(index);
-            if (chapter.getStatus() == Chapter.STATUS_ERROR) {
+            if (chapter.getStatus() == Chapter.STATUS_ERROR
+                    && mChapter.getStatus()!=Chapter.STATUS_ERROR) {
                 mCacheChapterList.set(index, mChapter);
                 int fronPage = getFrontPage(index);
                 List<Page> pageList = mChapter.getPages();
@@ -189,7 +172,6 @@ public class BookContentAdapter extends PagerAdapter {
                     appendList(fronPage + 1, pageList.subList(1, pageList.size()));
                 }
             }
-
         }
 
         if (mShowChapterListener != null) {
@@ -249,19 +231,48 @@ public class BookContentAdapter extends PagerAdapter {
     }
 
     @Override
+    public View getItem(int position) {
+        PageHolder holder = new PageHolder(bookContentView.getContext(), bookContentView, mLoadChapter);
+        Page page = getItemData(position);
+        holder.setPageScrollListener(pageScrollListener);
+        holder.setPage(getCurrentChapter(position), page);
+        holder.itemView.setTag(page);
+        return holder.itemView;
+    }
+
+    @Override
+    public int getCount() {
+        return pageList.size();
+    }
+
+    @Override
     public void notifyDataSetChanged() {
 
         super.notifyDataSetChanged();
     }
 
     @Override
-    public int getItemPosition(@NonNull Object object) {
-        return POSITION_NONE;
+    protected Page getItemData(int position) {
+        if (getCount() > position) {
+            return pageList.get(position);
+        }
+        return null;
     }
+
+    @Override
+    protected boolean dataEquals(Page oldData, Page newData) {
+        if (oldData == null) return false;
+        return oldData.equals(newData);
+    }
+
+    @Override
+    protected int getDataPosition(Page data) {
+        return pageList.indexOf(data);
+    }
+
 
     private void appendPage(Page page) {
         this.pageList.add(page);
-        notifyDataSetChanged();
     }
 
 
@@ -355,37 +366,4 @@ public class BookContentAdapter extends PagerAdapter {
     }
 
 
-    public Page getItem(int position) {
-        return pageList.get(position);
-    }
-
-    @Override
-    public int getCount() {
-        return Integer.MAX_VALUE;
-    }
-
-
-    @NonNull
-    @Override
-    public Object instantiateItem(@NonNull ViewGroup container, int position) {
-
-        PageHolder holder = new PageHolder(container.getContext(), container, mLoadChapter);
-        Page page = getItem(position);
-        holder.setPageScrollListener(pageScrollListener);
-        holder.setPage(getCurrentChapter(position), page);
-        container.addView(holder.itemView);
-        holder.itemView.setTag(page);
-        LogUtils.e("instantiateItem=" + holder.hashCode());
-        return holder.itemView;
-    }
-
-    @Override
-    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-        container.removeView((View) object);
-    }
-
-    @Override
-    public boolean isViewFromObject(@NonNull View view, @NonNull Object o) {
-        return view == o;
-    }
 }

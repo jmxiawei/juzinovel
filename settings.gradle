@@ -1,1 +1,1 @@
-include ':app', ':update-app', ':bookparser'
+include ':app', ':update-app', ':bookparser', ':openpageradapterlib'

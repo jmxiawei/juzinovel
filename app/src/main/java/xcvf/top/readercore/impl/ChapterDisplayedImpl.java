@@ -61,8 +61,10 @@ public class ChapterDisplayedImpl implements IDisplayer {
             public Object then(Task<ArrayList<Page>> task) throws Exception {
                 final ArrayList<Page> list = task.getResult();
                 if (list != null && list.size() > 0) {
-                    chapter.setPages(task.getResult());
-                    readerView.setChapter(reset, chapter, jumpCharPosition, page);
+                    Chapter chapter1 = cppyChapter(chapter);
+                    chapter1.setStatus(Chapter.STATUS_OK);
+                    chapter1.setPages(task.getResult());
+                    readerView.setChapter(reset, chapter1, jumpCharPosition, page);
                 } else {
                     addEmptyPage(chapter, readerView, reset, jumpCharPosition, page, Page.ERROR_PAGE);
                 }
@@ -70,6 +72,18 @@ public class ChapterDisplayedImpl implements IDisplayer {
             }
         }, Task.UI_THREAD_EXECUTOR);
 
+    }
+
+
+    private Chapter cppyChapter(Chapter src) {
+        Chapter chapter = new Chapter();
+        chapter.chapter_name = src.chapter_name;
+        chapter.chapterid = src.chapterid;
+        chapter.bookid = src.bookid;
+        chapter.engine_domain = src.engine_domain;
+        chapter.extern_bookid = src.extern_bookid;
+        chapter.self_page = src.self_page;
+        return chapter;
     }
 
     /**

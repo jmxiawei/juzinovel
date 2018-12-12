@@ -44,7 +44,7 @@ public class Chapter implements Parcelable {
 
     @Id
     @Unique
-    private String self_page;
+    public String self_page;
 
     @Transient
     int status = STATUS_OK;

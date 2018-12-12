@@ -66,8 +66,8 @@ public class RankListActivity extends BaseActivity<RankListView, RankListPresent
         mAdapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener<Rank>() {
             @Override
             public void onRecyclerViewItemClick(CommonViewHolder holder, int position, Rank item) {
-                if(item.getRankid() > 0){
-                    BookListActivity.toBookList(RankListActivity.this, item.listname, BookListActivity.TYPE_RANK, null,item.rankid);
+                if (item.getRankid() > 0) {
+                    BookListActivity.toBookList(RankListActivity.this, item.listname, BookListActivity.TYPE_RANK, null, item.rankid);
                 }
             }
         });
@@ -146,7 +146,7 @@ public class RankListActivity extends BaseActivity<RankListView, RankListPresent
                         return new CommonViewHolder<Rank>(parent.getContext(), parent, R.layout.item_holder_rank_header) {
                             @Override
                             public void bindData(Rank o, int position) {
-                                TextView tv = itemView.findViewById(R.id.tv_name);
+                                TextView tv = itemView.findViewById(R.id.tv_title);
                                 tv.setText(o.listname);
                             }
                         };

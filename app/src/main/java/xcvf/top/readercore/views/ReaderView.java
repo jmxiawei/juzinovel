@@ -2,10 +2,13 @@ package xcvf.top.readercore.views;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
+
+import com.blankj.utilcode.util.LogUtils;
 
 import java.util.List;
 
@@ -25,8 +28,6 @@ import xcvf.top.readercore.interfaces.IPageScrollListener;
 public class ReaderView extends FrameLayout {
 
     private static final int CACHE_CHAPTER = 5;
-
-
 
 
     Book mBook;
@@ -97,10 +98,28 @@ public class ReaderView extends FrameLayout {
         super(context, attrs, defStyleAttr);
         LayoutInflater.from(context).inflate(R.layout.layout_read_view, this, true);
         mBookContentView = findViewById(R.id.book_content);
-        mBookContentAdapter = new BookContentAdapter();
+        mBookContentAdapter = new BookContentAdapter(mBookContentView);
         mBookContentView.setAdapter(mBookContentAdapter);
+        mBookContentView.addOnPageChangeListener(mOnPageChangeListener);
     }
 
+
+    private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int i, float v, int i1) {
+
+        }
+
+        @Override
+        public void onPageSelected(int i) {
+            LogUtils.e("当前页:" + i + ",总页数：" + mBookContentAdapter.getPageList().size());
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int i) {
+
+        }
+    };
 
     /**
      * 获取当前的章节
