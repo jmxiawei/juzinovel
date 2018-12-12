@@ -127,15 +127,11 @@ public class DownloadIntentService extends IntentService {
             }
             if (files != null && files.size() > 0) {
                 chapter.setIs_download(true);
-                session.getChapterDao().insertOrReplace(chapter);
+                session.getChapterDao().update(chapter);
                 Intent itn = new Intent(PROGRESS);
                 finishCount++;
                 String msg = "正在下载: " + finishCount + "/" + mCount;
                 LogUtils.e(msg);
-//                mNotificationBuilder.setProgress(100,i,false);
-//                mNotificationBuilder.setContentText(String.format("已下载%d%%",i));
-//                mNotificationManager.notify(NOTIFICATION_ID_03, mNotificationBuilder.build());
-
                 itn.putExtra("info", msg);
                 itn.putExtra("bookid", chapter.extern_bookid);
                 itn.putExtra("finish", finishCount == mCount ? 1 : 0);

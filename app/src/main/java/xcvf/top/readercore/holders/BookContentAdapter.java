@@ -163,7 +163,7 @@ public class BookContentAdapter extends OpenPagerAdapter<Page> {
             int index = mCacheChapterList.indexOf(mChapter);
             Chapter chapter = mCacheChapterList.get(index);
             if (chapter.getStatus() == Chapter.STATUS_ERROR
-                    && mChapter.getStatus()!=Chapter.STATUS_ERROR) {
+                    && mChapter.getStatus()!= Chapter.STATUS_ERROR) {
                 mCacheChapterList.set(index, mChapter);
                 int fronPage = getFrontPage(index);
                 List<Page> pageList = mChapter.getPages();

@@ -257,20 +257,6 @@ public class Chapter implements Parcelable {
         this.chapterid = chapterid;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.chapter_name);
-        dest.writeString(this.extern_bookid);
-        dest.writeString(this.self_page);
-        dest.writeInt(this.status);
-        dest.writeInt(this.chapterid);
-    }
-
     public boolean getIs_download() {
         return this.is_download;
     }
@@ -295,27 +281,6 @@ public class Chapter implements Parcelable {
         this.engine_domain = engine_domain;
     }
 
-    protected Chapter(Parcel in) {
-        this.chapter_name = in.readString();
-        this.extern_bookid = in.readString();
-        this.self_page = in.readString();
-        this.status = in.readInt();
-        this.chapterid = in.readInt();
-    }
-
-    public static final Creator<Chapter> CREATOR = new Creator<Chapter>() {
-        @Override
-        public Chapter createFromParcel(Parcel source) {
-            return new Chapter(source);
-        }
-
-        @Override
-        public Chapter[] newArray(int size) {
-            return new Chapter[size];
-        }
-    };
-
-
 
     public String getFullPath(){
         final String self_page = new String(Base64.decode(getSelf_page(), Base64.DEFAULT));
@@ -335,4 +300,46 @@ public class Chapter implements Parcelable {
     public void setBookid(int bookid) {
         this.bookid = bookid;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.chapter_name);
+        dest.writeString(this.extern_bookid);
+        dest.writeInt(this.is_fetch);
+        dest.writeString(this.engine_domain);
+        dest.writeByte(this.is_download ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.bookid);
+        dest.writeString(this.self_page);
+        dest.writeInt(this.status);
+        dest.writeInt(this.chapterid);
+    }
+
+    protected Chapter(Parcel in) {
+        this.chapter_name = in.readString();
+        this.extern_bookid = in.readString();
+        this.is_fetch = in.readInt();
+        this.engine_domain = in.readString();
+        this.is_download = in.readByte() != 0;
+        this.bookid = in.readInt();
+        this.self_page = in.readString();
+        this.status = in.readInt();
+        this.chapterid = in.readInt();
+    }
+
+    public static final Creator<Chapter> CREATOR = new Creator<Chapter>() {
+        @Override
+        public Chapter createFromParcel(Parcel source) {
+            return new Chapter(source);
+        }
+
+        @Override
+        public Chapter[] newArray(int size) {
+            return new Chapter[size];
+        }
+    };
 }

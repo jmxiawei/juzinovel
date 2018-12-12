@@ -286,7 +286,7 @@ public class ReaderActivity extends BaseActivity<BookReadView, BookReadPresenter
         public void onComd(Chapter chapter, Category category) {
 
             ArrayList<Chapter> chapters = new ArrayList<>(Chapter.getLeftChapter(chapter.extern_bookid, String.valueOf(chapter.chapterid), category.getIntValue()));
-            DownloadIntentService.startDownloadService(getBaseContext(), book, chapter, chapters);
+            DownloadIntentService.startDownloadService(getApplicationContext(), book, chapter, chapters);
         }
     };
 
