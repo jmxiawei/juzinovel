@@ -1,5 +1,6 @@
 package xcvf.top.readercore.holders;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -44,6 +45,7 @@ public class PageHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.tv_source)
     TextView tvSource;
 
+
     public PageHolder(Context context, ViewGroup parentView, ILoadChapter mILoadChapter) {
         super(LayoutInflater.from(context).inflate(R.layout.item_page_content, parentView, false));
         this.mILoadChapter = mILoadChapter;
@@ -58,6 +60,19 @@ public class PageHolder extends RecyclerView.ViewHolder {
         llNotify = itemView.findViewById(R.id.ll_notify);
         tvRetry = itemView.findViewById(R.id.tv_retry);
         progressBar = itemView.findViewById(R.id.progress_loading);
+
+    }
+
+
+    public void textColorChanged(){
+        TextConfig textConfig = TextConfig.getConfig();
+        textConfig.applyColor(tvTime);
+        textConfig.applyColor(tvChapterName);
+        textConfig.applyColor(tvProgress);
+        textConfig.applyColor(tv_notify_net);
+        textConfig.applyColor(tvRetry);
+        itemView.setBackgroundColor(itemView.getResources().getColor(textConfig.getBackgroundColor()));
+        tv.postInvalidate();
     }
 
 
@@ -66,19 +81,14 @@ public class PageHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
+
     public void setPage(final Chapter chapter, Page page) {
         if (chapter == null || page == null) {
             return;
         }
         this.page = page;
-        TextConfig textConfig = TextConfig.getConfig();
+        textColorChanged();
         tvTime.setText(page.getTime());
-        textConfig.applyColor(tvTime);
-        textConfig.applyColor(tvChapterName);
-        textConfig.applyColor(tvProgress);
-        textConfig.applyColor(tv_notify_net);
-        textConfig.applyColor(tvRetry);
-        itemView.setBackgroundColor(itemView.getResources().getColor(textConfig.getBackgroundColor()));
         tvChapterName.setText(chapter.getChapter_name());
         tvSource.setText("来源:" + chapter.engine_domain);
         if (this.page.getIndex() > 0) {

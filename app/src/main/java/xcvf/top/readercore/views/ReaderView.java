@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ToastUtils;
 
 import java.util.List;
 
@@ -65,7 +66,7 @@ public class ReaderView extends FrameLayout {
     }
 
     public void onTextConfigChanged() {
-        mBookContentAdapter.notifyDataSetChanged();
+        mBookContentAdapter.onTextColorChange();
     }
 
     public void setPageScrollListener(IPageScrollListener pageScrollListener) {
@@ -143,15 +144,19 @@ public class ReaderView extends FrameLayout {
     }
 
 
+    /**
+     * move to next page
+     */
     public void scrollNextPage() {
-        int page = mBookContentView.getCurrentPage();
-        mBookContentView.setCurrentItem(page + 1);
+        mBookContentView.scrollNextPage();
+
     }
 
-
+    /**
+     * move to  pre page
+     */
     public void scrollPrePage() {
-        int page = mBookContentView.getCurrentPage();
-        mBookContentView.setCurrentItem(-1);
+        mBookContentView.scrollPrePage();
     }
 
     /**
@@ -166,6 +171,7 @@ public class ReaderView extends FrameLayout {
 
 
     /**
+     * 章节是否需要重新加载
      * @param chapter
      * @return
      */

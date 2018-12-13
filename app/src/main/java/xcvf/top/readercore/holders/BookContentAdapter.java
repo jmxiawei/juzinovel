@@ -29,7 +29,6 @@ public class BookContentAdapter extends OpenPagerAdapter<Page> {
     IPageScrollListener pageScrollListener;
     ILoadChapter mLoadChapter;
     ILoadChapter mShowChapterListener;
-    int startIndex = 0;
     BookContentView bookContentView;
 
     public BookContentAdapter(BookContentView bookContentView) {
@@ -44,6 +43,23 @@ public class BookContentAdapter extends OpenPagerAdapter<Page> {
         this.pageScrollListener = pageScrollListener;
         notifyDataSetChanged();
         return this;
+    }
+
+    /**
+     * 文字颜色改了，动态修改，不刷新页面
+     */
+    public void onTextColorChange() {
+        int size = getCount();
+        for (int i = 0; i < size; i++) {
+            View view = getCachedItem(i);
+            if (view != null) {
+                PageHolder holder = (PageHolder) view.getTag();
+                if (holder != null) {
+                    holder.textColorChanged();
+                }
+
+            }
+        }
     }
 
     public BookContentAdapter setmLoadChapter(ILoadChapter mLoadChapter) {
@@ -163,7 +179,7 @@ public class BookContentAdapter extends OpenPagerAdapter<Page> {
             int index = mCacheChapterList.indexOf(mChapter);
             Chapter chapter = mCacheChapterList.get(index);
             if (chapter.getStatus() == Chapter.STATUS_ERROR
-                    && mChapter.getStatus()!= Chapter.STATUS_ERROR) {
+                    && mChapter.getStatus() != Chapter.STATUS_ERROR) {
                 mCacheChapterList.set(index, mChapter);
                 int fronPage = getFrontPage(index);
                 List<Page> pageList = mChapter.getPages();
@@ -236,7 +252,7 @@ public class BookContentAdapter extends OpenPagerAdapter<Page> {
         Page page = getItemData(position);
         holder.setPageScrollListener(pageScrollListener);
         holder.setPage(getCurrentChapter(position), page);
-        holder.itemView.setTag(page);
+        holder.itemView.setTag(holder);
         return holder.itemView;
     }
 
@@ -261,7 +277,9 @@ public class BookContentAdapter extends OpenPagerAdapter<Page> {
 
     @Override
     protected boolean dataEquals(Page oldData, Page newData) {
-        if (oldData == null) return false;
+        if (oldData == null) {
+            return false;
+        }
         return oldData.equals(newData);
     }
 

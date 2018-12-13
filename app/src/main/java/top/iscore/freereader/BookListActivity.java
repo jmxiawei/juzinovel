@@ -40,10 +40,10 @@ import xcvf.top.readercore.styles.ModeProvider;
  */
 public class BookListActivity extends BaseActivity<SearchView, SearchPresenter> implements SearchView, SwitchModeListener {
 
-    public static final  int TYPE_KEYWORD = 0;
-    public static final  int TYPE_CATE = 1;
-    public static final  int TYPE_AUTHOR = 2;
-    public static final  int TYPE_RANK = 3;
+    public static final int TYPE_KEYWORD = 0;
+    public static final int TYPE_CATE = 1;
+    public static final int TYPE_AUTHOR = 2;
+    public static final int TYPE_RANK = 3;
 
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout refreshLayout;
@@ -70,12 +70,13 @@ public class BookListActivity extends BaseActivity<SearchView, SearchPresenter> 
     /**
      * 查询列表
      * 0 关键字查找 1 分类 2 作者书籍查找 3 排行榜
+     *
      * @param activity
      * @param title
      * @param type
      * @param params
      */
-    public static void toBookList(Activity activity, String title, int type, String params,int ranklistid) {
+    public static void toBookList(Activity activity, String title, int type, String params, int ranklistid) {
         Intent intent = new Intent(activity, BookListActivity.class);
         intent.putExtra("title", title);
         intent.putExtra("type", type);
@@ -130,6 +131,7 @@ public class BookListActivity extends BaseActivity<SearchView, SearchPresenter> 
 
         load();
     }
+
     //0 关键字查找 1 分类 2 作者书籍查找 3 排行榜
     private void load() {
         presenter.searchBook(params, type, ranklistid, page);
@@ -175,7 +177,9 @@ public class BookListActivity extends BaseActivity<SearchView, SearchPresenter> 
 
     @Override
     public void showLoading() {
-        llLoading.setVisibility(View.VISIBLE);
+        if (page == 1) {
+            llLoading.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -200,7 +204,7 @@ public class BookListActivity extends BaseActivity<SearchView, SearchPresenter> 
     }
 
     public void getIntentData() {
-        ranklistid = getIntent().getIntExtra("ranklistid",0);
+        ranklistid = getIntent().getIntExtra("ranklistid", 0);
         title = getIntent().getStringExtra("title");
         type = getIntent().getIntExtra("type", 0);
         params = getIntent().getStringExtra("params");

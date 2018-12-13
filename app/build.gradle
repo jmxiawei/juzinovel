@@ -70,5 +70,4 @@ dependencies {
     api rootProject.ext.mosby3Lce
     api rootProject.ext.mosby3queuing
     api project(':update-app')
-    compile 'com.github.OCNYang:PageTransformerHelp:v1.0.1'
 }

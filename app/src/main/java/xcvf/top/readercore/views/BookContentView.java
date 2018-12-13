@@ -52,16 +52,84 @@ public class BookContentView extends ViewPager {
     int touchSlop;
 
     long downTimestamp = 0L;
-    int mPosition = 0;
+    int mLastPosition = 0;
 
     int screenWidth;
 
-    public void setAreaClickListener(IAreaClickListener mAreaClickListener) {
+    /**
+     * 滑动页面
+     */
+    private OnPageChangeListener mPageChangedListener = new OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int i, float v, int i1) {
+
+        }
+
+        @Override
+        public void onPageSelected(int i) {
+            LogUtils.e("---page-_current-i" + i);
+//            if (i == 0) {
+//                if (mPageScrollListener != null) {
+//                    mPageScrollListener.onScroll(currentPage, totalPage, IPageScrollListener.NEXT_CHAPTER);
+//                }
+//                if (mPageScrollListener != null) {
+//                    mPageScrollListener.onScroll(currentPage, totalPage, IPageScrollListener.PRE_CHAPTER);
+//                }
+//            } else if (i > mLastPosition) {
+//                if (mPageScrollListener != null) {
+//                    mPageScrollListener.onScroll(currentPage, totalPage, IPageScrollListener.PRE_CHAPTER);
+//                }
+//            } else {
+//                if (mPageScrollListener != null) {
+//                    mPageScrollListener.onScroll(currentPage, totalPage, IPageScrollListener.NEXT_CHAPTER);
+//                }
+//            }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int i) {
+
+        }
+    };
+
+     void setAreaClickListener(IAreaClickListener mAreaClickListener) {
         this.mAreaClickListener = mAreaClickListener;
     }
 
-    public void setPageScrollListener(IPageScrollListener mPageScrollListener) {
+     void setPageScrollListener(IPageScrollListener mPageScrollListener) {
         this.mPageScrollListener = mPageScrollListener;
+
+    }
+
+
+    void scrollNextPage() {
+        int page = getCurrentItem();
+        int count = getAdapter().getCount();
+        if (page == count - 1) {
+
+        } else {
+            setCurrentItem(page + 1);
+        }
+
+        if (mPageScrollListener != null) {
+            mPageScrollListener.onScroll(page, count, IPageScrollListener.NEXT_CHAPTER);
+        }
+
+    }
+
+
+    void scrollPrePage() {
+        int page = getCurrentItem();
+        int count = getAdapter().getCount();
+        if (page == 0) {
+            // ToastUtils.showShort("已是第一页");
+        } else {
+            setCurrentItem(page - 1, true);
+        }
+
+        if (mPageScrollListener != null) {
+            mPageScrollListener.onScroll(page, count, IPageScrollListener.PRE_CHAPTER);
+        }
 
     }
 
@@ -73,15 +141,14 @@ public class BookContentView extends ViewPager {
         isReachStartPage = false;
     }
 
-    public int getCurrentPage() {
+     int getCurrentPage() {
         return getCurrentItem();
     }
 
-    public BookContentView setCurrentPage(int currentPage) {
+     BookContentView setCurrentPage(int currentPage) {
         this.currentPage = currentPage;
         return this;
     }
-
 
 
     @Override
@@ -156,7 +223,9 @@ public class BookContentView extends ViewPager {
         screenWidth = ScreenUtils.getScreenWidth();
         setOffscreenPageLimit(2);
         //AccordionTransformer StackTransformer ParallaxTransformer
-        setPageTransformer(true,new StackTransformer());
+        setPageTransformer(true, new StackTransformer());
+        removeOnPageChangeListener(mPageChangedListener);
+        addOnPageChangeListener(mPageChangedListener);
     }
 
 

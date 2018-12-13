@@ -425,9 +425,9 @@ public class ReaderActivity extends BaseActivity<BookReadView, BookReadPresenter
         if (area == Area.CENTER) {
             fullScreenHandler.check();
         } else if (area == Area.LEFT) {
-            //onScroll(0, 0, IPageScrollListener.PRE_CHAPTER);
+            readerView.scrollPrePage();
         } else if (area == Area.RIGHT) {
-            //onScroll(0, 0, IPageScrollListener.NEXT_CHAPTER);
+            readerView.scrollNextPage();
         }
     }
 
