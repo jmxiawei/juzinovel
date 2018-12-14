@@ -64,7 +64,7 @@ public class PageHolder extends RecyclerView.ViewHolder {
     }
 
 
-    public void textColorChanged(){
+    public void textColorChanged() {
         TextConfig textConfig = TextConfig.getConfig();
         textConfig.applyColor(tvTime);
         textConfig.applyColor(tvChapterName);
@@ -91,13 +91,13 @@ public class PageHolder extends RecyclerView.ViewHolder {
         tvTime.setText(page.getTime());
         tvChapterName.setText(chapter.getChapter_name());
         tvSource.setText("来源:" + chapter.engine_domain);
-        if (this.page.getIndex() > 0) {
+        if (this.page.getStatus() == Page.OK_PAGE) {
             this.chapter = chapter;
             tv.setPage((Page) page);
             tvProgress.setText(page.getIndex() + "/" + chapter.getPages().size());
             tv.setVisibility(View.VISIBLE);
             llProgress.setVisibility(View.INVISIBLE);
-        } else if (this.page.getIndex() == Page.ERROR_PAGE) {
+        } else if (this.page.getStatus() == Page.ERROR_PAGE) {
             tv.setVisibility(View.INVISIBLE);
             llProgress.setVisibility(View.VISIBLE);
             tvProgress.setText("-/-");
@@ -111,7 +111,7 @@ public class PageHolder extends RecyclerView.ViewHolder {
                     }
                 }
             });
-        } else if (this.page.getIndex() == Page.LOADING_PAGE) {
+        } else if (this.page.getStatus() == Page.LOADING_PAGE) {
             tv.setVisibility(View.INVISIBLE);
             llProgress.setVisibility(View.VISIBLE);
             tvProgress.setText("-/-");

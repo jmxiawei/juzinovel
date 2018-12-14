@@ -113,9 +113,7 @@ public abstract class OpenPagerAdapter<T> extends PagerAdapter {
                 }
                 return oldDataNewPosition;
             }
-
         }
-
         return POSITION_UNCHANGED;
     }
 

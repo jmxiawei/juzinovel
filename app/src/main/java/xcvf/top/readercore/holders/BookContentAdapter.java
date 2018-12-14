@@ -111,7 +111,7 @@ public class BookContentAdapter extends OpenPagerAdapter<Page> {
 
     /**
      * 设置需要显示的章节，放到后面
-     *
+     * @param jumpCharPosition 修改字体的时候，跳转到指定字符
      * @param mChapter
      * @param startPage
      */
@@ -178,8 +178,7 @@ public class BookContentAdapter extends OpenPagerAdapter<Page> {
             //存在。如果是失败的页面
             int index = mCacheChapterList.indexOf(mChapter);
             Chapter chapter = mCacheChapterList.get(index);
-            if (chapter.getStatus() == Chapter.STATUS_ERROR
-                    && mChapter.getStatus() != Chapter.STATUS_ERROR) {
+            if (chapter.getStatus() == Chapter.STATUS_ERROR) {
                 mCacheChapterList.set(index, mChapter);
                 int fronPage = getFrontPage(index);
                 List<Page> pageList = mChapter.getPages();
@@ -193,7 +192,6 @@ public class BookContentAdapter extends OpenPagerAdapter<Page> {
         if (mShowChapterListener != null) {
             mShowChapterListener.load(0, mChapter);
         }
-
     }
 
 
@@ -280,7 +278,12 @@ public class BookContentAdapter extends OpenPagerAdapter<Page> {
         if (oldData == null) {
             return false;
         }
-        return oldData.equals(newData);
+        boolean eq = oldData.equals(newData);
+        if (eq) {
+            //显示的时候跟状态有关，状态不一样需要重新显示
+            eq = oldData.getStatus() == newData.getStatus();
+        }
+        return eq;
     }
 
     @Override

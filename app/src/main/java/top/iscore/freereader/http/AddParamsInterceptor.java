@@ -3,6 +3,7 @@ package top.iscore.freereader.http;
 import com.blankj.utilcode.util.LogUtils;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import okhttp3.FormBody;
 import okhttp3.Headers;
@@ -44,17 +45,29 @@ public class AddParamsInterceptor implements Interceptor {
 
         FormBody formBody = (FormBody) oldRequest.body();
 
+        FormBody.Builder newBody = new FormBody.Builder();
+
+        HashMap<String, String> params = new HashMap<>();
+
         StringBuilder stringBuilder = new StringBuilder("[");
 
         int size = formBody == null ? 0 : formBody.size();
 
         for (int i = 0; i < size; i++) {
+            String name = formBody.name(i);
+            String value = formBody.value(i);
             stringBuilder.append(formBody.name(i)).append("=").append(formBody.value(i)).append(",");
+            newBody.add(name, value);
+            params.put(name, value);
         }
-        stringBuilder.append("]");
 
+        SignGenerator signGenerator = new MD5SignGenerator();
+        String sign = signGenerator.sign(params);
+        newBody.add("sign", sign);
+        stringBuilder.append("sign").append("=").append(sign);
+        stringBuilder.append("]");
         Request newRequest = oldRequest.newBuilder()
-                .method(oldRequest.method(), formBody)
+                .method(oldRequest.method(), newBody.build())
                 .url(builder.build())
                 .headers(newHeaders)
                 .build();

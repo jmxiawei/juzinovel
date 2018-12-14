@@ -39,6 +39,7 @@ public class ChapterDisplayedImpl implements IDisplayer {
             LogUtils.e("加载成功.无需加载");
             return;
         }
+        LogUtils.e("[start load chapter " + chapter.chapter_name + "]");
         addEmptyPage(chapter, readerView, reset, jumpCharPosition, page, Page.LOADING_PAGE);
         final String url = chapter.getFullPath();
         if (BaseChapterFileDownloader.isInTask(url)) {
@@ -65,7 +66,9 @@ public class ChapterDisplayedImpl implements IDisplayer {
                     chapter1.setStatus(Chapter.STATUS_OK);
                     chapter1.setPages(task.getResult());
                     readerView.setChapter(reset, chapter1, jumpCharPosition, page);
+                    LogUtils.e("[success load chapter " + chapter.chapter_name + "]");
                 } else {
+                    LogUtils.e("[fail load chapter " + chapter.chapter_name + "]");
                     addEmptyPage(chapter, readerView, reset, jumpCharPosition, page, Page.ERROR_PAGE);
                 }
                 return null;
@@ -83,6 +86,7 @@ public class ChapterDisplayedImpl implements IDisplayer {
         chapter.engine_domain = src.engine_domain;
         chapter.extern_bookid = src.extern_bookid;
         chapter.self_page = src.self_page;
+
         return chapter;
     }
 
@@ -102,7 +106,8 @@ public class ChapterDisplayedImpl implements IDisplayer {
         List<Page> pages = new ArrayList<>();
         pages.add(errorPage);
         chapter.setPages(pages);
-        errorPage.setIndex(status);
+        errorPage.setStatus(status);
+        errorPage.setIndex(1);
         chapter.setStatus(Chapter.STATUS_ERROR);
         readerView.setChapter(reset, chapter, jumpCharPosition, page);
     }

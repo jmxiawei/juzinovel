@@ -9,14 +9,14 @@ import java.util.Objects;
  * Created by xiaw on 2018/7/11.
  */
 public class Page {
-
+    public static final int OK_PAGE = 0;
     public static final int LOADING_PAGE = -1;
     public static final int ERROR_PAGE = -2;
     //这一页所有的行
     List<Line> lines = new ArrayList<>();
     //当前章节的第几页
     int index;
-
+    int status = OK_PAGE;
     int totalPage;
     String time;
     int pageTotalChars;
@@ -24,7 +24,17 @@ public class Page {
     int startPositionInChapter;
 
     public int chapterid;
+
     public Page() {
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public Page setStatus(int status) {
+        this.status = status;
+        return this;
     }
 
     public String getTime() {
@@ -107,7 +117,7 @@ public class Page {
 
 
     public int getTotalPage() {
-        return  this.totalPage;
+        return this.totalPage;
     }
 
 

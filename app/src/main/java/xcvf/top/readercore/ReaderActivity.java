@@ -482,7 +482,7 @@ public class ReaderActivity extends BaseActivity<BookReadView, BookReadPresenter
                     Page page = readerView.getCurrentPage();
                     mBookMark.setPage(page.getIndex());
                     mBookMark.save();
-                    if (mUser.getUid() > 0 && page.getIndex() > 0) {
+                    if (mUser.getUid() > 0 && page.getStatus() ==Page.OK_PAGE) {
                         mBookShelfPresenter.addBookMarker(mUser.getUid(),
                                 book.bookid,
                                 book.extern_bookid,
