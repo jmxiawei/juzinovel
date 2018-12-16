@@ -288,12 +288,21 @@ public class BookContentAdapter extends OpenPagerAdapter<Page> {
 
     @Override
     protected int getDataPosition(Page data) {
-        return pageList.indexOf(data);
+        if(data == null)return -1;
+        int size = pageList.size();
+        for (int i = 0; i < size ; i++) {
+            Page page = pageList.get(i);
+            if(page.equals(data) && page.getStatus() == data.getStatus()){
+                return i;
+            }
+        }
+        return -1;
     }
 
 
     private void appendPage(Page page) {
         this.pageList.add(page);
+        notifyDataSetChanged();
     }
 
 

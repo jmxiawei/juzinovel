@@ -20,6 +20,8 @@ import xcvf.top.readercore.utils.Constant;
 
 public class BaseChapterParser implements IChapterParser {
 
+    private HashMap<String,Integer> listName = new HashMap<>();
+
     /**
      * 文件过期时间，3小时
      */
@@ -101,4 +103,15 @@ public class BaseChapterParser implements IChapterParser {
 
         return null;
     }
+
+    /**
+     * 是否需要添加到列表
+     * @param chapter
+     * @return
+     */
+    public boolean checkAddToList(Chapter chapter){
+        return !listName.containsKey(chapter.chapter_name);
+    }
+
+
 }

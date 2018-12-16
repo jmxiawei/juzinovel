@@ -4,11 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -23,12 +23,16 @@ import top.iscore.freereader.fragment.adapters.BaseRecyclerAdapter;
 import top.iscore.freereader.fragment.adapters.CommonViewHolder;
 import top.iscore.freereader.fragment.adapters.OnRecyclerViewItemClickListener;
 import top.iscore.freereader.fragment.adapters.ViewHolderCreator;
+import xcvf.top.readercore.bean.AnimItem;
 import xcvf.top.readercore.bean.Mode;
 import xcvf.top.readercore.bean.TextConfig;
+import xcvf.top.readercore.holders.PageAnimAdapter;
 import xcvf.top.readercore.impl.BrightnessHandler;
+import xcvf.top.readercore.impl.path.PathGeneratorFactory;
 import xcvf.top.readercore.interfaces.OnTextConfigChangedListener;
 import xcvf.top.readercore.styles.ModeConfig;
 import xcvf.top.readercore.styles.ModeProvider;
+import xcvf.top.readercore.transformer.PageTransformerFactory;
 
 /**
  * 字体设置
@@ -65,6 +69,8 @@ public class PopFontSetting extends PopupWindow {
     ImageView imgMaxBrightness;
     Activity mActivity;
     boolean useSystemBrightness = false;
+    @BindView(R.id.ainm_recycler)
+    RecyclerView ainmRecycler;
 
     public PopFontSetting setOnTextConfigChangedListener(OnTextConfigChangedListener onTextConfigChangedListener) {
         this.onTextConfigChangedListener = onTextConfigChangedListener;
@@ -87,10 +93,32 @@ public class PopFontSetting extends PopupWindow {
         llContent.setBackgroundResource(R.drawable.bg_menu_nightmode);
         initStyle();
         initBrightnessView();
+        initAnim();
         getContentView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
+            }
+        });
+    }
+
+
+    /**
+     * 翻页动画
+     */
+    private void initAnim() {
+        ainmRecycler.setLayoutManager(new LinearLayoutManager(mActivity,LinearLayoutManager.HORIZONTAL,false));
+        final PageAnimAdapter adapter = new PageAnimAdapter();
+        ainmRecycler.setAdapter(adapter);
+        adapter.setDataList(PageTransformerFactory.getList());
+        adapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener<AnimItem>() {
+            @Override
+            public void onRecyclerViewItemClick(CommonViewHolder holder, int position, AnimItem item) {
+                PageTransformerFactory.put(item);
+                if (onTextConfigChangedListener != null) {
+                    onTextConfigChangedListener.onChanged(TextConfig.TYPE_PAGE_ANIM);
+                }
+                adapter.notifyDataSetChanged();
             }
         });
     }

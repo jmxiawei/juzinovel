@@ -8,6 +8,9 @@ import android.support.v4.app.ActivityCompat;
 
 import com.blankj.utilcode.util.CrashUtils;
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.ScreenUtils;
+import com.blankj.utilcode.util.SpanUtils;
 import com.blankj.utilcode.util.Utils;
 import com.facebook.stetho.Stetho;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -31,8 +34,6 @@ public class App extends Application {
 
 
     public static String baseUrl = "http://iscore.top/";
-    public static String oss_domain = "http://img.xcvf.top/book";
-
     static {
         //设置全局的Header构建器
         SmartRefreshLayout.setDefaultRefreshHeaderCreator(new DefaultRefreshHeaderCreator() {
@@ -55,11 +56,19 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
         Utils.init(this);
         boolean log = BuildConfig.DEBUG;
         LogUtils.getConfig().setLogSwitch(log);
         Stetho.initializeWithDefaults(this);
         TextConfig.initSpace(this);
+        boolean launched = SPUtils.getInstance().getBoolean("launched",false);
+
+        if(!launched){
+            int width = ScreenUtils.getScreenWidth();
+            TextConfig.getConfig().setTextSize(width/24);
+            SPUtils.getInstance().put("launched",true);
+        }
         DBManager.init(this);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling

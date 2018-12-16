@@ -21,6 +21,7 @@ public class TextConfig {
 
     public static final int TYPE_FONT_SIZE = 1;
     public static final int TYPE_FONT_COLOR = 2;
+    public static final int TYPE_PAGE_ANIM = 3;
 
 
     private static final String SAVE_NAME = "TxtConfig";
@@ -34,8 +35,8 @@ public class TextConfig {
     private static final String C_PADDING_TOP = "C_PADDING_TOP";
 
 
-    public static final int MAX_TEXT_SIZE = 100;
-    public static final int MIN_TEXT_SIZE = 48;
+    public static final int MAX_TEXT_SIZE = 88;
+    public static final int MIN_TEXT_SIZE = 30;
     public int textSize = MIN_TEXT_SIZE;
     public int textColor = R.color.text_black;
     public int backgroundColor = R.color.reader_styleclor1;

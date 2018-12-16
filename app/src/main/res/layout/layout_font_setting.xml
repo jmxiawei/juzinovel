@@ -107,7 +107,17 @@
                 android:textColor="@color/color_white"
                 android:textSize="14sp" />
 
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/ainm_recycler"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/horizon_margin"
+                />
         </LinearLayout>
+
+
+
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/style_recycler"
