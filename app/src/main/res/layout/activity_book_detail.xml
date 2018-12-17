@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
+    android:id="@+id/ll_content"
+    android:background="?attr/colorPrimary"
     tools:context="top.iscore.freereader.BookDetailActivity">
 
     <LinearLayout
@@ -47,13 +49,11 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/ll_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="?attr/colorPrimary"
             android:orientation="vertical"
             android:padding="@dimen/horizon_margin">
 

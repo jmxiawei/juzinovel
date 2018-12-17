@@ -174,4 +174,18 @@ public interface BookService {
                                 @Field("gender") String gender);
 
 
+    /**
+     * 崩溃日志
+     *
+     * @param service
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("reader/public/v1/")
+    Call<BaseModel<Object>> crashLog(@Field("service") String service,
+                                @Field("crashlog") String crashlog,
+                                @Field("versionname") String versionname,
+                                @Field("vcode") String vcode);
+
+
 }

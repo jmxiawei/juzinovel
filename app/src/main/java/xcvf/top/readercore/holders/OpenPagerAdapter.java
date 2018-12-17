@@ -24,7 +24,13 @@ public abstract class OpenPagerAdapter<T> extends PagerAdapter {
     public abstract View getItem(int position);
 
     protected View getCachedItem(int position) {
-        return mItemInfos.size() > position ? mItemInfos.get(position).view : null;
+        if(mItemInfos.size()>position){
+            ItemInfo itemInfo = mItemInfos.get(position);
+            if(itemInfo!=null){
+                return itemInfo.view;
+            }
+        }
+        return  null;
     }
 
     @Override

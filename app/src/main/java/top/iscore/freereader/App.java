@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 
+import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.CrashUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.SPUtils;
@@ -23,6 +24,12 @@ import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 
 import bolts.Task;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import top.iscore.freereader.http.BaseHttpHandler;
+import top.iscore.freereader.http.BaseModel;
+import top.iscore.freereader.http.BookService;
 import xcvf.top.readercore.bean.TextConfig;
 import xcvf.top.readercore.daos.DBManager;
 
@@ -34,6 +41,7 @@ public class App extends Application {
 
 
     public static String baseUrl = "http://iscore.top/";
+
     static {
         //设置全局的Header构建器
         SmartRefreshLayout.setDefaultRefreshHeaderCreator(new DefaultRefreshHeaderCreator() {
@@ -62,12 +70,12 @@ public class App extends Application {
         LogUtils.getConfig().setLogSwitch(log);
         Stetho.initializeWithDefaults(this);
         TextConfig.initSpace(this);
-        boolean launched = SPUtils.getInstance().getBoolean("launched",false);
+        boolean launched = SPUtils.getInstance().getBoolean("launched", false);
 
-        if(!launched){
+        if (!launched) {
             int width = ScreenUtils.getScreenWidth();
-            TextConfig.getConfig().setTextSize(width/24);
-            SPUtils.getInstance().put("launched",true);
+            TextConfig.getConfig().setTextSize(width / 24);
+            SPUtils.getInstance().put("launched", true);
         }
         DBManager.init(this);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -83,7 +91,17 @@ public class App extends Application {
         CrashUtils.init(new CrashUtils.OnCrashListener() {
             @Override
             public void onCrash(String crashInfo, Throwable e) {
-                LogUtils.e(crashInfo);
+                BaseHttpHandler.create().getProxy(BookService.class).crashLog("User.Crashlog", crashInfo, AppUtils.getAppVersionName(), AppUtils.getAppVersionCode() + "").enqueue(new Callback<BaseModel<Object>>() {
+                    @Override
+                    public void onResponse(Call<BaseModel<Object>> call, Response<BaseModel<Object>> response) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<BaseModel<Object>> call, Throwable t) {
+
+                    }
+                });
             }
         });
     }
