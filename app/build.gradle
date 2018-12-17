@@ -2,7 +2,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao' // apply plugin
 apply plugin: 'idea'
 android {
-
+    signingConfigs {
+        release {
+            keyAlias 'freereader'
+            keyPassword 'freereader2EDA54AF76CB2.jks'
+            storeFile file('D:/gitProject/FreeReader/buildsystem/freereader2EDA54AF76CB2.jks')
+            storePassword 'freereader2EDA54AF76CB2.jks'
+        }
+    }
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
@@ -13,27 +20,21 @@ android {
         versionName rootProject.ext.versionName
         vectorDrawables.useSupportLibrary = true
     }
-
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
-
-
     greendao {
         schemaVersion 3 //数据库版本号
         daoPackage 'xcvf.top.readercore.daos'// 设置DaoMaster、DaoSession、Dao 包名
         targetGenDir 'src/main/java'//设置DaoMaster、DaoSession、Dao目录
     }
-
-
     idea {
         module {
             downloadJavadoc = true
