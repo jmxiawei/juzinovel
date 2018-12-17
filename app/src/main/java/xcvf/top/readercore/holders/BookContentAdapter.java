@@ -119,7 +119,7 @@ public class BookContentAdapter extends OpenPagerAdapter<Page> {
         if (reset) {
             mCacheChapterList.clear();
             pageList.clear();
-            notifyDataSetChanged();
+            //notifyDataSetChanged();
         }
         //checkChapterList(mChapter);
         if (!mCacheChapterList.contains(mChapter)) {

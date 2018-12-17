@@ -54,7 +54,11 @@ public class MainActivity extends AppCompatActivity implements ISwitchTabListene
 
 
     String[] permissions = new String[]{
-            Manifest.permission.INTERNET, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE
+            Manifest.permission.INTERNET,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_PHONE_STATE,
+
     };
     @BindView(R.id.tablayout)
     TabLayout tablayout;

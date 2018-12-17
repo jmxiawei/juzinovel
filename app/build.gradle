@@ -6,7 +6,7 @@ android {
         release {
             keyAlias 'freereader'
             keyPassword 'freereader2EDA54AF76CB2.jks'
-            storeFile file('D:/gitProject/FreeReader/buildsystem/freereader2EDA54AF76CB2.jks')
+            storeFile file('../buildsystem/freereader2EDA54AF76CB2.jks')
             storePassword 'freereader2EDA54AF76CB2.jks'
         }
     }
@@ -71,4 +71,5 @@ dependencies {
     api rootProject.ext.mosby3Lce
     api rootProject.ext.mosby3queuing
     api project(':update-app')
+    api 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:5.1.6'
 }

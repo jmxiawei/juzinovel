@@ -218,5 +218,19 @@ public class BookshelfFragment extends MvpFragment<BookShelfView, BookShelfPrese
     public void onChanged(User user) {
         mUser = user;
         loadData(true);
+        refreshBookShelf();
+    }
+
+    private void refreshBookShelf() {
+
+        List<Book> books = DBManager.getDaoSession().getBookDao().queryBuilder().where(BookDao.Properties.Userid.eq(0))
+                .orderDesc(BookDao.Properties.Update_time).list();
+
+        int size = books == null?0:books.size();
+        for (int i = 0; i < size ; i++) {
+            Book book = books.get(i);
+            presenter.addBookShelf(mUser.getUid(),book.bookid,book);
+        }
+
     }
 }
