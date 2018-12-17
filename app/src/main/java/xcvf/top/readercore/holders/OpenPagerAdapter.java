@@ -12,7 +12,7 @@ import java.util.ArrayList;
  */
 public abstract class OpenPagerAdapter<T> extends PagerAdapter {
     private static final String TAG = "FragmentStatePagerAdapt";
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     private ArrayList<ItemInfo<T>> mItemInfos = new ArrayList<>();
     private View mCurrentPrimaryItem = null;

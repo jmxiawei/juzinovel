@@ -31,13 +31,5 @@ public class Constant {
         return file.getAbsolutePath();
     }
 
-    /**
-     * 章节文章
-     * @param self_page
-     * @return
-     */
-    public static final String buildChapterFilePath(String self_page){
-        return  App.oss_domain + self_page;
-    }
 
 }

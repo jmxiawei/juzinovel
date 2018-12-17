@@ -25,6 +25,7 @@ import xcvf.top.readercore.interfaces.IPageScrollListener;
 import xcvf.top.readercore.interfaces.OnPageChangedListener;
 import xcvf.top.readercore.transformer.AccordionTransformer;
 import xcvf.top.readercore.transformer.CubeInTransformer;
+import xcvf.top.readercore.transformer.PageTransformerFactory;
 import xcvf.top.readercore.transformer.ParallaxTransformer;
 import xcvf.top.readercore.transformer.StackTransformer;
 
@@ -223,11 +224,10 @@ public class BookContentView extends ViewPager {
         screenWidth = ScreenUtils.getScreenWidth();
         setOffscreenPageLimit(2);
         //AccordionTransformer StackTransformer ParallaxTransformer
-        setPageTransformer(true, new StackTransformer());
+        setPageTransformer(true, PageTransformerFactory.get().pageTransformer);
         removeOnPageChangeListener(mPageChangedListener);
         addOnPageChangeListener(mPageChangedListener);
     }
-
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {

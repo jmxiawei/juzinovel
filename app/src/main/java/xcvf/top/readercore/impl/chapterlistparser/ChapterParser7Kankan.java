@@ -53,7 +53,9 @@ public class ChapterParser7Kankan extends BaseChapterParser {
                 } else {
                     continue;
                 }
-                pageList.add(chapter);
+                if(checkAddToList(chapter)){
+                    pageList.add(chapter);
+                }
             }
         } catch (Exception e) {
         }

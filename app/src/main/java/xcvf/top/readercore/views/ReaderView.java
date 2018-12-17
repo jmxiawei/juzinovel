@@ -200,4 +200,10 @@ public class ReaderView extends FrameLayout {
         mBookContentAdapter.setChapter(mBookContentView, reset, mChapter, page, jumpCharPosition);
     }
 
+
+
+    public void setPageTransformer(ViewPager.PageTransformer pageTransformer){
+        mBookContentView.setPageTransformer(true,pageTransformer);
+        mBookContentAdapter.notifyDataSetChanged();
+    }
 }

@@ -16,6 +16,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
@@ -236,7 +237,10 @@ public class AppUpdateUtils {
     public static String getManifestString(Context context, String name) {
         try {
             ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
-            return appInfo.metaData.getString(name);
+            Bundle bundle = appInfo.metaData;
+            if(bundle!=null){
+                return bundle.getString(name);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -63,6 +63,7 @@ import xcvf.top.readercore.interfaces.OnTextConfigChangedListener;
 import xcvf.top.readercore.services.DownloadIntentService;
 import xcvf.top.readercore.styles.ModeConfig;
 import xcvf.top.readercore.styles.ModeProvider;
+import xcvf.top.readercore.transformer.PageTransformerFactory;
 import xcvf.top.readercore.views.BookSourceDialog;
 import xcvf.top.readercore.views.ContentDialog;
 import xcvf.top.readercore.views.PopDownload;
@@ -298,12 +299,14 @@ public class ReaderActivity extends BaseActivity<BookReadView, BookReadPresenter
         public void onChanged(int type) {
             if (type == TextConfig.TYPE_FONT_COLOR) {
                 readerView.onTextConfigChanged();
-            } else {
+            } else if(type == TextConfig.TYPE_FONT_SIZE){
                 // TextConfig.TYPE_FONT_SIZE
                 Chapter chapter = readerView.getCurrentChapter();
                 Page page = readerView.getCurrentPage();
                 int start = page.getPageTotalChars();
                 mChapterDisplayedImpl.showChapter(true, readerView, start, page.getIndex(), chapter);
+            }else if(type == TextConfig.TYPE_PAGE_ANIM){
+                readerView.setPageTransformer(PageTransformerFactory.get().pageTransformer);
             }
         }
     };

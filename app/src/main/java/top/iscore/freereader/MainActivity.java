@@ -19,9 +19,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.AppUtils;
 import com.vector.update_app.UpdateAppBean;
 import com.vector.update_app.UpdateAppManager;
 import com.vector.update_app.listener.IUpdateDialogFragmentListener;
+import com.vector.update_app.utils.AppUpdateUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -102,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements ISwitchTabListene
 
     private void checkUpdate() {
         HashMap<String, String> params = new HashMap<>();
-        params.put("vcode", "1");
+        params.put("vcode", String.valueOf(AppUpdateUtils.getVersionCode(this)));
         new UpdateAppManager
                 .Builder()
                 //当前Activity
