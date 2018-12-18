@@ -111,6 +111,7 @@ public class BookContentAdapter extends OpenPagerAdapter<Page> {
 
     /**
      * 设置需要显示的章节，放到后面
+     *
      * @param jumpCharPosition 修改字体的时候，跳转到指定字符
      * @param mChapter
      * @param startPage
@@ -163,15 +164,18 @@ public class BookContentAdapter extends OpenPagerAdapter<Page> {
 
             if (reset) {
                 if (startPage > 0) {
-                    bookContentView.setCurrentItem(startPage - 1,true);
+                    bookContentView.setCurrentItem(startPage - 1, false);
+                    LogUtils.e("scroll to page==" + startPage);
                 } else {
+                    //修改字体大小
                     int page = findPageByPosition(jumpCharPosition, mChapter.getPages());
-                    bookContentView.setCurrentItem(page,true);
+                    bookContentView.setCurrentItem(page, false);
+                    LogUtils.e("scroll to page1" + page);
                 }
             } else {
                 if (startPage != Page.LOADING_PAGE && startPage > 0) {
                     //历史记录
-                    bookContentView.setCurrentItem(startPage - 1,true);
+                    bookContentView.setCurrentItem(startPage - 1, true);
                 }
             }
             notifyDataSetChanged();
@@ -250,7 +254,7 @@ public class BookContentAdapter extends OpenPagerAdapter<Page> {
         PageHolder holder = new PageHolder(bookContentView.getContext(), bookContentView, mLoadChapter);
         Page page = getItemData(position);
         holder.setPageScrollListener(pageScrollListener);
-                                                                                                                                                                                                                                                                                                                                                                                                                                  holder.setPage(getCurrentChapter(position), page);
+        holder.setPage(getCurrentChapter(position), page);
         holder.itemView.setTag(holder);
         return holder.itemView;
     }
@@ -289,11 +293,13 @@ public class BookContentAdapter extends OpenPagerAdapter<Page> {
 
     @Override
     protected int getDataPosition(Page data) {
-        if(data == null)return -1;
+        if (data == null) {
+            return -1;
+        }
         int size = pageList.size();
-        for (int i = 0; i < size ; i++) {
+        for (int i = 0; i < size; i++) {
             Page page = pageList.get(i);
-            if(page.equals(data) && page.getStatus() == data.getStatus()){
+            if (page.equals(data) && page.getStatus() == data.getStatus()) {
                 return i;
             }
         }

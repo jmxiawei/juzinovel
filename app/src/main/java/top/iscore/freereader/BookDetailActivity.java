@@ -216,25 +216,28 @@ public class BookDetailActivity extends MvpActivity<BookShelfView, BookShelfPres
                 }
                 break;
             case R.id.tv_add:
-                if (mUser.getUid() > 0) {
-                    if (mBook.shelfid == null) {
-                        presenter.addBookShelf(mUser.getUid(), mBook.getBookid(), mBook);
-                    } else {
-                        presenter.deleteBookShelf(mUser.getUid(), mBook.shelfid, mBook.bookid);
-                    }
-                } else {
-                    //没登录
-                    LoginDialog loginDialog = new LoginDialog();
-                    loginDialog.setFinishTask(new UserInfoChangedHandler.OnUserChanged() {
-                        @Override
-                        public void onChanged(User user) {
-                            presenter.addBookShelf(mUser.getUid(), mBook.bookid, mBook);
+                if (mBook != null) {
+                    if (mUser.getUid() > 0) {
+                        if (mBook.shelfid == null) {
+                            presenter.addBookShelf(mUser.getUid(), mBook.getBookid(), mBook);
+                        } else {
+                            presenter.deleteBookShelf(mUser.getUid(), mBook.shelfid, mBook.bookid);
                         }
-                    }).show(getSupportFragmentManager(), "LoginDialog");
+                    } else {
+                        //没登录
+                        LoginDialog loginDialog = new LoginDialog();
+                        loginDialog.setFinishTask(new UserInfoChangedHandler.OnUserChanged() {
+                            @Override
+                            public void onChanged(User user) {
+                                presenter.addBookShelf(mUser.getUid(), mBook.bookid, mBook);
+                            }
+                        }).show(getSupportFragmentManager(), "LoginDialog");
 
+                    }
                 }
                 break;
             case R.id.tv_start:
+
                 if (mBook != null) {
                     ReaderActivity.toReadPage(this, mBook);
                 }

@@ -572,10 +572,10 @@ public class ReaderActivity extends BaseActivity<BookReadView, BookReadPresenter
      */
     @Override
     public void onStateChanged(int state) {
-//        if (state == FullScreenHandler.OnSettingViewStateChanged.STATE_VISIABLE) {
-//            readerView.setPageTransformer(null);
-//        } else if (state == FullScreenHandler.OnSettingViewStateChanged.STATE_GONE) {
-//            readerView.setPageTransformer(PageTransformerFactory.get().pageTransformer);
-//        }
+        if (state == FullScreenHandler.OnSettingViewStateChanged.STATE_VISIABLE) {
+            readerView.setPageTransformer(null);
+        } else if (state == FullScreenHandler.OnSettingViewStateChanged.STATE_GONE) {
+            readerView.setPageTransformer(PageTransformerFactory.get().pageTransformer);
+        }
     }
 }
