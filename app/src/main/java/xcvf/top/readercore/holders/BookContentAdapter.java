@@ -119,7 +119,7 @@ public class BookContentAdapter extends OpenPagerAdapter<Page> {
         if (reset) {
             mCacheChapterList.clear();
             pageList.clear();
-            //notifyDataSetChanged();
+            notifyDataSetChanged();
         }
         //checkChapterList(mChapter);
         if (!mCacheChapterList.contains(mChapter)) {
@@ -163,17 +163,18 @@ public class BookContentAdapter extends OpenPagerAdapter<Page> {
 
             if (reset) {
                 if (startPage > 0) {
-                    bookContentView.setCurrentItem(startPage - 1);
+                    bookContentView.setCurrentItem(startPage - 1,true);
                 } else {
                     int page = findPageByPosition(jumpCharPosition, mChapter.getPages());
-                    bookContentView.setCurrentItem(page);
+                    bookContentView.setCurrentItem(page,true);
                 }
             } else {
                 if (startPage != Page.LOADING_PAGE && startPage > 0) {
                     //历史记录
-                    bookContentView.setCurrentItem(startPage - 1);
+                    bookContentView.setCurrentItem(startPage - 1,true);
                 }
             }
+            notifyDataSetChanged();
         } else {
             //存在。如果是失败的页面
             int index = mCacheChapterList.indexOf(mChapter);
@@ -249,7 +250,7 @@ public class BookContentAdapter extends OpenPagerAdapter<Page> {
         PageHolder holder = new PageHolder(bookContentView.getContext(), bookContentView, mLoadChapter);
         Page page = getItemData(position);
         holder.setPageScrollListener(pageScrollListener);
-        holder.setPage(getCurrentChapter(position), page);
+                                                                                                                                                                                                                                                                                                                                                                                                                                  holder.setPage(getCurrentChapter(position), page);
         holder.itemView.setTag(holder);
         return holder.itemView;
     }

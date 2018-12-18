@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import top.iscore.freereader.R;
+import top.iscore.freereader.wxapi.WXEntryActivity;
 import xcvf.top.readercore.bean.Book;
 import xcvf.top.readercore.bean.Mode;
 import xcvf.top.readercore.bean.SettingAction;
@@ -75,6 +77,8 @@ public class ReaderSettingView extends FrameLayout {
     TextView tvDownload;
     @BindView(R.id.tv_detail)
     TextView tvDetail;
+    @BindView(R.id.tv_share)
+    TextView tvShare;
 
 
     public void setSettingListener(ISettingListener settingListener) {
@@ -93,6 +97,7 @@ public class ReaderSettingView extends FrameLayout {
         super(context, attrs, defStyleAttr);
         LayoutInflater.from(context).inflate(R.layout.layout_read_setting, this, true);
         ButterKnife.bind(this, this);
+        tvShare.setVisibility(!TextUtils.isEmpty(WXEntryActivity.APP_ID) ? VISIBLE : GONE);
         initView();
     }
 
@@ -163,7 +168,7 @@ public class ReaderSettingView extends FrameLayout {
     }
 
     @OnClick({R.id.iv_back, R.id.ll_mode, R.id.ll_font, R.id.ll_cache,
-            R.id.ll_chapter_list, R.id.tv_detail,R.id.tv_change})
+            R.id.ll_chapter_list, R.id.tv_detail, R.id.tv_change, R.id.tv_share})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
@@ -200,6 +205,12 @@ public class ReaderSettingView extends FrameLayout {
                 if (settingListener != null) {
                     settingListener.onSettingChanged(SettingAction.ACTION_CHANGE);
                 }
+                break;
+            case R.id.tv_share:
+                if (settingListener != null) {
+                    settingListener.onSettingChanged(SettingAction.ACTION_CHANGE);
+                }
+                break;
             default:
                 break;
         }

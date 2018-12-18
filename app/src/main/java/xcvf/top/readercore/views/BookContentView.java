@@ -93,15 +93,26 @@ public class BookContentView extends ViewPager {
         }
     };
 
-     void setAreaClickListener(IAreaClickListener mAreaClickListener) {
+    void setAreaClickListener(IAreaClickListener mAreaClickListener) {
         this.mAreaClickListener = mAreaClickListener;
     }
 
-     void setPageScrollListener(IPageScrollListener mPageScrollListener) {
+    void setPageScrollListener(IPageScrollListener mPageScrollListener) {
         this.mPageScrollListener = mPageScrollListener;
 
     }
 
+    @Override
+    public void setCurrentItem(int item, boolean smoothScroll) {
+        int count = 0;
+        if (getAdapter() != null) {
+            count = getAdapter().getCount();
+        }
+        if (item > count) {
+            item = 0;
+        }
+        super.setCurrentItem(item, smoothScroll);
+    }
 
     void scrollNextPage() {
         int page = getCurrentItem();
@@ -142,11 +153,11 @@ public class BookContentView extends ViewPager {
         isReachStartPage = false;
     }
 
-     int getCurrentPage() {
+    int getCurrentPage() {
         return getCurrentItem();
     }
 
-     BookContentView setCurrentPage(int currentPage) {
+    BookContentView setCurrentPage(int currentPage) {
         this.currentPage = currentPage;
         return this;
     }

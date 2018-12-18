@@ -13,13 +13,20 @@ import android.view.View;
 public class FullScreenHandler {
 
 
-    public static final int DELAY_HIDE = 1500;
+    public static final int DELAY_HIDE = 2000;
     public static final int ANIM_DELAY_HIDE = 100;
 
     AppCompatActivity mActivity;
     View contentView;
     View controllerView;
     Handler mHandler = new Handler(Looper.getMainLooper());
+    OnSettingViewStateChanged onSettingViewStateChanged;
+
+
+    public FullScreenHandler setOnSettingViewStateChanged(OnSettingViewStateChanged onSettingViewStateChanged) {
+        this.onSettingViewStateChanged = onSettingViewStateChanged;
+        return this;
+    }
 
     public FullScreenHandler(AppCompatActivity mActivity, View contentView, View controllerView) {
         this.mActivity = mActivity;
@@ -35,7 +42,14 @@ public class FullScreenHandler {
             if (actionBar != null) {
                 actionBar.show();
             }
-            controllerView.setVisibility(View.VISIBLE);
+
+
+            if (controllerView.getVisibility() != View.VISIBLE) {
+                controllerView.setVisibility(View.VISIBLE);
+                if (onSettingViewStateChanged != null) {
+                    onSettingViewStateChanged.onStateChanged(OnSettingViewStateChanged.STATE_VISIABLE);
+                }
+            }
         }
     };
 
@@ -78,7 +92,14 @@ public class FullScreenHandler {
         if (actionBar != null) {
             actionBar.hide();
         }
-        controllerView.setVisibility(View.GONE);
+
+        if (contentView.getVisibility() != View.GONE) {
+            controllerView.setVisibility(View.GONE);
+            if (onSettingViewStateChanged != null) {
+                onSettingViewStateChanged.onStateChanged(OnSettingViewStateChanged.STATE_GONE);
+            }
+        }
+
         mHandler.removeCallbacks(mShowSettingRunnable);
         mHandler.postDelayed(mHideSettingRunnable, ANIM_DELAY_HIDE);
     }
@@ -109,6 +130,16 @@ public class FullScreenHandler {
             //更新隐藏的时间
             hide();
         }
+    }
+
+
+    public interface OnSettingViewStateChanged {
+
+        int STATE_VISIABLE = 1;
+        int STATE_GONE = 2;
+
+        void onStateChanged(int state);
+
     }
 
 

@@ -17,6 +17,7 @@ import xcvf.top.readercore.impl.downloader.ChapterDownloader7KanKan;
 import xcvf.top.readercore.impl.downloader.ChapterDownloaderPRWX;
 import xcvf.top.readercore.impl.downloader.ChapterDownloaderQingkan9;
 import xcvf.top.readercore.interfaces.ChapterFileDownloader;
+import xcvf.top.readercore.interfaces.IChapterContentParser;
 import xcvf.top.readercore.interfaces.IChapterParser;
 
 public class ChapterParserFactory {

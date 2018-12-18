@@ -3,8 +3,6 @@ package xcvf.top.readercore.bean;
 import java.util.LinkedList;
 import java.util.List;
 
-import xcvf.top.readercore.interfaces.IChar;
-
 /**
  * Created by xiaw on 2018/7/11.
  */

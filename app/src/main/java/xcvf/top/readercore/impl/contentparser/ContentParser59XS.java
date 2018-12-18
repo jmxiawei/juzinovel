@@ -12,7 +12,7 @@ import java.io.File;
 import java.util.List;
 
 import xcvf.top.readercore.bean.Chapter;
-import xcvf.top.readercore.impl.IChapterContentParser;
+import xcvf.top.readercore.interfaces.IChapterContentParser;
 
 public class ContentParser59XS implements IChapterContentParser {
 

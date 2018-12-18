@@ -1,4 +1,4 @@
-package xcvf.top.readercore.impl;
+package xcvf.top.readercore.interfaces;
 
 import java.util.List;
 

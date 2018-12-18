@@ -31,18 +31,32 @@
 
         <TextView
             android:id="@+id/tv_change"
-            android:layout_width="64dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:paddingLeft="@dimen/vertical_margin"
+            android:paddingRight="@dimen/vertical_margin"
             android:gravity="center"
             android:text="换源"
             android:textColor="@color/color_light_white" />
 
         <TextView
             android:id="@+id/tv_detail"
-            android:layout_width="64dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:paddingLeft="@dimen/vertical_margin"
+            android:paddingRight="@dimen/vertical_margin"
             android:text="详情"
+            android:textColor="@color/color_light_white" />
+
+        <TextView
+            android:id="@+id/tv_share"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingLeft="@dimen/vertical_margin"
+            android:paddingRight="@dimen/vertical_margin"
+            android:text="分享"
             android:textColor="@color/color_light_white" />
 
 

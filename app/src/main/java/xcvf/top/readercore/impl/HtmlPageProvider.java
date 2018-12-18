@@ -7,11 +7,11 @@ import com.blankj.utilcode.util.TimeUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 
 import xcvf.top.readercore.bean.Chapter;
 import xcvf.top.readercore.bean.Line;
 import xcvf.top.readercore.bean.Page;
+import xcvf.top.readercore.interfaces.IChapterContentParser;
 import xcvf.top.readercore.interfaces.IPageProvider;
 import xcvf.top.readercore.utils.TextBreakUtil;
 

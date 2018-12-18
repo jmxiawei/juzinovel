@@ -1,6 +1,6 @@
 package xcvf.top.readercore.bean;
 
-import xcvf.top.readercore.impl.IChapterContentParser;
+import xcvf.top.readercore.interfaces.IChapterContentParser;
 import xcvf.top.readercore.interfaces.ChapterFileDownloader;
 import xcvf.top.readercore.interfaces.IChapterParser;
 

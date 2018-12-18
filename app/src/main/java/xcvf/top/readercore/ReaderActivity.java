@@ -21,6 +21,7 @@ import android.widget.FrameLayout;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.hannesdorfmann.mosby3.mvp.MvpActivity;
+import com.scwang.smartrefresh.layout.listener.OnStateChangedListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,7 +76,8 @@ import xcvf.top.readercore.views.ReaderView;
  * 阅读页面
  * Created by xiaw on 2018/6/30.
  */
-public class ReaderActivity extends BaseActivity<BookReadView, BookReadPresenter> implements IAreaClickListener, IPageScrollListener, BookReadView {
+public class ReaderActivity extends BaseActivity<BookReadView, BookReadPresenter> implements
+        IAreaClickListener, IPageScrollListener, BookReadView, FullScreenHandler.OnSettingViewStateChanged {
 
 
     Book book;
@@ -144,6 +146,7 @@ public class ReaderActivity extends BaseActivity<BookReadView, BookReadPresenter
             }
         }
         fullScreenHandler = new FullScreenHandler(this, readerView, settingView);
+        fullScreenHandler.setOnSettingViewStateChanged(this);
         onNewIntent(getIntent());
     }
 
@@ -299,13 +302,13 @@ public class ReaderActivity extends BaseActivity<BookReadView, BookReadPresenter
         public void onChanged(int type) {
             if (type == TextConfig.TYPE_FONT_COLOR) {
                 readerView.onTextConfigChanged();
-            } else if(type == TextConfig.TYPE_FONT_SIZE){
+            } else if (type == TextConfig.TYPE_FONT_SIZE) {
                 // TextConfig.TYPE_FONT_SIZE
                 Chapter chapter = readerView.getCurrentChapter();
                 Page page = readerView.getCurrentPage();
                 int start = page.getPageTotalChars();
                 mChapterDisplayedImpl.showChapter(true, readerView, start, page.getIndex(), chapter);
-            }else if(type == TextConfig.TYPE_PAGE_ANIM){
+            } else if (type == TextConfig.TYPE_PAGE_ANIM) {
                 readerView.setPageTransformer(PageTransformerFactory.get().pageTransformer);
             }
         }
@@ -411,15 +414,6 @@ public class ReaderActivity extends BaseActivity<BookReadView, BookReadPresenter
             if (mLoadingFragment != null) {
                 mLoadingFragment.dismiss();
             }
-//            int index = readerView.indexOfCurrentChapter();
-//            if (index == 0) {
-//                onScroll(0, 0, IPageScrollListener.PRE_CHAPTER);
-//            } else if (index == 2) {
-//                onScroll(0, 0, IPageScrollListener.NEXT_CHAPTER);
-//            } else if (index != 1) {
-//                onScroll(0, 0, IPageScrollListener.PRE_CHAPTER);
-//                onScroll(0, 0, IPageScrollListener.NEXT_CHAPTER);
-//            }
         }
     };
 
@@ -485,7 +479,7 @@ public class ReaderActivity extends BaseActivity<BookReadView, BookReadPresenter
                     Page page = readerView.getCurrentPage();
                     mBookMark.setPage(page.getIndex());
                     mBookMark.save();
-                    if (mUser.getUid() > 0 && page.getStatus() ==Page.OK_PAGE) {
+                    if (mUser.getUid() > 0 && page.getStatus() == Page.OK_PAGE) {
                         mBookShelfPresenter.addBookMarker(mUser.getUid(),
                                 book.bookid,
                                 book.extern_bookid,
@@ -532,24 +526,6 @@ public class ReaderActivity extends BaseActivity<BookReadView, BookReadPresenter
             }
         }
 
-
-//        ChapterProviderImpl.newInstance().saveChapter(book.extern_bookid, chapters, new IChapterListener() {
-//            @Override
-//            public void onChapter(int code, Chapter srcChapter, Chapter destChapter, HashMap<String, Object> params) {
-//                if (mLoadingFragment != null) {
-//                    mLoadingFragment.dismiss();
-//                    fullScreenHandler.hide();
-//                }
-//                mChapterList = (ArrayList<Chapter>) params.get(ChapterProviderImpl.KEY_CHAPTER_LIST);
-//                LogUtils.e("[读取章节完成..." + mChapterList.size() + "章]");
-//                if (!isShowSuccess) {
-//                    mLoadingFragment = LoadingFragment.newOne("读取章节内容...");
-//                    mLoadingFragment.show(getSupportFragmentManager(), "LoadingFragment");
-//                    checkChapters(loadedChapter);
-//                }
-//            }
-//        });
-
     }
 
     @Override
@@ -587,5 +563,19 @@ public class ReaderActivity extends BaseActivity<BookReadView, BookReadPresenter
         }
         loadedChapter = true;
         presenter.loadChapters(this, book);
+    }
+
+
+    /**
+     * 设置的时候不使用翻页动画
+     * @param state
+     */
+    @Override
+    public void onStateChanged(int state) {
+//        if (state == FullScreenHandler.OnSettingViewStateChanged.STATE_VISIABLE) {
+//            readerView.setPageTransformer(null);
+//        } else if (state == FullScreenHandler.OnSettingViewStateChanged.STATE_GONE) {
+//            readerView.setPageTransformer(PageTransformerFactory.get().pageTransformer);
+//        }
     }
 }

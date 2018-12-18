@@ -7,13 +7,12 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
-import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.util.List;
 
 import xcvf.top.readercore.bean.Chapter;
-import xcvf.top.readercore.impl.IChapterContentParser;
+import xcvf.top.readercore.interfaces.IChapterContentParser;
 
 public class DefaulContentParser implements IChapterContentParser {
 
