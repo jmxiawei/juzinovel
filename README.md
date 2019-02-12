@@ -2,8 +2,6 @@
  
  * apk 下载地址 http://reader.iscore.top/d.html
  * android 代码 https://code.aliyun.com/120765121/freereader.git
- * python 代码  https://code.aliyun.com/120765121/pythonExamples.git
- * php 代码 https://code.aliyun.com/120765121/php-reader.git 
  * 喜欢看小说，但是现在看小说都要付费了，空余时间写这个app
  * 小说app，包括小说软件常用功能
  * 服务端代码是php
